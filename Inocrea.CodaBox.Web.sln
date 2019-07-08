@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.645
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Inocrea.CodaBox.Web", "Inocrea.CodaBox.Web\Inocrea.CodaBox.Web.csproj", "{EAB687C5-1A75-4578-9232-DBC8269A46E7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Inocrea.CodaBox.ApiModel", "Inocrea.CodaBox.ApiModel\Inocrea.CodaBox.ApiModel.csproj", "{DA54A2FC-F1D2-4BE2-A553-CBCC4D483E08}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Inocrea.CodaBox.CodaApiClient", "Inocrea.CodaBox.CodaApiClient\Inocrea.CodaBox.CodaApiClient.csproj", "{077CC4BB-2971-4874-B1A3-557E08E96754}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EAB687C5-1A75-4578-9232-DBC8269A46E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAB687C5-1A75-4578-9232-DBC8269A46E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EAB687C5-1A75-4578-9232-DBC8269A46E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EAB687C5-1A75-4578-9232-DBC8269A46E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA54A2FC-F1D2-4BE2-A553-CBCC4D483E08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA54A2FC-F1D2-4BE2-A553-CBCC4D483E08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA54A2FC-F1D2-4BE2-A553-CBCC4D483E08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA54A2FC-F1D2-4BE2-A553-CBCC4D483E08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{077CC4BB-2971-4874-B1A3-557E08E96754}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{077CC4BB-2971-4874-B1A3-557E08E96754}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{077CC4BB-2971-4874-B1A3-557E08E96754}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{077CC4BB-2971-4874-B1A3-557E08E96754}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0D6229AF-D68B-4B7F-95FA-82012BE0D490}
+	EndGlobalSection
+EndGlobal
