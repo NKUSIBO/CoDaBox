@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Inocrea.CodaBox.ApiModel;
 using Inocrea.CodaBox.Web.Factory;
 using Microsoft.AspNetCore.Mvc;
 using Inocrea.CodaBox.Web.Models;
@@ -25,8 +26,9 @@ namespace Inocrea.CodaBox.Web.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            var data = await ApiClientFactory.Instance.GetInvoice();
-            return View();
+
+            List<InvoiceModel> data = await ApiClientFactory.Instance.GetInvoice();
+            return View(data);
         }
         public async Task<IActionResult> ExportV2(CancellationToken cancellationToken)
         {

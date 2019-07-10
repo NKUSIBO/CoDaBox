@@ -12,7 +12,7 @@ namespace Inocrea.CodaBox.ApiModel
         [Key]
         public int Id { get; set; }
         [DataMember]
-        public DateTime AccountingDate { get; set; }
+        public String AccountingDate { get; set; }
         [DataMember]
         public DateTime ValueDate { get; set; }
         [DataMember]
@@ -21,5 +21,7 @@ namespace Inocrea.CodaBox.ApiModel
         public string TransactionMessage { get; set; }
         [DataMember]
         public decimal Balance { get; set; }
+        [DataMember]
+        public decimal Amount { get; set; }
     }
 }

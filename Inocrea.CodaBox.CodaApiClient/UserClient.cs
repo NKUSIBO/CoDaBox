@@ -8,7 +8,7 @@ namespace Inocrea.CodaBox.CodaApiClient
 {
     public partial class ApiClient
     {
-        public async Task<string> GetInvoice()
+        public async Task<List<InvoiceModel>> GetInvoice()
         {
             var requestUrl = CreateRequestUri(string.Format(System.Globalization.CultureInfo.InvariantCulture,
                 ""));
