@@ -3,57 +3,163 @@
 @{
     ViewData["Title"] = "Index";
 }
+<head>
+    <title>CodaBox</title>
 
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src=" https://cdn.datatables.net/fixedheader/3.1.5/js/dataTables.fixedHeader.min.js"></script>
+</head>
 <h2>Index</h2>
 
 <p>
     <a asp-action="Export">Export to PDF</a>
 </p>
-<table class="table">
-    <thead>
+<div class="row">
+    <div class="col-lg-4">
+        <table class="table" id="exemple">
+            <thead>
+            <tr>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.Transactions.FirstOrDefault().ValueDate)
+
+                </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.Transactions.FirstOrDefault().StructuredMessage)
+                </th>
+
+
+
+
+
+                <th>
+                    @Html.DisplayNameFor(model => model.Transactions.FirstOrDefault().Message)
+                </th>
+
+            </tr>
+            </thead>
+            <tbody>
+
+            @foreach (var item in ViewBag.transactions)
+            {
+
+                <tr>
+                    <td>@item.ValueDate</td>
+
+                    <td>@item.StructuredMessage</td>
+                    <td>@item.Message</td>
+                </tr>
+
+
+
+            }
+
+            </tbody>
+            <tfoot>
+
+            </tfoot>
+        </table>
+    </div>
+<div class="col-lg-8">
+    <table id="exemple" class="table">
+        <p>
+            <a asp-action="ExportTransactions">Export to PDF</a>
+        </p>
+        <thead>
+
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.AccountingDate)
+                @Html.DisplayNameFor(model => model.Number)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ValueDate)
+                @Html.DisplayNameFor(model => model.NumeroIdentification)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CurrencyCode)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Bic)
+            </th>
+
             <th>
                 @Html.DisplayNameFor(model => model.CounterParty)
             </th>
+
+
+
+
+
             <th>
-                @Html.DisplayNameFor(model => model.TransactionMessage)
+                @Html.DisplayNameFor(model => model.NewBalance)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Balance)
+                @Html.DisplayNameFor(model => model.InitialBalance)
             </th>
-            <th></th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.AccountingDate)
+            </th>
         </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.AccountingDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ValueDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CounterParty)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TransactionMessage)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Balance)
-            </td>
-            <td>
-                @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+        @foreach (var item in ViewBag.statements)
+        {
+
+
+
+            <tr>
+                <td>@item.Number</td>
+
+                <td>@item.NumeroIdentification</td>
+                <td>@item.Name</td>
+                <td>@item.CurrencyCode</td>
+                <td>@item.Bic</td>
+                <td>@item.NumeroIdentification</td>
+                <td>@item.InitialBalance</td>
+                <td>@item.NewBalance</td>
+                <td>@item.AccountingDate</td>
+
+            </tr>
+
+
+        }
+        </tbody>
+
+        <tfoot>
+
+        </tfoot>
+    </table>
+</div>
+</div>
+<script>
+    $(document).ready(function () {
+        // Setup - add a text input to each footer cell
+        $('#example thead tr').clone(true).appendTo('#example thead');
+        $('#example thead tr:eq(1) th').each(function (i) {
+            var title = $(this).text();
+            $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+
+            $('input', this).on('keyup change', function () {
+                if (table.column(i).search() !== this.value) {
+                    table
+                        .column(i)
+                        .search(this.value)
+                        .draw();
+                }
+            });
+        });
+
+        var table = $('#example').DataTable({
+            orderCellsTop: true,
+            fixedHeader: true
+        });
+    });
+</script>
+
+

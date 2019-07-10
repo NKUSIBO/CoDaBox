@@ -21,6 +21,7 @@ namespace Inocrea.CodaBox.Web.Controllers
     {
         private readonly IOptions<SettingsModels> _appSettings;
         private static List<InvoiceModel> listInvoice = new List<InvoiceModel>();
+        private static List<Transactions>   dataList = new List<Transactions>();
 
         public HomeController(IOptions<SettingsModels> app)
         {
@@ -31,32 +32,67 @@ namespace Inocrea.CodaBox.Web.Controllers
         {
 
             List<InvoiceModel> data = await ApiClientFactory.Instance.GetInvoice();
+            var mytrans = data.Select(s => s.Transactions).Distinct();
+            for (int i = 0; i < mytrans.Count(); i++)
+            {
+                foreach (var item in mytrans.ElementAt(i))
+                {
+                    dataList.Add(item);
+                }
+            }
+         
+            ViewBag.transactions = dataList;
+            ViewBag.statements = data;
             listInvoice = data;
             return View(data);
         }
-        public async Task<IActionResult> ExportV2(CancellationToken cancellationToken)
+        public FileResult ExportTransactions()
         {
             // query data from database  
-            await Task.Yield();
-            var list = await ApiClientFactory.Instance.GetInvoice();
-            var stream = new MemoryStream();
-
-            using (var package = new ExcelPackage(stream))
+            DataTable dt = ExportToExcel.ExportGenericTransactions<List<InvoiceModel>>(dataList);
+            for (int i = 0; i < dt.Columns.Count; i++)
             {
-                var workSheet = package.Workbook.Worksheets.Add("Sheet1");
-                workSheet.Cells.LoadFromCollection(list, true);
-                package.Save();
-            }
-            stream.Position = 0;
-            string excelName = $"UserList-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
 
-            //return File(stream, "application/octet-stream", excelName);  
-            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
+                if ((dt.Columns[i].ColumnName.ToString().Contains("DATE") ||
+                     (dt.Columns[i].ColumnName.ToString().Contains("Date"))))
+                {
+                    var name = dt.Columns[i].ColumnName;
+                    if (!(dt.Columns[i].ColumnName.ToString().Contains("FORMAT")))
+                    {
+                        dt.Columns.Remove(dt.Columns[i].ColumnName.ToString());
+                    }
+
+                }
+
+
+            }
+
+            var fileName = "cod" + ".xlsx"; //declaration.xlsx";
+
+
+            using (XLWorkbook wb = new XLWorkbook())
+            {
+                wb.Worksheets.Add(dt);
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    try
+                    {
+                          wb.SaveAs(stream);
+                        return File(stream.ToArray(),
+                            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                    }
+                    catch (Exception ex)
+                    {
+
+                        throw;
+                    }
+                }
+            }
         }
 
         public FileResult Export()
         {
-            DataTable dt = ExportToExcel.ExportGeneric<List<InvoiceModel>>(listInvoice);
+            DataTable dt = ExportToExcel.ExportGenericInvoiceModel<List<InvoiceModel>>(listInvoice);
             for (int i = 0; i < dt.Columns.Count; i++)
             {
 
