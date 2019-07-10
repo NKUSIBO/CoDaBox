@@ -36,5 +36,15 @@ namespace Inocrea.CodaBox.ApiModel
         public string Number { get; set; }
         [DataMember]
         public ICollection<Transactions> Transactions { get; set; }
+        public string Amount { get; set; }
+        [DataMember]
+        public string TransactionDate { get; set; }
+
+        [DataMember]
+        public string ValueDate { get; set; }
+        [DataMember]
+        public string StructuredMessage { get; set; }
+        [DataMember]
+        public string Message { get; set; }
     }
 }

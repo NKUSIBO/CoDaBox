@@ -8,11 +8,11 @@ namespace Inocrea.CodaBox.CodaApiClient
 {
     public partial class ApiClient
     {
-        public async Task<List<InvoiceModel>> GetInvoice()
+        public async Task<List<Transactions>> GetInvoice()
         {
             var requestUrl = CreateRequestUri(string.Format(System.Globalization.CultureInfo.InvariantCulture,
                 ""));
-            return await GetAsync<List<InvoiceModel>>(requestUrl);
+            return await GetAsync<List<Transactions>>(requestUrl);
         }
 
         

@@ -32,21 +32,14 @@ namespace Inocrea.CodaBox.Web.Controllers
         public async Task<IActionResult> Index()
         {
 
-            List<InvoiceModel> data = await ApiClientFactory.Instance.GetInvoice();
-            var mytrans = data.Select(s => s.Transactions).Distinct();
-            for (int i = 0; i < mytrans.Count(); i++)
-            {
-                foreach (var item in mytrans.ElementAt(i))
-                {
-                    dataList.Add(item);
-                }
-            }
+            List<Transactions> data = await ApiClientFactory.Instance.GetInvoice();
+            
 
             name = data.Select(n => n.Number).FirstOrDefault()?.ToString();
             ViewBag.transactions = dataList;
             ViewBag.statements = data;
-            listInvoice = data;
-            return View(data);
+            dataList = data;
+            return View(dataList);
         }
         public FileResult ExportTransactions()
         {

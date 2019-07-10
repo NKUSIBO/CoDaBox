@@ -1,74 +1,27 @@
 ﻿
 
 
-@model IEnumerable<Inocrea.CodaBox.ApiModel.InvoiceModel>
+@model IEnumerable<Inocrea.CodaBox.ApiModel.Transactions>
 
 @{
     ViewData["Title"] = "Index";
 }
 <head>
     <title>CodaBox</title>
+    <script src="~/js/Jquery.js"></script>
+  
 
-    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <script src=" https://cdn.datatables.net/fixedheader/3.1.5/js/dataTables.fixedHeader.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+
 </head>
 <h2>Index</h2>
 
 
-<div class="row">
-    <div class="col-lg-4">
+
         <p>
-            <a asp-action="ExportTransactions">Export transactions to Excel</a>
-        </p>
-        <table class="table" id="exemple">
-            <thead>
-            <tr>
-
-                <th>
-                    @Html.DisplayNameFor(model => model.Transactions.FirstOrDefault().ValueDate)
-
-                </th>
-
-                <th>
-                    @Html.DisplayNameFor(model => model.Transactions.FirstOrDefault().StructuredMessage)
-                </th>
-
-
-
-
-
-                <th>
-                    @Html.DisplayNameFor(model => model.Transactions.FirstOrDefault().Message)
-                </th>
-
-            </tr>
-            </thead>
-            <tbody>
-
-            @foreach (var item in ViewBag.transactions)
-            {
-
-                <tr>
-                    <td>@item.ValueDate</td>
-
-                    <td>@item.StructuredMessage</td>
-                    <td>@item.Message</td>
-                </tr>
-
-
-
-            }
-
-            </tbody>
-            <tfoot>
-
-            </tfoot>
-        </table>
-    </div>
-    <div class="col-lg-8">
-        <p>
-            <a asp-action="Export">Export testaments to Excel</a>
+            <a asp-action="ExportTransactions">Export testaments to Excel</a>
         </p>
         <table id="exemple" class="table">
 
@@ -77,10 +30,30 @@
 
             <tr>
                 <th>
+                    @Html.DisplayNameFor(model => model.ValueDate)
+
+                </th>
+                
+
+                <th>
+                    @Html.DisplayNameFor(model => model.StructuredMessage)
+                </th>
+
+
+
+
+
+                <th>
+                    @Html.DisplayNameFor(model => model.Message)
+                </th>
+
+                <th>
                     @Html.DisplayNameFor(model => model.Number)
+
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.NumeroIdentification)
+
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Name)
@@ -91,21 +64,23 @@
 
                 <th>
                     @Html.DisplayNameFor(model => model.Bic)
+
                 </th>
+
+         
+
+
+
 
                 <th>
-                    @Html.DisplayNameFor(model => model.CounterParty)
+                    @Html.DisplayNameFor(model => model.Amount)
                 </th>
-
-
-
-
-
                 <th>
                     @Html.DisplayNameFor(model => model.NewBalance)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.InitialBalance)
+
                 </th>
 
                 <th>
@@ -120,15 +95,21 @@
 
 
                 <tr>
+                    <td>@item.ValueDate</td>
+                    <td>@item.StructuredMessage</td>
+                    <td>@item.Message</td>
                     <td>@item.Number</td>
 
                     <td>@item.NumeroIdentification</td>
                     <td>@item.Name</td>
                     <td>@item.CurrencyCode</td>
                     <td>@item.Bic</td>
-                    <td>@item.NumeroIdentification</td>
-                    <td>@item.InitialBalance</td>
+
+                   
+                    <td>@item.Amount</td>
                     <td>@item.NewBalance</td>
+
+                    <td>@item.InitialBalance</td>
                     <td>@item.AccountingDate</td>
 
                 </tr>
@@ -141,8 +122,7 @@
 
             </tfoot>
         </table>
-    </div>
-</div>
+  
 <script>
     $(document).ready(function () {
         // Setup - add a text input to each footer cell

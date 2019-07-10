@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -15,6 +17,7 @@ namespace Inocrea.CodaBox.CodaApiClient
     public partial class ApiClient
     {
         private static List<InvoiceModel> listInvoice = new List<InvoiceModel>();
+        private static List<Transactions> listTransactions = new List<Transactions>();
 
         string[] stringLine;
         private readonly HttpClient _httpClient;
@@ -24,7 +27,7 @@ namespace Inocrea.CodaBox.CodaApiClient
             BaseEndpoint = baseEndpoint ?? throw new ArgumentNullException("baseEndpoint");
             _httpClient = new HttpClient();
         }
-        private async Task<List<InvoiceModel>> GetAsync<T>(Uri requestUrl)
+        private async Task<List<Transactions>> GetAsync<T>(Uri requestUrl)
         {
             AddHeaders();
             var response = await _httpClient.GetAsync(requestUrl, HttpCompletionOption.ResponseHeadersRead);
@@ -46,26 +49,31 @@ namespace Inocrea.CodaBox.CodaApiClient
                 invoice.NumeroIdentification = statement.Account.CompanyIdentificationNumber;
                 invoice.Bic = statement.Account.Bic;
                 invoice.Name = statement.Account.Name;
+                
                 invoice.CurrencyCode = statement.Account.CurrencyCode;
-                var ListTransactions = new List<Transactions>();
                 foreach (var transaction in statement.Transactions)
                 {
                     Transactions trans= new Transactions();
-                    
+                    trans.AccountingDate = statement.Date.ToString("dd-MM-yyyy");
+                    trans.InitialBalance = statement.InitialBalance;
+                    trans.NewBalance = statement.NewBalance;
+                    trans.Number = statement.Account.Number;
+                    trans.NumeroIdentification = statement.Account.CompanyIdentificationNumber;
+                    trans.Bic = statement.Account.Bic;
+                    trans.Name = statement.Account.Name;
+                    trans.CurrencyCode = statement.Account.CurrencyCode;
                     trans.Message = Regex.Replace(transaction.Message, @"    ", "");
-
                     trans.StructuredMessage = transaction.StructuredMessage;
                     trans.TransactionDate = transaction.TransactionDate.ToString("dd-MM-yyyy");
 
                     trans.ValueDate = transaction.ValutaDate.ToString("dd-MM-yyyy");
-                    trans.Amount = transaction.Amount.ToString();
+                    trans.Amount = transaction.Amount.ToString(CultureInfo.InvariantCulture);
 
-                    ListTransactions.Add(trans);
-                   
+                    listTransactions.Add(trans);
+                    listInvoice.Add(invoice);
                     Console.WriteLine(transaction.Account.Name + ": " + transaction.Amount);
                 }
-                listInvoice.Add(invoice);
-                invoice.Transactions = ListTransactions;
+                invoice.Transactions = listTransactions;
                 
                 Console.WriteLine(statement.NewBalance);
 
@@ -74,7 +82,7 @@ namespace Inocrea.CodaBox.CodaApiClient
             // Above three lines can be replaced with new helper method below
             // string responseBody = await client.GetStringAsync(uri);
 
-            return listInvoice;
+            return listTransactions;
             
         }
         public void WrittingToFile(string[] lines)
