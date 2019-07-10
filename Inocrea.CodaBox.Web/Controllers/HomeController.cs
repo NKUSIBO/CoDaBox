@@ -6,6 +6,8 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Linq.Dynamic.Core;
+
 using ClosedXML.Excel;
 using Inocrea.CodaBox.ApiModel;
 using Inocrea.CodaBox.Web.Factory;
@@ -13,7 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using Inocrea.CodaBox.Web.Models;
 using Microsoft.Extensions.Options;
 using Inocrea.CodaBox.Web.Helper;
-using OfficeOpenXml;
+
 
 namespace Inocrea.CodaBox.Web.Controllers
 {
@@ -127,6 +129,7 @@ namespace Inocrea.CodaBox.Web.Controllers
                 }
             }
         }
+       
 
         public IActionResult About()
         {
