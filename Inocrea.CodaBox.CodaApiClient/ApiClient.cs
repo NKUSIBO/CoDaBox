@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using CodaParser;
 using Inocrea.CodaBox.ApiModel;
@@ -38,17 +39,34 @@ namespace Inocrea.CodaBox.CodaApiClient
             foreach (var statement in statements)
             {
                 InvoiceModel invoice = new InvoiceModel();
-                invoice.AccountingDate = statement.Date.ToString("yyyy -MM-dd");
-                Console.WriteLine(statement.Date.ToString("yyyy -MM-dd"));
-
+                invoice.AccountingDate = statement.Date.ToString("dd-MM-yyyy");
+                invoice.InitialBalance = statement.InitialBalance;
+                invoice.NewBalance = statement.NewBalance;
+                invoice.Number = statement.Account.Number;
+                invoice.NumeroIdentification = statement.Account.CompanyIdentificationNumber;
+                invoice.Bic = statement.Account.Bic;
+                invoice.Name = statement.Account.Name;
+                invoice.CurrencyCode = statement.Account.CurrencyCode;
+                var ListTransactions = new List<Transactions>();
                 foreach (var transaction in statement.Transactions)
                 {
-                    invoice.TransactionMessage = transaction.Account.Name;
-                    invoice.Amount = transaction.Amount;
-                    listInvoice.Add(invoice);
+                    Transactions trans= new Transactions();
+                    
+                    trans.Message = Regex.Replace(transaction.Message, @"    ", "");
+
+                    trans.StructuredMessage = transaction.StructuredMessage;
+                    trans.TransactionDate = transaction.TransactionDate.ToString("dd-MM-yyyy");
+
+                    trans.ValueDate = transaction.ValutaDate.ToString("dd-MM-yyyy");
+                    trans.Amount = transaction.Amount.ToString();
+
+                    ListTransactions.Add(trans);
+                   
                     Console.WriteLine(transaction.Account.Name + ": " + transaction.Amount);
                 }
-                invoice.Balance = statement.NewBalance;
+                listInvoice.Add(invoice);
+                invoice.Transactions = ListTransactions;
+                
                 Console.WriteLine(statement.NewBalance);
 
             }
