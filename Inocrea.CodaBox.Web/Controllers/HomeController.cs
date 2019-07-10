@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ClosedXML.Excel;
 using Inocrea.CodaBox.ApiModel;
 using Inocrea.CodaBox.Web.Factory;
 using Microsoft.AspNetCore.Mvc;
@@ -18,6 +20,7 @@ namespace Inocrea.CodaBox.Web.Controllers
     public class HomeController : Controller
     {
         private readonly IOptions<SettingsModels> _appSettings;
+        private static List<InvoiceModel> listInvoice = new List<InvoiceModel>();
 
         public HomeController(IOptions<SettingsModels> app)
         {
@@ -28,6 +31,7 @@ namespace Inocrea.CodaBox.Web.Controllers
         {
 
             List<InvoiceModel> data = await ApiClientFactory.Instance.GetInvoice();
+            listInvoice = data;
             return View(data);
         }
         public async Task<IActionResult> ExportV2(CancellationToken cancellationToken)
@@ -48,6 +52,49 @@ namespace Inocrea.CodaBox.Web.Controllers
 
             //return File(stream, "application/octet-stream", excelName);  
             return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
+        }
+
+        public FileResult Export()
+        {
+            DataTable dt = ExportToExcel.ExportGeneric<List<InvoiceModel>>(listInvoice);
+            for (int i = 0; i < dt.Columns.Count; i++)
+            {
+
+                if ((dt.Columns[i].ColumnName.ToString().Contains("DATE") ||
+                     (dt.Columns[i].ColumnName.ToString().Contains("Date"))))
+                {
+                    var name = dt.Columns[i].ColumnName;
+                    if (!(dt.Columns[i].ColumnName.ToString().Contains("FORMAT")))
+                    {
+                        dt.Columns.Remove(dt.Columns[i].ColumnName.ToString());
+                    }
+
+                }
+
+
+            }
+
+            var fileName = "cod" + ".xlsx"; //declaration.xlsx";
+
+
+            using (XLWorkbook wb = new XLWorkbook())
+            {
+                wb.Worksheets.Add(dt);
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    try
+                    {
+                        wb.SaveAs(stream);
+                        return File(stream.ToArray(),
+                            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                    }
+                    catch (Exception ex)
+                    {
+
+                        throw;
+                    }
+                }
+            }
         }
 
         public IActionResult About()
