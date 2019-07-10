@@ -14,5 +14,6 @@ namespace Inocrea.CodaBox.Web.Data
         {
         }
         public DbSet<Inocrea.CodaBox.ApiModel.InvoiceModel> InvoiceModel { get; set; }
+        public DbSet<Inocrea.CodaBox.ApiModel.StatementsTransactionViewModel> StatementsTransactionViewModel { get; set; }
     }
 }

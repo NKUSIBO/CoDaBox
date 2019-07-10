@@ -1,4 +1,7 @@
-﻿@model IEnumerable<Inocrea.CodaBox.ApiModel.InvoiceModel>
+﻿
+
+
+@model IEnumerable<Inocrea.CodaBox.ApiModel.InvoiceModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -12,11 +15,12 @@
 </head>
 <h2>Index</h2>
 
-<p>
-    <a asp-action="Export">Export to PDF</a>
-</p>
+
 <div class="row">
     <div class="col-lg-4">
+        <p>
+            <a asp-action="ExportTransactions">Export transactions to Excel</a>
+        </p>
         <table class="table" id="exemple">
             <thead>
             <tr>
@@ -62,80 +66,82 @@
             </tfoot>
         </table>
     </div>
-<div class="col-lg-8">
-    <table id="exemple" class="table">
+    <div class="col-lg-8">
         <p>
-            <a asp-action="ExportTransactions">Export to PDF</a>
+            <a asp-action="Export">Export testaments to Excel</a>
         </p>
-        <thead>
-
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Number)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NumeroIdentification)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CurrencyCode)
-            </th>
-
-            <th>
-                @Html.DisplayNameFor(model => model.Bic)
-            </th>
-
-            <th>
-                @Html.DisplayNameFor(model => model.CounterParty)
-            </th>
+        <table id="exemple" class="table">
 
 
-
-
-
-            <th>
-                @Html.DisplayNameFor(model => model.NewBalance)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.InitialBalance)
-            </th>
-
-            <th>
-                @Html.DisplayNameFor(model => model.AccountingDate)
-            </th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var item in ViewBag.statements)
-        {
-
-
+            <thead>
 
             <tr>
-                <td>@item.Number</td>
+                <th>
+                    @Html.DisplayNameFor(model => model.Number)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.NumeroIdentification)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CurrencyCode)
+                </th>
 
-                <td>@item.NumeroIdentification</td>
-                <td>@item.Name</td>
-                <td>@item.CurrencyCode</td>
-                <td>@item.Bic</td>
-                <td>@item.NumeroIdentification</td>
-                <td>@item.InitialBalance</td>
-                <td>@item.NewBalance</td>
-                <td>@item.AccountingDate</td>
+                <th>
+                    @Html.DisplayNameFor(model => model.Bic)
+                </th>
 
+                <th>
+                    @Html.DisplayNameFor(model => model.CounterParty)
+                </th>
+
+
+
+
+
+                <th>
+                    @Html.DisplayNameFor(model => model.NewBalance)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.InitialBalance)
+                </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.AccountingDate)
+                </th>
             </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in ViewBag.statements)
+            {
 
 
-        }
-        </tbody>
 
-        <tfoot>
+                <tr>
+                    <td>@item.Number</td>
 
-        </tfoot>
-    </table>
-</div>
+                    <td>@item.NumeroIdentification</td>
+                    <td>@item.Name</td>
+                    <td>@item.CurrencyCode</td>
+                    <td>@item.Bic</td>
+                    <td>@item.NumeroIdentification</td>
+                    <td>@item.InitialBalance</td>
+                    <td>@item.NewBalance</td>
+                    <td>@item.AccountingDate</td>
+
+                </tr>
+
+
+            }
+            </tbody>
+
+            <tfoot>
+
+            </tfoot>
+        </table>
+    </div>
 </div>
 <script>
     $(document).ready(function () {
@@ -144,7 +150,6 @@
         $('#example thead tr:eq(1) th').each(function (i) {
             var title = $(this).text();
             $(this).html('<input type="text" placeholder="Search ' + title + '" />');
-
             $('input', this).on('keyup change', function () {
                 if (table.column(i).search() !== this.value) {
                     table
@@ -154,7 +159,6 @@
                 }
             });
         });
-
         var table = $('#example').DataTable({
             orderCellsTop: true,
             fixedHeader: true
@@ -163,3 +167,15 @@
 </script>
 
 
+© 2019 GitHub, Inc.
+Terms
+Privacy
+Security
+Status
+Help
+Contact GitHub
+Pricing
+API
+Training
+Blog
+About

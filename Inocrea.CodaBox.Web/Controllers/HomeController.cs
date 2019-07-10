@@ -40,7 +40,8 @@ namespace Inocrea.CodaBox.Web.Controllers
                     dataList.Add(item);
                 }
             }
-         
+        
+
             ViewBag.transactions = dataList;
             ViewBag.statements = data;
             listInvoice = data;
