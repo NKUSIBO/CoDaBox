@@ -22,6 +22,7 @@ namespace Inocrea.CodaBox.Web.Controllers
         private readonly IOptions<SettingsModels> _appSettings;
         private static List<InvoiceModel> listInvoice = new List<InvoiceModel>();
         private static List<Transactions>   dataList = new List<Transactions>();
+        private static string name = "";
 
         public HomeController(IOptions<SettingsModels> app)
         {
@@ -40,8 +41,8 @@ namespace Inocrea.CodaBox.Web.Controllers
                     dataList.Add(item);
                 }
             }
-        
 
+            name = data.Select(n => n.Number).FirstOrDefault()?.ToString();
             ViewBag.transactions = dataList;
             ViewBag.statements = data;
             listInvoice = data;
@@ -68,7 +69,7 @@ namespace Inocrea.CodaBox.Web.Controllers
 
             }
 
-            var fileName = "cod" + ".xlsx"; //declaration.xlsx";
+            var fileName = name + ".xlsx"; //declaration.xlsx";
 
 
             using (XLWorkbook wb = new XLWorkbook())
@@ -111,7 +112,7 @@ namespace Inocrea.CodaBox.Web.Controllers
 
             }
 
-            var fileName = "cod" + ".xlsx"; //declaration.xlsx";
+            var fileName = name + ".xlsx"; //declaration.xlsx";
 
 
             using (XLWorkbook wb = new XLWorkbook())
