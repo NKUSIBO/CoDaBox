@@ -6,11 +6,12 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Options" Version="1.1.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Downloads\coda-parser-master\CodaParser\CodaParser.csproj" />
     <ProjectReference Include="..\Inocrea.CodaBox.ApiModel\Inocrea.CodaBox.ApiModel.csproj" />
+    <ProjectReference Include="..\CodaParser\CodaParser.csproj" />
   </ItemGroup>
 
   <ItemGroup>

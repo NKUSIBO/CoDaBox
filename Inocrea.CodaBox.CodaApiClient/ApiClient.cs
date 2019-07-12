@@ -145,6 +145,7 @@ namespace Inocrea.CodaBox.CodaApiClient
         {
             
             
+            _httpClient.DefaultRequestHeaders.Remove("X-Software-Company");
             _httpClient.DefaultRequestHeaders.Add("X-Software-Company", "641088c3-8fcb-47a3-8cef-de8197f5172c");
             var byteArray = Encoding.ASCII.GetBytes("GF-4e2cee89-e8df-4a1d-b285-f7c:XyJn6NQYrm");
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));

@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Inocrea.CodaBox.ApiModel", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Inocrea.CodaBox.CodaApiClient", "Inocrea.CodaBox.CodaApiClient\Inocrea.CodaBox.CodaApiClient.csproj", "{077CC4BB-2971-4874-B1A3-557E08E96754}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodaParser", "..\..\..\Downloads\coda-parser-master\CodaParser\CodaParser.csproj", "{1BF2AF43-F50A-463B-A166-43380CE30FDB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodaParser", "CodaParser\CodaParser.csproj", "{95E524D2-8484-4DE4-8A35-3F1E2792F67A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,10 @@ Global
 		{077CC4BB-2971-4874-B1A3-557E08E96754}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{077CC4BB-2971-4874-B1A3-557E08E96754}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{077CC4BB-2971-4874-B1A3-557E08E96754}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1BF2AF43-F50A-463B-A166-43380CE30FDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1BF2AF43-F50A-463B-A166-43380CE30FDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1BF2AF43-F50A-463B-A166-43380CE30FDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1BF2AF43-F50A-463B-A166-43380CE30FDB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95E524D2-8484-4DE4-8A35-3F1E2792F67A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95E524D2-8484-4DE4-8A35-3F1E2792F67A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95E524D2-8484-4DE4-8A35-3F1E2792F67A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95E524D2-8484-4DE4-8A35-3F1E2792F67A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

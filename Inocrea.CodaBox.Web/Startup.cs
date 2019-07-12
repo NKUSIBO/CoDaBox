@@ -13,6 +13,7 @@ using Inocrea.CodaBox.Web.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Inocrea.CodaBox.Web.Models;
+using Inocrea.CodaBox.Web.Background;
 
 namespace Inocrea.CodaBox.Web
 {
@@ -42,7 +43,9 @@ namespace Inocrea.CodaBox.Web
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.Configure<SettingsModels>(Configuration.GetSection("ApiSettings"));
 
-        services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddHostedService<PeriodicBackgroundService>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

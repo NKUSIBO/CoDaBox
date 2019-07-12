@@ -15,7 +15,8 @@ using Microsoft.AspNetCore.Mvc;
 using Inocrea.CodaBox.Web.Models;
 using Microsoft.Extensions.Options;
 using Inocrea.CodaBox.Web.Helper;
-
+using System.Text;
+using Inocrea.CodaBox.Web.Background;
 
 namespace Inocrea.CodaBox.Web.Controllers
 {
@@ -41,6 +42,7 @@ namespace Inocrea.CodaBox.Web.Controllers
             ViewBag.transactions = dataList;
             ViewBag.statements = data;
             dataList = data;
+            PeriodicBackgroundService.DataList = data;
             return View(dataList);
         }
         public FileResult ExportTransactions()
@@ -75,8 +77,9 @@ namespace Inocrea.CodaBox.Web.Controllers
                     try
                     {
                           wb.SaveAs(stream);
-                        return File(stream.ToArray(),
+                        var file = File(stream.ToArray(),
                             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                        return file;
                     }
                     catch (Exception ex)
                     {
@@ -118,8 +121,7 @@ namespace Inocrea.CodaBox.Web.Controllers
                     try
                     {
                         wb.SaveAs(stream);
-                        return File(stream.ToArray(),
-                            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                        return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
                     }
                     catch (Exception ex)
                     {
@@ -129,7 +131,14 @@ namespace Inocrea.CodaBox.Web.Controllers
                 }
             }
         }
-       
+
+        public FileResult ExportJson()
+        {
+            var json = Newtonsoft.Json.JsonConvert.SerializeObject(dataList);
+            var fileName = "coda" + ".json"; //declaration.json";
+            byte[] fileBytes = Encoding.UTF8.GetBytes(json);
+            return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
+        }
 
         public IActionResult About()
         {
