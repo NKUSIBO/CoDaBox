@@ -13,7 +13,6 @@ namespace Inocrea.CodaBox.Web.Data
             : base(options)
         {
         }
-        public DbSet<Inocrea.CodaBox.ApiModel.InvoiceModel> InvoiceModel { get; set; }
-        public DbSet<Inocrea.CodaBox.ApiModel.StatementsTransactionViewModel> StatementsTransactionViewModel { get; set; }
+        public DbSet<Inocrea.CodaBox.ApiModel.Transactions> Transactions { get; set; }
     }
 }

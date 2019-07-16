@@ -1,16 +1,14 @@
-﻿using System;
+﻿using Inocrea.CodaBox.ApiModel;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
-using System.Web;
-using Inocrea.CodaBox.ApiModel;
+using System.Threading.Tasks;
 
 namespace Inocrea.CodaBox.Web.Helper
 {
     
-
-   
         public static class ExportToExcel
         {
             public static int mycount = 0;
@@ -133,6 +131,7 @@ namespace Inocrea.CodaBox.Web.Helper
 
             }
 
-    }
+        }
 
+    
 }
