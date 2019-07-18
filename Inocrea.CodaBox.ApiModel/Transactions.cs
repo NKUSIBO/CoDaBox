@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.Serialization;
 using System.Text;
 
 namespace Inocrea.CodaBox.ApiModel
 {
+    
     public class Transactions
     {
         [Key]
@@ -16,8 +18,8 @@ namespace Inocrea.CodaBox.ApiModel
 
         [DataMember]
         public string Bic { get; set; }
-        [DataMember]
-        public string CounterParty { get; set; }
+        //[DataMember]
+        //public string CounterParty { get; set; }
 
 
        

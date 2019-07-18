@@ -29,9 +29,18 @@ namespace Inocrea.CodaBox.CodaApiClient
         }
         private async Task<List<Transactions>> GetAsync<T>(Uri requestUrl)
         {
-            AddHeaders();
-            var response = await _httpClient.GetAsync(requestUrl, HttpCompletionOption.ResponseHeadersRead);
-            
+             AddHeaders();
+             HttpResponseMessage response;
+            try
+            {
+                response = await _httpClient.GetAsync(requestUrl, HttpCompletionOption.ResponseHeadersRead);
+
+            }
+            catch (Exception ex)
+            {
+                
+                throw ex;
+            }            
             response.EnsureSuccessStatusCode();
             var data = await response.Content.ReadAsStringAsync();
             stringLine = new string[] { data };
@@ -143,8 +152,8 @@ namespace Inocrea.CodaBox.CodaApiClient
         }
         private void AddHeaders()
         {
-            
-            
+
+            _httpClient.DefaultRequestHeaders.Remove("X-Software-Company");
             _httpClient.DefaultRequestHeaders.Add("X-Software-Company", "641088c3-8fcb-47a3-8cef-de8197f5172c");
             var byteArray = Encoding.ASCII.GetBytes("GF-4e2cee89-e8df-4a1d-b285-f7c:XyJn6NQYrm");
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));

@@ -1,161 +1,236 @@
-﻿
-
-
-@model IEnumerable<Inocrea.CodaBox.ApiModel.Transactions>
+﻿@model IEnumerable<Inocrea.CodaBox.ApiModel.Transactions>
 
 @{
-    ViewData["Title"] = "Index";
+    Layout = "_Layout";
 }
-<head>
-    <title>CodaBox</title>
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-    <link href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet" />
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
-</head>
-<h2>Index</h2>
-
-
-
-<p>
-    <a asp-action="ExportTransactions">Export testaments to Excel</a>
-</p>
-<table id="example" class="table">
-
-
-    <thead>
-
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ValueDate)
-
-            </th>
-
-
-            <th>
-                @Html.DisplayNameFor(model => model.StructuredMessage)
-            </th>
-
-
-
-
-
-            <th>
-                @Html.DisplayNameFor(model => model.Message)
-            </th>
-
-            <th>
-                @Html.DisplayNameFor(model => model.Number)
-
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NumeroIdentification)
-
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CurrencyCode)
-            </th>
-
-            <th>
-                @Html.DisplayNameFor(model => model.Bic)
-
-            </th>
-
-
-
-
-
-
-            <th>
-                @Html.DisplayNameFor(model => model.Amount)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NewBalance)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.InitialBalance)
-
-            </th>
-
-            <th>
-                @Html.DisplayNameFor(model => model.AccountingDate)
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in ViewBag.statements)
-        {
-
-
-
-            <tr>
-                <td>@item.ValueDate</td>
-                <td>@item.StructuredMessage</td>
-                <td>@item.Message</td>
-                <td>@item.Number</td>
-
-                <td>@item.NumeroIdentification</td>
-                <td>@item.Name</td>
-                <td>@item.CurrencyCode</td>
-                <td>@item.Bic</td>
-
-
-                <td>@item.Amount</td>
-                <td>@item.NewBalance</td>
-
-                <td>@item.InitialBalance</td>
-                <td>@item.AccountingDate</td>
-
-            </tr>
-
-
-        }
-    </tbody>
-
-    <tfoot>
-
-    </tfoot>
-</table>
-
-
-
-@* Load datatable css *@
-<link href="//cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css" rel="stylesheet"/>
-
-@section Scripts{
-    @* Load DataTable js here *@
-    <script src="//cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
+@section styles {
+    <link rel='stylesheet' type='text/css' href='https://cdn.datatables.net/v/dt/dt-1.10.13/datatables.min.css' />
 }
-<script>
-    $(document).ready(function() {
-        // Setup - add a text input to each footer cell
-        $('#example thead tr').clone(true).appendTo( '#example thead' );
-        $('#example thead tr:eq(1) th').each( function (i) {
-            var title = $(this).text();
-            $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+<div class='row'>
  
-            $( 'input', this ).on( 'keyup change', function () {
-                if ( table.column(i).search() !== this.value ) {
-                    table
-                        .column(i)
-                        .search( this.value )
-                        .draw();
-                }
-            } );
-        } );
+        <div>
+            <div >
+                
+            </div>
+            <div class='panel-body'>
+                <table id='example' class='table table-striped  table-hover '>
+                    <thead>
+                  
+
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ValueDate)
+
+                        </th>
+
+
+                        <th>
+                            @Html.DisplayNameFor(model => model.StructuredMessage)
+                        </th>
+
+
+
+
+
+                        <th>
+                            @Html.DisplayNameFor(model => model.Message)
+                        </th>
+
+                        <th>
+                            @Html.DisplayNameFor(model => model.Number)
+
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.NumeroIdentification)
+
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Name)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.CurrencyCode)
+                        </th>
+
+                        <th>
+                            @Html.DisplayNameFor(model => model.Bic)
+
+                        </th>
+
+
+
+
+
+
+                        <th>
+                            @Html.DisplayNameFor(model => model.Amount)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.NewBalance)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.InitialBalance)
+
+                        </th>
+
+                        <th>
+                            @Html.DisplayNameFor(model => model.AccountingDate)
+                        </th>
+                    </tr>
+                    </thead>
+                    
+                </table>
+            </div>
+        </div>
+    
+</div>
+@section scripts {
+    <script type='text/javascript' src='https://cdn.datatables.net/v/dt/dt-1.10.13/datatables.min.js'></script>
+    <script>
+
+        $(document).ready(function() {
+                $('#example')
+                    .dataTable({
+                        'processing': true,
+                        'serverSide': true,
+                        'ajax': {
+                            'url': 'Api/Statements',
+                            ' dataFilter': function(data){
+                                var json = jQuery.parseJSON( data );
+                                json.recordsTotal = json.total;
+                                json.recordsFiltered = json.total;
+                                json.data = json.list;
  
-        var table = $('#example').DataTable( {
-            orderCellsTop: true,
-            fixedHeader: true
-        } );
-    } );
+                                return JSON.stringify( json ); // return JSON string
+                            },
 
-</script>
+                        'type': 'POST'
+                    },
 
+                    'columns':
+                        [
+                            { data: 'ValueDate', name: 'ValueDate', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
+                            {
+                                data: 'StructuredMessage',
+                                name: 'StructuredMessage',
+                                'sDefaultContent': '0-0-0000',
+                                'autoWidth': true
+                            },
+                            {
+                                data: 'Message',
+                                name: 'Message',
+                                'sDefaultContent': '0-0-0000',
+                                'autoWidth': true
+                            },
+                            { data: 'Number', name: 'Number', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
+                            {
+                                data: 'NumeroIdentification',
+                                'sDefaultContent': '0-0-0000',
+                                name: 'NumeroIdentification',
+                                'autoWidth': true
+                            },
+                            { data: name, name: name, 'sDefaultContent': '0-0-0000', 'autoWidth': true },
+                            {
+                                data: 'CurrencyCode',
+                                'sDefaultContent': '0-0-0000',
+                                name: 'CurrencyCode',
+                                'autoWidth': true
+                            },
+                            { data: 'Bic', name: 'Bic', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
+                            { data: 'Amount', name: 'Amount', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
+                            {
+                                data: 'NewBalance',
+                                name: 'NewBalance',
+                                'sDefaultContent': '0-0-0000',
+                                'autoWidth': true
+                            },
+                            {
+                                data: 'InitialBalance',
+                                name: 'InitialBalance',
+                                'sDefaultContent': '0-0-0000',
+                                'autoWidth': true
+                            },
+                            {
+                                data: 'AccountingDate',
+                                name: 'AccountingDate',
+                                'sDefaultContent': '0-0-0000',
+                                'autoWidth': true
+                            }
+                            ],
+                        'ordering': true,
+                        'paging': true,
+                        'pagingType': 'full_numbers',
+                        'pageLength': 10
+                    
+
+                });
+        });
+        
+
+        //(function($) {
+        //    var generateCustomerTable = $('#example')
+        //        .dataTable({
+        //            'processing': true,
+        //            'serverSide': true,
+        //            'ajax': {
+        //                'url': '/Home/LoadTransaction',
+        //                'dataSrc': '',
+        //                'method': 'POST'
+        //            },
+                   
+        //            'columns': [
+        //                { 'data': 'ValueDate', 'name': 'ValueDate', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
+        //                { 'data': 'StructuredMessage', 'name': 'StructuredMessage', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
+        //                {
+        //                    'data': 'Message',
+        //                    'name': 'Message',
+        //                    'sDefaultContent': '0-0-0000',
+        //                    'autoWidth': true
+        //                },
+        //                { 'data': 'Number', 'name': 'Number', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
+        //                {
+        //                    'data': 'NumeroIdentification',
+        //                    'sDefaultContent': '0-0-0000',
+        //                    'name': 'NumeroIdentification',
+        //                    'autoWidth': true
+        //                },
+        //                { 'data': 'Name', 'name': 'Name', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
+        //                {
+        //                    'data': 'CurrencyCode',
+        //                    'sDefaultContent': '0-0-0000',
+        //                    'name': 'CurrencyCode',
+        //                    'autoWidth': true
+        //                },
+        //                { 'data': 'Bic', 'name': 'Bic', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
+        //                { 'data': 'Amount', 'name': 'Amount', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
+        //                {
+        //                    'data': 'NewBalance',
+        //                    'name': 'NewBalance',
+        //                    'sDefaultContent': '0-0-0000',
+        //                    'autoWidth': true
+        //                },
+        //                {
+        //                    'data': 'InitialBalance',
+        //                    'name': 'InitialBalance',
+        //                    'sDefaultContent': '0-0-0000',
+        //                    'autoWidth': true
+        //                },
+        //                {
+        //                    'data': 'AccountingDate',
+        //                    'name': 'AccountingDate',
+        //                    'sDefaultContent': '0-0-0000',
+        //                    'autoWidth': true
+        //                }
+        //            ],
+        //            'ordering': true,
+        //            'paging': true,
+        //            'pagingType': 'full_numbers',
+        //            'pageLength': 10
+
+        //        });
+        //})(jQuery);
+    </script>
+}
 
 
 
