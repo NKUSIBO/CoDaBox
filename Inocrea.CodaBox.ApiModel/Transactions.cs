@@ -47,5 +47,13 @@ namespace Inocrea.CodaBox.ApiModel
         public string StructuredMessage { get; set; }
         [DataMember]
         public string Message { get; set; }
+
+        public int AdresseId { get; set; }
+     
+        public int StatementId { get; set; }
+        public int CompteBancaireId { get; set; }
+
+        public CompteBancaire CompteBancaire { get; set; }
+        public Statements Statement { get; set; }
     }
 }

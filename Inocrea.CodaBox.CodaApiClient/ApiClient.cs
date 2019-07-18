@@ -17,7 +17,7 @@ namespace Inocrea.CodaBox.CodaApiClient
     public partial class ApiClient
     {
         private static List<InvoiceModel> listInvoice = new List<InvoiceModel>();
-        private static List<Transactions> listTransactions = new List<Transactions>();
+        private static List<MyTransaction> listTransactions = new List<MyTransaction>();
 
         string[] stringLine;
         private readonly HttpClient _httpClient;
@@ -46,10 +46,33 @@ namespace Inocrea.CodaBox.CodaApiClient
             stringLine = new string[] { data };
             var parser = new Parser();
             WrittingToFile(stringLine);
+            List<Transactions> res = new List<Transactions>();
+
             var statements = parser.ParseFile(@"C:\Users\Public\TestFolder\WriteLines.cod");
 
             foreach (var statement in statements)
             {
+                List<MyTransaction> mytransList = new List<MyTransaction>();
+
+                ApiModel.Statements st = new ApiModel.Statements();
+                CompteBancaire cb = new CompteBancaire()
+                {
+                    Iban = statement.Account.Number,
+                    IdentificationNumber = statement.Account.CompanyIdentificationNumber,
+                    Bic = statement.Account.Bic,
+                    CurrencyCode = statement.Account.CurrencyCode
+
+
+                };
+                st.CompteBancaire = cb;
+                st.InitialBalance = statement.InitialBalance;
+                st.Date = statement.Date;
+                st.NewBalance = statement.NewBalance;
+                st.InformationalMessage = statement.InformationalMessage;
+
+               
+                // modele à effacer
+
                 InvoiceModel invoice = new InvoiceModel();
                 invoice.AccountingDate = statement.Date.ToString("dd-MM-yyyy");
                 invoice.InitialBalance = statement.InitialBalance;
@@ -58,40 +81,80 @@ namespace Inocrea.CodaBox.CodaApiClient
                 invoice.NumeroIdentification = statement.Account.CompanyIdentificationNumber;
                 invoice.Bic = statement.Account.Bic;
                 invoice.Name = statement.Account.Name;
-                
+
                 invoice.CurrencyCode = statement.Account.CurrencyCode;
                 foreach (var transaction in statement.Transactions)
                 {
-                    Transactions trans= new Transactions();
-                    trans.AccountingDate = statement.Date.ToString("dd-MM-yyyy");
-                    trans.InitialBalance = statement.InitialBalance;
-                    trans.NewBalance = statement.NewBalance;
-                    trans.Number = statement.Account.Number;
-                    trans.NumeroIdentification = statement.Account.CompanyIdentificationNumber;
-                    trans.Bic = statement.Account.Bic;
-                    trans.Name = statement.Account.Name;
-                    trans.CurrencyCode = statement.Account.CurrencyCode;
-                    trans.Message = Regex.Replace(transaction.Message, @"    ", "");
-                    trans.StructuredMessage = transaction.StructuredMessage;
-                    trans.TransactionDate = transaction.TransactionDate.ToString("dd-MM-yyyy");
+                    MyTransaction mytransaction = new MyTransaction();
 
-                    trans.ValueDate = transaction.ValutaDate.ToString("dd-MM-yyyy");
-                    trans.Amount = transaction.Amount.ToString(CultureInfo.InvariantCulture);
+                    CompteBancaire transCompte = new CompteBancaire();
+                    transCompte.Bic = transaction.Account.Bic;
+                    transCompte.CurrencyCode = transaction.Account.CurrencyCode;
+                    transCompte.Iban = transaction.Account.Number;
+                    transCompte.IdentificationNumber = transaction.Account.Name;
+                    mytransaction.ValueDate = transaction.ValutaDate;
+                    mytransaction.Amount = transaction.Amount;
+                    mytransaction.StructuredMessage = transaction.StructuredMessage;
+                    mytransaction.TransactionDate = transaction.TransactionDate;
+                   
+                    mytransaction.CompteBancaire = transCompte;
+                    mytransList.Add(mytransaction);
+                    ///modele à effacer
+                    Transactions trans = new Transactions();
 
-                    listTransactions.Add(trans);
+                    listTransactions.Add(mytransaction);
                     listInvoice.Add(invoice);
                     Console.WriteLine(transaction.Account.Name + ": " + transaction.Amount);
                 }
-                invoice.Transactions = listTransactions;
-                
+                //invoice.Transactions = listTransactions;
+                st.Transactions = listTransactions;
                 Console.WriteLine(statement.NewBalance);
 
             }
+            //foreach (var statement in statements)
+            //{
+            //    InvoiceModel invoice = new InvoiceModel();
+            //    invoice.AccountingDate = statement.Date.ToString("dd-MM-yyyy");
+            //    invoice.InitialBalance = statement.InitialBalance;
+            //    invoice.NewBalance = statement.NewBalance;
+            //    invoice.Number = statement.Account.Number;
+            //    invoice.NumeroIdentification = statement.Account.CompanyIdentificationNumber;
+            //    invoice.Bic = statement.Account.Bic;
+            //    invoice.Name = statement.Account.Name;
+                
+            //    invoice.CurrencyCode = statement.Account.CurrencyCode;
+            //    foreach (var transaction in statement.Transactions)
+            //    {
+            //        Transactions trans= new Transactions();
+            //        trans.AccountingDate = statement.Date.ToString("dd-MM-yyyy");
+            //        trans.InitialBalance = statement.InitialBalance;
+            //        trans.NewBalance = statement.NewBalance;
+            //        trans.Number = statement.Account.Number;
+            //        trans.NumeroIdentification = statement.Account.CompanyIdentificationNumber;
+            //        trans.Bic = statement.Account.Bic;
+            //        trans.Name = statement.Account.Name;
+            //        trans.CurrencyCode = statement.Account.CurrencyCode;
+            //        trans.Message = Regex.Replace(transaction.Message, @"    ", "");
+            //        trans.StructuredMessage = transaction.StructuredMessage;
+            //        trans.TransactionDate = transaction.TransactionDate.ToString("dd-MM-yyyy");
+
+            //        trans.ValueDate = transaction.ValutaDate.ToString("dd-MM-yyyy");
+            //        trans.Amount = transaction.Amount.ToString(CultureInfo.InvariantCulture);
+
+            //        listTransactions.Add(trans);
+            //        listInvoice.Add(invoice);
+            //        Console.WriteLine(transaction.Account.Name + ": " + transaction.Amount);
+            //    }
+            //    invoice.Transactions = listTransactions;
+                
+            //    Console.WriteLine(statement.NewBalance);
+
+            //}
             response.EnsureSuccessStatusCode();
             // Above three lines can be replaced with new helper method below
             // string responseBody = await client.GetStringAsync(uri);
 
-            return listTransactions;
+            return res;
             
         }
         public void WrittingToFile(string[] lines)
