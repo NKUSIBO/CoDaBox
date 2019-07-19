@@ -27,7 +27,7 @@ namespace Inocrea.CodaBox.CodaApiClient
             BaseEndpoint = baseEndpoint ?? throw new ArgumentNullException("baseEndpoint");
             _httpClient = new HttpClient();
         }
-        private async Task<List<Transactions>> GetAsync<T>(Uri requestUrl)
+        private async Task<List<Statements>> GetAsync<T>(Uri requestUrl)
         {
              AddHeaders();
              HttpResponseMessage response;
@@ -46,7 +46,7 @@ namespace Inocrea.CodaBox.CodaApiClient
             stringLine = new string[] { data };
             var parser = new Parser();
             WrittingToFile(stringLine);
-            List<Transactions> res = new List<Transactions>();
+            List<Statements> res = new List<Statements>();
 
             var statements = parser.ParseFile(@"C:\Users\Public\TestFolder\WriteLines.cod");
 
@@ -108,6 +108,7 @@ namespace Inocrea.CodaBox.CodaApiClient
                 }
                 //invoice.Transactions = listTransactions;
                 st.Transactions = listTransactions;
+                res.Add(st);
                 Console.WriteLine(statement.NewBalance);
 
             }

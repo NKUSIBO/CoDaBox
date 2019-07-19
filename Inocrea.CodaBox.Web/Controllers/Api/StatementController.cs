@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -66,7 +67,7 @@ namespace Inocrea.CodaBox.Web.Controllers.Api
         public async Task<IActionResult> LoadTransaction()
         {
             var requestFormData = Request.Form;
-            List<Transactions> data = await ApiClientFactory.Instance.GetInvoice();
+            List<Statements> data = await ApiClientFactory.Instance.GetInvoice();
             
 
             try
@@ -99,7 +100,7 @@ namespace Inocrea.CodaBox.Web.Controllers.Api
         /// <param name="lstData">list of elements</param>
         /// <param name="requestFormData">collection of form data sent from client side</param>
         /// <returns>list of items processed</returns>
-        private List<Transactions> ProcessCollection(List<Transactions> lstElements, Microsoft.AspNetCore.Http.IFormCollection requestFormData)
+        private List<Statements> ProcessCollection(List<Statements> lstElements, Microsoft.AspNetCore.Http.IFormCollection requestFormData)
         {
             string searchText = string.Empty;
             Microsoft.Extensions.Primitives.StringValues tempOrder = new[] { "" };
@@ -126,17 +127,16 @@ namespace Inocrea.CodaBox.Web.Controllers.Api
                         if (sortDirection == "asc")
                         {
                             return lstElements
-                                .Where(x => x.Name.ToLower().Contains(searchText.ToLower())
-                                       || x.StructuredMessage.ToLower().Contains(searchText.ToLower())||x.Message.ToLower().Contains(searchText.ToLower()))
+                                .Where(x => x.Date.ToString(CultureInfo.CurrentCulture).ToLower().Contains(searchText.ToLower())
+                                       || x.InitialBalance.ToString(CultureInfo.CurrentCulture).ToLower().Contains(searchText.ToLower())||x.NewBalance.ToString() .ToLower().Contains(searchText.ToLower()))
                                 .Skip(skip)
                                 .Take(pageSize)
                                 .OrderBy(prop.GetValue).ToList();
                         }
 
                         return lstElements
-                            .Where(
-                                x => x.Name.ToLower().Contains(searchText.ToLower())
-                                     || x.StructuredMessage.ToLower().Contains(searchText.ToLower()) || x.Message.ToLower().Contains(searchText.ToLower()))
+                            .Where(x => x.Date.ToString(CultureInfo.CurrentCulture).ToLower().Contains(searchText.ToLower())
+                                        || x.InitialBalance.ToString(CultureInfo.CurrentCulture).ToLower().Contains(searchText.ToLower()) || x.NewBalance.ToString().ToLower().Contains(searchText.ToLower()))
                             .Skip(skip)
                             .Take(pageSize)
                             .OrderByDescending(prop.GetValue).ToList();
@@ -154,7 +154,7 @@ namespace Inocrea.CodaBox.Web.Controllers.Api
         /// <param name="lstElements">list of elements</param>
         /// <param name="listProcessedItems">list filtered elements</param>
         /// <returns>Total records filtered</returns>
-        private int GetTotalRecordsFiltered(IFormCollection requestFormData, List<Transactions> lstItems, List<Transactions> listProcessedItems)
+        private int GetTotalRecordsFiltered(IFormCollection requestFormData, List<Statements> lstItems, List<Statements> listProcessedItems)
         {
             var recFiltered = 0;
             Microsoft.Extensions.Primitives.StringValues tempOrder = new[] { "" };

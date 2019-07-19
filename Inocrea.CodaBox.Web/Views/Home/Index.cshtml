@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Inocrea.CodaBox.ApiModel.Transactions>
+﻿@model IEnumerable<Inocrea.CodaBox.ApiModel.Statements>
 
 @{
     Layout = "_Layout";
@@ -20,62 +20,36 @@
 
                     <tr>
                         <th>
-                            @Html.DisplayNameFor(model => model.ValueDate)
-
-                        </th>
-
-
-                        <th>
-                            @Html.DisplayNameFor(model => model.StructuredMessage)
-                        </th>
-
-
-
-
-
-                        <th>
-                            @Html.DisplayNameFor(model => model.Message)
-                        </th>
-
-                        <th>
-                            @Html.DisplayNameFor(model => model.Number)
-
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.NumeroIdentification)
-
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Name)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.CurrencyCode)
-                        </th>
-
-                        <th>
-                            @Html.DisplayNameFor(model => model.Bic)
-
-                        </th>
-
-
-
-
-
-
-                        <th>
-                            @Html.DisplayNameFor(model => model.Amount)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.NewBalance)
-                        </th>
-                        <th>
                             @Html.DisplayNameFor(model => model.InitialBalance)
 
                         </th>
 
+
                         <th>
-                            @Html.DisplayNameFor(model => model.AccountingDate)
+                            @Html.DisplayNameFor(model => model.NewBalance)
                         </th>
+
+
+
+
+
+                        <th>
+                            @Html.DisplayNameFor(model => model.InformationalMessage)
+                        </th>
+
+                        <th>
+                            @Html.DisplayNameFor(model => model.Date)
+
+                        </th>
+                       
+
+
+
+
+
+
+                       
+                        
                     </tr>
                     </thead>
                     
@@ -109,53 +83,21 @@
 
                     'columns':
                         [
-                            { data: 'ValueDate', name: 'ValueDate', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
-                            {
-                                data: 'StructuredMessage',
-                                name: 'StructuredMessage',
-                                'sDefaultContent': '0-0-0000',
-                                'autoWidth': true
-                            },
-                            {
-                                data: 'Message',
-                                name: 'Message',
-                                'sDefaultContent': '0-0-0000',
-                                'autoWidth': true
-                            },
-                            { data: 'Number', name: 'Number', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
-                            {
-                                data: 'NumeroIdentification',
-                                'sDefaultContent': '0-0-0000',
-                                name: 'NumeroIdentification',
-                                'autoWidth': true
-                            },
-                            { data: name, name: name, 'sDefaultContent': '0-0-0000', 'autoWidth': true },
-                            {
-                                data: 'CurrencyCode',
-                                'sDefaultContent': '0-0-0000',
-                                name: 'CurrencyCode',
-                                'autoWidth': true
-                            },
-                            { data: 'Bic', name: 'Bic', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
-                            { data: 'Amount', name: 'Amount', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
+                            { data: 'InitialBalance', name: 'InitialBalance', 'sDefaultContent': '0.0', 'autoWidth': true },
                             {
                                 data: 'NewBalance',
                                 name: 'NewBalance',
-                                'sDefaultContent': '0-0-0000',
+                                'sDefaultContent': '0.0',
                                 'autoWidth': true
                             },
                             {
-                                data: 'InitialBalance',
-                                name: 'InitialBalance',
-                                'sDefaultContent': '0-0-0000',
+                                data: 'InformationalMessage',
+                                name: 'InformationalMessage',
+                                'sDefaultContent': 'InformationalMessage',
                                 'autoWidth': true
                             },
-                            {
-                                data: 'AccountingDate',
-                                name: 'AccountingDate',
-                                'sDefaultContent': '0-0-0000',
-                                'autoWidth': true
-                            }
+                            { data: 'Date', name: 'Date', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
+                            
                             ],
                         'ordering': true,
                         'paging': true,

@@ -42,7 +42,7 @@ namespace Inocrea.CodaBox.ApiModel
         public string TransactionDate { get; set; }
 
         [DataMember]
-        public string ValueDate { get; set; }
+        public DateTime ValueDate { get; set; }
         [DataMember]
         public string StructuredMessage { get; set; }
         [DataMember]
