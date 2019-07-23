@@ -18,7 +18,7 @@ namespace Inocrea.CodaBox.ApiServer.Models
         public int StatementId { get; set; }
         public int CompteBancaireId { get; set; }
 
-        public CompteBancaire CompteBancaire { get; set; }
-        public ICollection<Transactions> Transactions { get; set; }
+        public virtual CompteBancaire CompteBancaire { get; set; }
+        public virtual ICollection<Transactions> Transactions { get; set; }
     }
 }

@@ -21,4 +21,5 @@ namespace Inocrea.CodaBox.ApiModel
         public ICollection<AspNetUsers> AspNetUsers { get; set; }
         public ICollection<CompteBancaire> CompteBancaire { get; set; }
     }
+
 }

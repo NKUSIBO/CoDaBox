@@ -1,8 +1,9 @@
 ﻿using System;
+using Inocrea.CodaBox.ApiServer.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace Inocrea.CodaBox.ApiServer.Models
+namespace Inocrea.CodaBox.Dal.Models
 {
     public partial class CodaBoxContext : DbContext
     {
@@ -21,8 +22,8 @@ namespace Inocrea.CodaBox.ApiServer.Models
         public virtual DbSet<AspNetUserClaims> AspNetUserClaims { get; set; }
         public virtual DbSet<AspNetUserLogins> AspNetUserLogins { get; set; }
         public virtual DbSet<AspNetUserRoles> AspNetUserRoles { get; set; }
-        public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
         public virtual DbSet<AspNetUserTokens> AspNetUserTokens { get; set; }
+        public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
         public virtual DbSet<Company> Company { get; set; }
         public virtual DbSet<CompteBancaire> CompteBancaire { get; set; }
         public virtual DbSet<Country> Country { get; set; }
@@ -40,6 +41,8 @@ namespace Inocrea.CodaBox.ApiServer.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.HasAnnotation("ProductVersion", "2.2.6-servicing-10079");
+
             modelBuilder.Entity<Adress>(entity =>
             {
                 entity.Property(e => e.AdressId)
@@ -145,6 +148,19 @@ namespace Inocrea.CodaBox.ApiServer.Models
                     .HasForeignKey(d => d.UserId);
             });
 
+            modelBuilder.Entity<AspNetUserTokens>(entity =>
+            {
+                entity.HasKey(e => new { e.UserId, e.LoginProvider, e.Name });
+
+                entity.Property(e => e.LoginProvider).HasMaxLength(128);
+
+                entity.Property(e => e.Name).HasMaxLength(128);
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.AspNetUserTokens)
+                    .HasForeignKey(d => d.UserId);
+            });
+
             modelBuilder.Entity<AspNetUsers>(entity =>
             {
                 entity.HasIndex(e => e.NormalizedEmail)
@@ -170,21 +186,7 @@ namespace Inocrea.CodaBox.ApiServer.Models
                 entity.HasOne(d => d.CompanyVatNavigation)
                     .WithMany(p => p.AspNetUsers)
                     .HasForeignKey(d => d.CompanyVat)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_AspNetUsers_Company");
-            });
-
-            modelBuilder.Entity<AspNetUserTokens>(entity =>
-            {
-                entity.HasKey(e => new { e.UserId, e.LoginProvider, e.Name });
-
-                entity.Property(e => e.LoginProvider).HasMaxLength(128);
-
-                entity.Property(e => e.Name).HasMaxLength(128);
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.AspNetUserTokens)
-                    .HasForeignKey(d => d.UserId);
             });
 
             modelBuilder.Entity<Company>(entity =>
@@ -211,12 +213,6 @@ namespace Inocrea.CodaBox.ApiServer.Models
                     .HasMaxLength(50);
 
                 entity.Property(e => e.IdentificationNumber).HasMaxLength(50);
-
-                entity.HasOne(d => d.Company)
-                    .WithMany(p => p.CompteBancaire)
-                    .HasForeignKey(d => d.CompanyId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_CompteBancaire_Company");
             });
 
             modelBuilder.Entity<Country>(entity =>

@@ -9,7 +9,7 @@ namespace Inocrea.CodaBox.ApiModel
     {
         public Statements()
         {
-            Transactions = new HashSet<MyTransaction>();
+            Transactions = new HashSet<Transactions>();
         }
 
         public decimal InitialBalance { get; set; }
@@ -21,6 +21,6 @@ namespace Inocrea.CodaBox.ApiModel
         public int CompteBancaireId { get; set; }
 
         public CompteBancaire CompteBancaire { get; set; }
-        public ICollection<MyTransaction> Transactions { get; set; }
+        public ICollection<Transactions> Transactions { get; set; }
     }
 }

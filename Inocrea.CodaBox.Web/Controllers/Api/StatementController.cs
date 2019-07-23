@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Inocrea.CodaBox.ApiModel;
+using Inocrea.CodaBox.ApiModel.ViewModel;
 using Inocrea.CodaBox.Web.Factory;
 using Inocrea.CodaBox.Web.Helper;
 using Inocrea.CodaBox.Web.Models;
@@ -67,7 +68,7 @@ namespace Inocrea.CodaBox.Web.Controllers.Api
         public async Task<IActionResult> LoadTransaction()
         {
             var requestFormData = Request.Form;
-            List<Statements> data = await ApiClientFactory.Instance.GetInvoice();
+            List<StatementAccountViewModel> data = await ApiClientFactory.Instance.GetInvoice();
             
 
             try
@@ -100,7 +101,7 @@ namespace Inocrea.CodaBox.Web.Controllers.Api
         /// <param name="lstData">list of elements</param>
         /// <param name="requestFormData">collection of form data sent from client side</param>
         /// <returns>list of items processed</returns>
-        private List<Statements> ProcessCollection(List<Statements> lstElements, Microsoft.AspNetCore.Http.IFormCollection requestFormData)
+        private List<StatementAccountViewModel> ProcessCollection(List<StatementAccountViewModel> lstElements, Microsoft.AspNetCore.Http.IFormCollection requestFormData)
         {
             string searchText = string.Empty;
             Microsoft.Extensions.Primitives.StringValues tempOrder = new[] { "" };
@@ -154,7 +155,7 @@ namespace Inocrea.CodaBox.Web.Controllers.Api
         /// <param name="lstElements">list of elements</param>
         /// <param name="listProcessedItems">list filtered elements</param>
         /// <returns>Total records filtered</returns>
-        private int GetTotalRecordsFiltered(IFormCollection requestFormData, List<Statements> lstItems, List<Statements> listProcessedItems)
+        private int GetTotalRecordsFiltered(IFormCollection requestFormData, List<StatementAccountViewModel> lstItems, List<StatementAccountViewModel> listProcessedItems)
         {
             var recFiltered = 0;
             Microsoft.Extensions.Primitives.StringValues tempOrder = new[] { "" };

@@ -13,6 +13,6 @@ namespace Inocrea.CodaBox.Dal.Models
         public int CountryId { get; set; }
         public string CountryName { get; set; }
 
-        public ICollection<Adress> Adress { get; set; }
+        public virtual ICollection<Adress> Adress { get; set; }
     }
 }

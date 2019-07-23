@@ -1,9 +1,9 @@
 ﻿using System;
-using Inocrea.CodaBox.ApiModel;
+using Inocrea.CodaBox.Web.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace Inocrea.CodaBox.Dal.Entities
+namespace Inocrea.CodaBox.Dal.Models
 {
     public partial class CodaBoxContext : DbContext
     {
@@ -22,8 +22,8 @@ namespace Inocrea.CodaBox.Dal.Entities
         public virtual DbSet<AspNetUserClaims> AspNetUserClaims { get; set; }
         public virtual DbSet<AspNetUserLogins> AspNetUserLogins { get; set; }
         public virtual DbSet<AspNetUserRoles> AspNetUserRoles { get; set; }
-        public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
         public virtual DbSet<AspNetUserTokens> AspNetUserTokens { get; set; }
+        public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
         public virtual DbSet<Company> Company { get; set; }
         public virtual DbSet<CompteBancaire> CompteBancaire { get; set; }
         public virtual DbSet<Country> Country { get; set; }
@@ -41,6 +41,8 @@ namespace Inocrea.CodaBox.Dal.Entities
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.HasAnnotation("ProductVersion", "2.2.6-servicing-10079");
+
             modelBuilder.Entity<Adress>(entity =>
             {
                 entity.Property(e => e.AdressId)
@@ -146,6 +148,19 @@ namespace Inocrea.CodaBox.Dal.Entities
                     .HasForeignKey(d => d.UserId);
             });
 
+            modelBuilder.Entity<AspNetUserTokens>(entity =>
+            {
+                entity.HasKey(e => new { e.UserId, e.LoginProvider, e.Name });
+
+                entity.Property(e => e.LoginProvider).HasMaxLength(128);
+
+                entity.Property(e => e.Name).HasMaxLength(128);
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.AspNetUserTokens)
+                    .HasForeignKey(d => d.UserId);
+            });
+
             modelBuilder.Entity<AspNetUsers>(entity =>
             {
                 entity.HasIndex(e => e.NormalizedEmail)
@@ -171,21 +186,7 @@ namespace Inocrea.CodaBox.Dal.Entities
                 entity.HasOne(d => d.CompanyVatNavigation)
                     .WithMany(p => p.AspNetUsers)
                     .HasForeignKey(d => d.CompanyVat)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_AspNetUsers_Company");
-            });
-
-            modelBuilder.Entity<AspNetUserTokens>(entity =>
-            {
-                entity.HasKey(e => new { e.UserId, e.LoginProvider, e.Name });
-
-                entity.Property(e => e.LoginProvider).HasMaxLength(128);
-
-                entity.Property(e => e.Name).HasMaxLength(128);
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.AspNetUserTokens)
-                    .HasForeignKey(d => d.UserId);
             });
 
             modelBuilder.Entity<Company>(entity =>
@@ -212,12 +213,6 @@ namespace Inocrea.CodaBox.Dal.Entities
                     .HasMaxLength(50);
 
                 entity.Property(e => e.IdentificationNumber).HasMaxLength(50);
-
-                entity.HasOne(d => d.Company)
-                    .WithMany(p => p.CompteBancaire)
-                    .HasForeignKey(d => d.CompanyId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_CompteBancaire_Company");
             });
 
             modelBuilder.Entity<Country>(entity =>
@@ -258,7 +253,17 @@ namespace Inocrea.CodaBox.Dal.Entities
 
                 entity.Property(e => e.ValueDate).HasColumnType("datetime");
 
-                
+                entity.HasOne(d => d.CompteBancaire)
+                    .WithMany(p => p.Transactions)
+                    .HasForeignKey(d => d.CompteBancaireId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Transactions_CompteBancaire");
+
+                entity.HasOne(d => d.Statement)
+                    .WithMany(p => p.Transactions)
+                    .HasForeignKey(d => d.StatementId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Transactions_Statements");
             });
         }
     }

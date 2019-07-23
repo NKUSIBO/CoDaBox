@@ -20,7 +20,7 @@ namespace Inocrea.CodaBox.ApiModel
         public int? StatementsId { get; set; }
         public int? TransactionsId { get; set; }
 
-        public Company Company { get; set; }
+        
         public ICollection<Statements> Statements { get; set; }
         public ICollection<Transactions> Transactions { get; set; }
     }

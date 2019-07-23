@@ -10,6 +10,6 @@ namespace Inocrea.CodaBox.Dal.Models
         public string ClaimType { get; set; }
         public string ClaimValue { get; set; }
 
-        public AspNetRoles Role { get; set; }
+        public virtual AspNetRoles Role { get; set; }
     }
 }

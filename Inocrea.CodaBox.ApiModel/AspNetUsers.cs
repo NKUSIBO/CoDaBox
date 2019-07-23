@@ -30,7 +30,7 @@ namespace Inocrea.CodaBox.ApiModel
         public int AccessFailedCount { get; set; }
         public int CompanyVat { get; set; }
 
-        public Company CompanyVatNavigation { get; set; }
+     
         public ICollection<AspNetUserClaims> AspNetUserClaims { get; set; }
         public ICollection<AspNetUserLogins> AspNetUserLogins { get; set; }
         public ICollection<AspNetUserRoles> AspNetUserRoles { get; set; }

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Inocrea.CodaBox.ApiServer.Models;
+using Inocrea.CodaBox.Dal.Models;
 
 namespace Inocrea.CodaBox.ApiServer.Controllers
 {
@@ -13,9 +14,9 @@ namespace Inocrea.CodaBox.ApiServer.Controllers
     [ApiController]
     public class StatementsController : ControllerBase
     {
-        private readonly CodaBoxContext _context;
+        private readonly DevCodaBoxContext _context;
 
-        public StatementsController(CodaBoxContext context)
+        public StatementsController(DevCodaBoxContext context)
         {
             _context = context;
         }

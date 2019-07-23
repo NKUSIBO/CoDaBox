@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
-namespace Inocrea.CodaBox.Dal.Models
+namespace Inocrea.CodaBox.ApiModel.ViewModel
 {
-    public partial class CompteBancaire
+    public class TransactionsAccountViewModel
     {
-        public CompteBancaire()
-        {
-            Statements = new HashSet<Statements>();
-            Transactions = new HashSet<Transactions>();
-        }
-
+        public int AdresseId { get; set; }
+        public string StructuredMessage { get; set; }
+        public DateTime TransactionDate { get; set; }
+        public DateTime ValueDate { get; set; }
+        public decimal Amount { get; set; }
         public int Id { get; set; }
+
         public string Iban { get; set; }
         public int CompanyId { get; set; }
         public string CurrencyCode { get; set; }
@@ -19,8 +20,5 @@ namespace Inocrea.CodaBox.Dal.Models
         public string IdentificationNumber { get; set; }
         public int? StatementsId { get; set; }
         public int? TransactionsId { get; set; }
-
-        public virtual ICollection<Statements> Statements { get; set; }
-        public virtual ICollection<Transactions> Transactions { get; set; }
     }
 }

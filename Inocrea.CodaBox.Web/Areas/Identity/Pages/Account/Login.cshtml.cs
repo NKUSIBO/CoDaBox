@@ -44,10 +44,7 @@ namespace Inocrea.CodaBox.Web.Areas.Identity.Pages.Account
             [Required]
             [DataType(DataType.Password)]
             public string Password { get; set; }
-            [Required]
-           
-            public string CompanyVTA { get; set; }
-
+            
             [Display(Name = "Remember me?")]
             public bool RememberMe { get; set; }
         }

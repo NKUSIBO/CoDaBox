@@ -15,7 +15,7 @@ namespace Inocrea.CodaBox.Dal.Models
         public string HouseNumber { get; set; }
         public int CompanyId { get; set; }
 
-        public Company AdressNavigation { get; set; }
-        public Country Country { get; set; }
+        public virtual Company AdressNavigation { get; set; }
+        public virtual Country Country { get; set; }
     }
 }

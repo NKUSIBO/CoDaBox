@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Inocrea.CodaBox.Web.Entities
 {
@@ -10,7 +11,7 @@ namespace Inocrea.CodaBox.Web.Entities
             AspNetRoleClaims = new HashSet<AspNetRoleClaims>();
             AspNetUserRoles = new HashSet<AspNetUserRoles>();
         }
-
+        [Key]
         public string Id { get; set; }
         public string Name { get; set; }
         public string NormalizedName { get; set; }

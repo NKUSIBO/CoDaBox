@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Inocrea.CodaBox.ApiServer.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Hosting;
@@ -10,6 +11,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Inocrea.CodaBox.Web.Data;
+using Inocrea.CodaBox.Web.Entities;
 using Inocrea.CodaBox.Web.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -42,14 +44,16 @@ namespace Inocrea.CodaBox.Web
                  options.CheckConsentNeeded = context => true;
                  options.MinimumSameSitePolicy = SameSiteMode.None;
              });
-
-             services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddDbContext<DevCodaBoxContext>(options =>
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<ApplicationDbContext>(options =>
                  options.UseSqlServer(
                      Configuration.GetConnectionString("DefaultConnection")));
              services.AddDefaultIdentity<IdentityUser>()
                  .AddEntityFrameworkStores<ApplicationDbContext>();
              services.Configure<SettingsModels>(Configuration.GetSection("ApiSettings"));
-
+             services.Configure<SettingsModelsApiServer>(Configuration.GetSection("ApiServerSettings"));
              services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
