@@ -167,18 +167,11 @@ namespace Inocrea.CodaBox.Web.Controllers
                 }
             }
         }
-        [HttpPost]
-        public async Task<IActionResult> LoadTransaction()
+
+        public void InsertStatementToDb(List<Statements> staInsertResult)
         {
-            ApiServerCoda _api=new ApiServerCoda();
+            ApiServerCoda _api = new ApiServerCoda();
             HttpClient client = _api.Initial();
-            var requestFormData = Request.Form;
-            List<StatementAccountViewModel> data = await ApiClientFactory.Instance.GetInvoice();
-           
-           var staInsertResult = await ApiClientFactory.Instance.GetStatements();
-
-
-
             foreach (var item in staInsertResult)
             {
                 var statementToInsert = JsonConvert.SerializeObject(item);
@@ -200,6 +193,20 @@ namespace Inocrea.CodaBox.Web.Controllers
                 }
 
             }
+        }
+        [HttpPost]
+        public async Task<IActionResult> LoadTransaction()
+        {
+           
+            var requestFormData = Request.Form;
+            List<StatementAccountViewModel> data = await ApiClientFactory.Instance.GetInvoice();
+           
+           var staInsertResult = await ApiClientFactory.Instance.GetStatements();
+
+           InsertStatementToDb(staInsertResult);
+
+
+
             try
             {
                 listData = ProcessCollection(data, requestFormData);

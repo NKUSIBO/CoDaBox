@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Infrastructure;
+using System;
 using System.Collections.Generic;
 
 namespace Inocrea.CodaBox.ApiServer.Models
 {
+    
     public partial class CompteBancaire
     {
         public CompteBancaire()

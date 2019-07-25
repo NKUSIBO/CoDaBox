@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Inocrea.CodaBox.ApiServer.Models;
-using Inocrea.CodaBox.Dal.Models;
 
 namespace Inocrea.CodaBox.ApiServer.Controllers
 {
@@ -76,8 +75,16 @@ namespace Inocrea.CodaBox.ApiServer.Controllers
         [HttpPost]
         public async Task<ActionResult<Statements>> PostStatements(Statements statements)
         {
-            _context.Statements.Add(statements);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Statements.Add(statements);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
 
             return CreatedAtAction("GetStatements", new { id = statements.StatementId }, statements);
         }

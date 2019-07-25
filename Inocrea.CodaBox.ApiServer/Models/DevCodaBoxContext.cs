@@ -10,6 +10,8 @@ namespace Inocrea.CodaBox.ApiServer.Models
         {
         }
 
+       
+
         public DevCodaBoxContext(DbContextOptions<DevCodaBoxContext> options)
             : base(options)
         {
@@ -19,14 +21,7 @@ namespace Inocrea.CodaBox.ApiServer.Models
         public virtual DbSet<Statements> Statements { get; set; }
         public virtual DbSet<Transactions> Transactions { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=.\\;Database=DevCodaBox;Trusted_Connection=True;");
-            }
-        }
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

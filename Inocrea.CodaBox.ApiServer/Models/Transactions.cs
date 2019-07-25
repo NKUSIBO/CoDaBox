@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace Inocrea.CodaBox.ApiServer.Models
 {
     public partial class Transactions
     {
+
+        public Transactions( )
+        {
+        }
         public int AdresseId { get; set; }
         public string StructuredMessage { get; set; }
         public DateTime TransactionDate { get; set; }

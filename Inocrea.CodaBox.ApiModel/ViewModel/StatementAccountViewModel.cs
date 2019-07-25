@@ -26,5 +26,7 @@ namespace Inocrea.CodaBox.ApiModel.ViewModel
         public string Bic { get; set; }
         [DataMember]
         public string IdentificationNumber { get; set; }
+        [DataMember]
+        public List<Transactions> Transactions { get; set; }
     }
 }

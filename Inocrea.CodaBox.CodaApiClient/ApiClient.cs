@@ -21,7 +21,7 @@ namespace Inocrea.CodaBox.CodaApiClient
         private static List<InvoiceModel> listInvoice = new List<InvoiceModel>();
         private static List<Transactions> listTransactions = new List<Transactions>();
         private static List<StatementAccountViewModel> listStateAccountViewModels = new List<StatementAccountViewModel>();
-
+        List<Statements> listStatements;
         string[] stringLineErase;
         private readonly HttpClient _httpClient;
         private Uri BaseEndpoint { get; set; }
@@ -30,7 +30,68 @@ namespace Inocrea.CodaBox.CodaApiClient
             BaseEndpoint = baseEndpoint ?? throw new ArgumentNullException("baseEndpoint");
             _httpClient = new HttpClient();
         }
+        private List<Statements> GetStatements<T>(Uri requestUrl, string data)
 
+        {
+            //await CallingHelper(requestUrl);
+            stringLine = new string[] { data };
+            var parser = new Parser();
+            var statements = parser.ParseFile(@"C:\Users\Public\TestFolder\WriteLines.cod");
+
+          
+            foreach (var statement in statements)
+            {
+                Statements sta = new Statements();
+
+                sta.Date = statement.Date;
+                sta.InitialBalance = statement.InitialBalance;
+                sta.NewBalance = statement.NewBalance;
+                sta.CompteBancaire.Iban = statement.Account.Number;
+                sta.CompteBancaire.IdentificationNumber = statement.Account.CompanyIdentificationNumber;
+                sta.CompteBancaire.Bic = statement.Account.Bic;
+                sta.InformationalMessage = statement.InformationalMessage;
+                sta.CompteBancaire.CurrencyCode = statement.Account.CurrencyCode;
+                foreach (var tra in statement.Transactions)
+                {
+
+                }
+                //invoice.CurrencyCode = statement.Account.CurrencyCode;
+                //foreach (var transaction in statement.Transactions)
+                //{
+                //    Transactions trans = new Transactions();
+                //    CompteBancaire transCompte = new CompteBancaire();
+                //    transCompte.Bic = transaction.Account.Bic;
+                //    transCompte.CurrencyCode = transaction.Account.CurrencyCode;
+                //    transCompte.Iban = transaction.Account.Number;
+                //    transCompte.IdentificationNumber = transaction.Account.Number;
+                //    trans.AccountingDate = statement.Date.ToString("dd-MM-yyyy");
+                //    trans.InitialBalance = statement.InitialBalance;
+                //    trans.NewBalance = statement.NewBalance;
+                //    trans.Number = statement.Account.Number;
+                //    trans.NumberCustomer = transaction.Account.Number;
+                //    trans.NumeroIdentification = statement.Account.CompanyIdentificationNumber;
+                //    trans.Bic = statement.Account.Bic;
+                //    trans.BicCustomer = transaction.Account.Bic;
+                //    trans.Name = statement.Account.Name;
+                //    trans.CurrencyCode = statement.Account.CurrencyCode;
+                //    trans.Message = Regex.Replace(transaction.Message, @"    ", "");
+                //    trans.StructuredMessage = transaction.StructuredMessage;
+                //    trans.TransactionDate = transaction.TransactionDate.ToString("dd-MM-yyyy");
+
+                //    trans.ValueDate = transaction.ValutaDate;
+                //    trans.Amount = transaction.Amount.ToString(CultureInfo.InvariantCulture);
+
+                //    listTransactions.Add(trans);
+                //    listInvoice.Add(invoice);
+                //    Console.WriteLine(transaction.Account.Name + ": " + transaction.Amount);
+                //}
+                //invoice.Transactions = listTransactions;
+                listStatements.Add(sta);
+
+            }
+
+            return listStatements;
+        }
         private  List<StatementAccountViewModel> GetBusinessStatements<T>(Uri requestUrl, string data)
 
         {
@@ -51,6 +112,10 @@ namespace Inocrea.CodaBox.CodaApiClient
                 sta.Bic = statement.Account.Bic;
                 sta.InformationalMessage = statement.Account.Name;
                 sta.CurrencyCode = statement.Account.CurrencyCode;
+                foreach (var tra in statement.Transactions)
+                {
+                    
+                }
                 //invoice.CurrencyCode = statement.Account.CurrencyCode;
                 //foreach (var transaction in statement.Transactions)
                 //{
@@ -89,7 +154,7 @@ namespace Inocrea.CodaBox.CodaApiClient
             return listStateAccountViewModels;
         }
 
-       
+        
         private async Task<string> GetAsync<T> (Uri requestUrl)
         {
              AddHeaders();
@@ -100,7 +165,7 @@ namespace Inocrea.CodaBox.CodaApiClient
                 response.EnsureSuccessStatusCode();
                 var data =  response.Content.ReadAsStringAsync().Result;
                
-                //var res = GetBusinessStatements<List<StatementAccountViewModel>>(requestUrl, statementData);
+                 GetBusinessStatements<List<StatementAccountViewModel>>(requestUrl, data);
 
                 response.EnsureSuccessStatusCode();
                 // Above three lines can be replaced with new helper method below

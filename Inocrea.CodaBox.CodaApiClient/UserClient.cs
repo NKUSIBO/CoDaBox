@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using CodaParser;
@@ -18,8 +19,9 @@ namespace Inocrea.CodaBox.CodaApiClient
         string[] stringLine;
         private string rep = "";
         private string data = "";
-        private static List<Statements> listSta = new List<Statements>();
-        private static List<Transactions> listTra= new List<Transactions>();
+        private static List<Statements> _statementToInsert = new List<Statements>();
+        private static List<CompteBancaire> _compteToInsert = new List<CompteBancaire>();
+
 
         public async Task<List<StatementAccountViewModel>> GetInvoice()
         {
@@ -29,13 +31,15 @@ namespace Inocrea.CodaBox.CodaApiClient
             rep =  await  GetAsync<List<StatementAccountViewModel>>(requestUrl);
             stringLine = new string[] { rep };
             data = rep;
+            //code to insert in db must be here
             WrittingToFile(stringLine);
+            
 
-
-            var stat = GetBusinessStatements(rep);
+            var stat = GetStatements();
             return GetBusinessStatements
                 (rep);
         }
+
         public void WrittingToFile(string[] lines)
         {
 
@@ -104,7 +108,7 @@ namespace Inocrea.CodaBox.CodaApiClient
                 var content = new StringContent(statementToInsert, System.Text.Encoding.UTF8, "application/json");
                 try
                 {
-                    HttpResponseMessage result = client.PostAsync("api/CompteBancaires", content).Result;
+                    HttpResponseMessage result =  client.PostAsync("api/CompteBancaires", content).Result;
                     if (result.IsSuccessStatusCode)
                     {
 
@@ -120,6 +124,19 @@ namespace Inocrea.CodaBox.CodaApiClient
             
 
         }
+        public async Task<CompteBancaire> GetCompte(int id)
+        {
+            CompteBancaire role = new CompteBancaire();
+            HttpClient client = _api.Initial();
+            HttpResponseMessage res = await client.GetAsync(("api/CompteBancaires/" + id));
+            if (res.IsSuccessStatusCode)
+            {
+                var result = res.Content.ReadAsStringAsync().Result;
+                role = JsonConvert.DeserializeObject<CompteBancaire>(result);
+            }
+
+            return role;
+        }
         private async Task<List<CompteBancaire>> GetAccount()
         {
             HttpClient client = _api.Initial();
@@ -129,10 +146,18 @@ namespace Inocrea.CodaBox.CodaApiClient
             if (res.IsSuccessStatusCode)
             {
                 var result = res.Content.ReadAsStringAsync().Result;
-                comptes = JsonConvert.DeserializeObject<List<CompteBancaire>>(result);
+                try
+                {
+                    comptes = JsonConvert.DeserializeObject<List<CompteBancaire>>(result);
+
+                }
+                catch (Exception ex)
+                {
+
+                    throw ex;
+                }
             }
 
-            List<CompteBancaire> listIban = new List<CompteBancaire>();
             
             return comptes;
         }
@@ -141,20 +166,20 @@ namespace Inocrea.CodaBox.CodaApiClient
         {
             
             var parser = new Parser();
-            var statements = parser.ParseFile(@"C:\Users\Public\TestFolder\WriteLines.cod");
-
-            foreach (var statement in statements)
+            var statementsFromDb = GetStatementsFromDbAsync(); ;
+           
+            foreach (var statement in statementsFromDb.Result)
             {
                 StatementAccountViewModel sta = new StatementAccountViewModel();
 
                 sta.Date = statement.Date;
                 sta.InitialBalance = statement.InitialBalance;
                 sta.NewBalance = statement.NewBalance;
-                sta.Iban = statement.Account.Number;
-                sta.IdentificationNumber = statement.Account.CompanyIdentificationNumber;
-                sta.Bic = statement.Account.Bic;
-                sta.InformationalMessage = statement.Account.Name;
-                sta.CurrencyCode = statement.Account.CurrencyCode;
+                sta.Iban = statement.CompteBancaire.Iban;
+                sta.IdentificationNumber = statement.CompteBancaire.IdentificationNumber;
+                sta.Bic = statement.CompteBancaire.Bic;
+                sta.InformationalMessage = statement.InformationalMessage;
+                sta.CurrencyCode = statement.CompteBancaire.CurrencyCode;
                 //invoice.CurrencyCode = statement.Account.CurrencyCode;
                 //foreach (var transaction in statement.Transactions)
                 //{
@@ -192,52 +217,101 @@ namespace Inocrea.CodaBox.CodaApiClient
 
             return listStateAccountViewModels;
         }
+
+        public async Task<List<Statements>> GetStatementsFromDbAsync()
+        {
+            HttpClient client = _api.Initial();
+            HttpResponseMessage res = await client.GetAsync("api/Statements");
+            var statements = new List<Statements>();
+
+            if (res.IsSuccessStatusCode)
+            {
+                var result = res.Content.ReadAsStringAsync().Result;
+
+                try
+                {
+                    statements = JsonConvert.DeserializeObject<List<Statements>>(result);
+                    foreach (var statement in statements)
+                    {
+                        CompteBancaire cp = GetCompte(statement.CompteBancaireId).Result;
+                        statement.CompteBancaire = cp;
+                    }
+                }
+                catch ( Exception ex)
+                {
+
+                    throw ex;
+                }
+            }
+
+            
+            return statements;
+
+        }
         public async Task<List<Statements>> GetStatements()
 
         {
+            List<Statements> listStatement = new List<Statements>();
+
             CompteBancaire transCompte = new CompteBancaire();
             var parser = new Parser();
             var statements = parser.ParseFile(@"C:\Users\Public\TestFolder\WriteLines.cod");
 
+            listStatement=await ParsingCod(statements);
+            
+            _statementToInsert = listStatement;
+            return listStatement; 
+            
+        }
+        public async Task<List<Statements>> ParsingCod(IEnumerable<CodaParser.Statements.Statement> statements)
+        {
+            List<Statements> listSta = new List<Statements>();
+            List<Transactions> listTra = new List<Transactions>();
+
             foreach (var statement in statements)
             {
-                CompteBancaire cp=new CompteBancaire();
-                cp.CurrencyCode = statement.Account.CurrencyCode;
-                cp.Iban = statement.Account.Number;
-                cp.IdentificationNumber = statement.Account.CompanyIdentificationNumber;
-                cp.Bic = statement.Account.Bic;
-                Statements sta = new Statements();
-                sta.CompteBancaire = cp;
-                sta.Date = statement.Date;
-                sta.InitialBalance = statement.InitialBalance;
-                sta.NewBalance = statement.NewBalance;
-                sta.InformationalMessage = statement.Account.Name;
-              
+                CompteBancaire transCompte = new CompteBancaire();
+
+                CompteBancaire cp = new CompteBancaire
+                {
+                    CurrencyCode = statement.Account.CurrencyCode,
+                    Iban = statement.Account.Number,
+                    IdentificationNumber = statement.Account.CompanyIdentificationNumber,
+                    Bic = statement.Account.Bic
+                };
+                Statements sta = new Statements
+                {
+                    CompteBancaire = cp,
+                    Date = statement.Date,
+                    InitialBalance = statement.InitialBalance,
+                    NewBalance = statement.NewBalance,
+                    InformationalMessage = statement.Account.Name
+                };
+
                 foreach (var transaction in statement.Transactions)
                 {
-                    Transactions mytransaction = new Transactions();
-                    mytransaction.ValueDate = transaction.ValutaDate;
-                    mytransaction.Amount = transaction.Amount;
-                    mytransaction.StructuredMessage = transaction.StructuredMessage;
-                    mytransaction.TransactionDate = transaction.TransactionDate;
-                    List<CompteBancaire> listCp=new List<CompteBancaire>();
-                    listCp = await GetAccount();
+                    Transactions mytransaction = new Transactions
+                    {
+                        ValueDate = transaction.ValutaDate,
+                        Amount = transaction.Amount,
+                        StructuredMessage = transaction.StructuredMessage,
+                        TransactionDate = transaction.TransactionDate
+                    };
+                    var listCp = await GetAccount();
                     if (listCp.Count > 0)
                     {
+                        transCompte.Iban = transaction.Account.Number;
                         foreach (var tra in listCp)
                         {
 
                             if (transCompte.Iban != tra.Iban)
                             {
-                                CompteBancaire transCompte2 = new CompteBancaire();
                                 mytransaction.CompteBancaire = transCompte;
                                 transCompte.Bic = transaction.Account.Bic;
                                 transCompte.CurrencyCode = transaction.Account.CurrencyCode;
                                 transCompte.Iban = transaction.Account.Number;
                                 transCompte.IdentificationNumber = transaction.Account.Name;
-                                await PostCompte(transCompte2);
-                                List<CompteBancaire> listTempCp = new List<CompteBancaire>();
-                                listTempCp = await GetAccount();
+                                var listTempCp = await GetAccount();
                                 var differences = listCp.Except(listTempCp);
                                 CompteBancaire first = null;
                                 foreach (var difference in differences)
@@ -250,19 +324,21 @@ namespace Inocrea.CodaBox.CodaApiClient
                             }
                             else mytransaction.CompteBancaireId = tra.Id;
                         }
-                        
+
                     }
                     else
                     {
-                      
 
+
+                        transCompte.Iban = transaction.Account.Number;
                         transCompte.Bic = transaction.Account.Bic;
                         transCompte.CurrencyCode = transaction.Account.CurrencyCode;
+
+
                         transCompte.Iban = transaction.Account.Number;
                         transCompte.IdentificationNumber = transaction.Account.Name;
                         await PostCompte(transCompte);
-                        List<CompteBancaire> listTempCp = new List<CompteBancaire>();
-                        listTempCp = await GetAccount();
+                        var listTempCp = await GetAccount();
                         CompteBancaire first = null;
                         foreach (var bancaire in listTempCp)
                         {
@@ -270,24 +346,28 @@ namespace Inocrea.CodaBox.CodaApiClient
                             break;
                         }
 
-                        if (first != null) 
-                         mytransaction.CompteBancaireId = first.Id;
+                        if (first != null)
+                            mytransaction.CompteBancaireId = first.Id;
                     }
-                   
-                   
+
+
                     listTra.Add(mytransaction);
                 }
 
-               
-              
+
+
                 sta.Transactions = listTra;
                 listSta.Add(sta);
 
             }
 
             return listSta;
+
+
+
+
         }
-     
+
         public async Task<Message<Statements>> SaveStatement(Statements model)
         {
            
@@ -298,7 +378,7 @@ namespace Inocrea.CodaBox.CodaApiClient
 
         private void Save()
         {
-            foreach (var item in listSta)
+            foreach (var item in _statementToInsert)
             {
                var t= SaveStatement(item);
             }
