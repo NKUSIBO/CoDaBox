@@ -38,7 +38,7 @@ namespace Inocrea.CodaBox.Web.Controllers
             AppSettings.ApiUrl = "Https://" + _appSettings.Value.WebApiBaseUrl;
         }
        
-        public async Task<IActionResult> Index()
+        public  ActionResult Index()
         {
             
             return View();

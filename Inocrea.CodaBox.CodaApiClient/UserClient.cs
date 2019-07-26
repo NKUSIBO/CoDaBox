@@ -10,6 +10,7 @@ using CodaParser;
 using Inocrea.CodaBox.ApiModel.ViewModel;
 using Inocrea.CodaBox.CodaApiClient.Helper;
 using Newtonsoft.Json;
+using CompteBancaire = Inocrea.CodaBox.ApiModel.CompteBancaire;
 
 namespace Inocrea.CodaBox.CodaApiClient
 {
@@ -20,8 +21,8 @@ namespace Inocrea.CodaBox.CodaApiClient
         private string rep = "";
         private string data = "";
         private static List<Statements> _statementToInsert = new List<Statements>();
-        private static List<CompteBancaire> _compteToInsert = new List<CompteBancaire>();
-
+        private static  List<string> IbanAccountToInsert = new List<string>();
+        private static  List<string> IbanAccountInserted = new List<string>();
 
         public async Task<List<StatementAccountViewModel>> GetInvoice()
         {
@@ -90,7 +91,7 @@ namespace Inocrea.CodaBox.CodaApiClient
             }
         }
 
-        private async Task  PostCompte(CompteBancaire compte)
+        private void PostCompte(CompteBancaire compte)
         {
             HttpClient client = _api.Initial();
             //List<CompteBancaire> listIban = new List<CompteBancaire>();
@@ -103,25 +104,46 @@ namespace Inocrea.CodaBox.CodaApiClient
             //}
 
             //listIban.Distinct().ToList();
-           
-                var statementToInsert = JsonConvert.SerializeObject(compte);
-                var content = new StringContent(statementToInsert, System.Text.Encoding.UTF8, "application/json");
-                try
+
+            var compteToInsert = JsonConvert.SerializeObject(compte);
+            var content = new StringContent(compteToInsert, System.Text.Encoding.UTF8, "application/json");
+            try
+            {
+                if (IbanAccountToInsert.Count>0)
                 {
-                    HttpResponseMessage result =  client.PostAsync("api/CompteBancaires", content).Result;
+                   
+                    
+                        
+                            HttpResponseMessage result = client.PostAsync("api/CompteBancaires", content).Result;
+                            if (result.IsSuccessStatusCode)
+                            {
+                                IbanAccountInserted.Add(compte.Iban);
+                                Console.WriteLine("All is fine");
+
+                            }
+                    
+                }
+                else
+                {
+                    HttpResponseMessage result = client.PostAsync("api/CompteBancaires", content).Result;
                     if (result.IsSuccessStatusCode)
                     {
-
+                       
+                        IbanAccountInserted.Add(compte.Iban);
                         Console.WriteLine("All is fine");
 
                     }
+
                 }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                    throw;
-                }
-            
+                
+               
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+
 
         }
         public async Task<CompteBancaire> GetCompte(int id)
@@ -263,6 +285,68 @@ namespace Inocrea.CodaBox.CodaApiClient
             return listStatement; 
             
         }
+        public async Task<List<CompteBancaire>> GettingAccountToInsert(IEnumerable<CodaParser.Statements.Statement> statements)
+        {
+            List<CompteBancaire> listCompte = new List<CompteBancaire>();
+            
+            foreach (var statement in statements)
+            {
+                
+
+                CompteBancaire cp = new CompteBancaire
+                {
+                    CurrencyCode = statement.Account.CurrencyCode,
+                    Iban = statement.Account.Number,
+                    IdentificationNumber = statement.Account.CompanyIdentificationNumber,
+                    Bic = statement.Account.Bic
+                };
+
+                listCompte.Add(cp);
+                foreach (var transaction in statement.Transactions)
+                {
+
+
+                               CompteBancaire transCompte = new CompteBancaire();
+
+                                transCompte.Bic = transaction.Account.Bic;
+                                transCompte.CurrencyCode = transaction.Account.CurrencyCode;
+                                transCompte.Iban = transaction.Account.Number;
+                                transCompte.IdentificationNumber = transaction.Account.Name;
+
+                                var match = listCompte.Find(c => c.Iban == cp.Iban);
+                                if (match == null) listCompte.Add(cp);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                }
+
+
+
+              
+            }
+
+
+
+            return listCompte;
+
+
+        }
+
         public async Task<List<Statements>> ParsingCod(IEnumerable<CodaParser.Statements.Statement> statements)
         {
             List<Statements> listSta = new List<Statements>();
@@ -337,7 +421,12 @@ namespace Inocrea.CodaBox.CodaApiClient
 
                         transCompte.Iban = transaction.Account.Number;
                         transCompte.IdentificationNumber = transaction.Account.Name;
-                        await PostCompte(transCompte);
+                        if (!IbanAccountToInsert.Contains(transCompte.Iban))
+                        {
+                            IbanAccountToInsert.Add(transCompte.Iban);
+                            
+                        }
+                        PostCompte(transCompte);
                         var listTempCp = await GetAccount();
                         CompteBancaire first = null;
                         foreach (var bancaire in listTempCp)
