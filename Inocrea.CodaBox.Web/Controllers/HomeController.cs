@@ -203,7 +203,7 @@ namespace Inocrea.CodaBox.Web.Controllers
            
            var staInsertResult = await ApiClientFactory.Instance.GetStatements();
 
-           InsertStatementToDb(staInsertResult);
+           //InsertStatementToDb(staInsertResult);
 
 
 

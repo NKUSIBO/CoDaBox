@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Inocrea.CodaBox.ApiServer.Models;
+using Inocrea.CodaBox.ApiServer.Entities;
 
 namespace Inocrea.CodaBox.ApiServer.Controllers
 {
@@ -13,9 +13,9 @@ namespace Inocrea.CodaBox.ApiServer.Controllers
     [ApiController]
     public class StatementsController : ControllerBase
     {
-        private readonly DevCodaBoxContext _context;
+        private readonly InosysDBContext _context;
 
-        public StatementsController(DevCodaBoxContext context)
+        public StatementsController(InosysDBContext context)
         {
             _context = context;
         }
@@ -79,13 +79,13 @@ namespace Inocrea.CodaBox.ApiServer.Controllers
             {
                 _context.Statements.Add(statements);
                 await _context.SaveChangesAsync();
+
             }
             catch (Exception ex)
             {
 
                 throw ex;
             }
-
             return CreatedAtAction("GetStatements", new { id = statements.StatementId }, statements);
         }
 

@@ -20,7 +20,6 @@ namespace Inocrea.CodaBox.CodaApiClient
        
         private static List<InvoiceModel> listInvoice = new List<InvoiceModel>();
         private static List<Transactions> listTransactions = new List<Transactions>();
-        private static List<StatementAccountViewModel> listStateAccountViewModels = new List<StatementAccountViewModel>();
         List<Statements> listStatements;
         string[] stringLineErase;
         private readonly HttpClient _httpClient;
@@ -30,75 +29,79 @@ namespace Inocrea.CodaBox.CodaApiClient
             BaseEndpoint = baseEndpoint ?? throw new ArgumentNullException("baseEndpoint");
             _httpClient = new HttpClient();
         }
-        private List<Statements> GetStatements<T>(Uri requestUrl, string data)
+        //private List<Statements> GetStatements<T>(Uri requestUrl,  string data)
 
-        {
-            //await CallingHelper(requestUrl);
-            stringLine = new string[] { data };
-            var parser = new Parser();
-            var statements = parser.ParseFile(@"C:\Users\Public\TestFolder\WriteLines.cod");
+        //{
+        //    //await CallingHelper(requestUrl);
+        //    stringLine = new string[] { data };
+        //    var parser = new Parser();
+        //    var statements = parser.ParseFile(@"C:\Users\Public\TestFolder\WriteLines.cod");
 
           
-            foreach (var statement in statements)
-            {
-                Statements sta = new Statements();
+        //    foreach (var statement in statements)
+        //    {
+        //        Statements sta = new Statements();
 
-                sta.Date = statement.Date;
-                sta.InitialBalance = statement.InitialBalance;
-                sta.NewBalance = statement.NewBalance;
-                sta.CompteBancaire.Iban = statement.Account.Number;
-                sta.CompteBancaire.IdentificationNumber = statement.Account.CompanyIdentificationNumber;
-                sta.CompteBancaire.Bic = statement.Account.Bic;
-                sta.InformationalMessage = statement.InformationalMessage;
-                sta.CompteBancaire.CurrencyCode = statement.Account.CurrencyCode;
-                foreach (var tra in statement.Transactions)
-                {
+        //        sta.Date = statement.Date;
+        //        sta.InitialBalance = statement.InitialBalance;
+        //        sta.NewBalance = statement.NewBalance;
+        //        sta.CompteBancaire.Iban = statement.Account.Number;
+        //        sta.CompteBancaire.IdentificationNumber = statement.Account.CompanyIdentificationNumber;
+        //        sta.CompteBancaire.Bic = statement.Account.Bic;
+        //        sta.InformationalMessage = statement.InformationalMessage;
+        //        sta.CompteBancaire.CurrencyCode = statement.Account.CurrencyCode;
+        //        foreach (var tra in statement.Transactions)
+        //        {
 
-                }
-                //invoice.CurrencyCode = statement.Account.CurrencyCode;
-                //foreach (var transaction in statement.Transactions)
-                //{
-                //    Transactions trans = new Transactions();
-                //    CompteBancaire transCompte = new CompteBancaire();
-                //    transCompte.Bic = transaction.Account.Bic;
-                //    transCompte.CurrencyCode = transaction.Account.CurrencyCode;
-                //    transCompte.Iban = transaction.Account.Number;
-                //    transCompte.IdentificationNumber = transaction.Account.Number;
-                //    trans.AccountingDate = statement.Date.ToString("dd-MM-yyyy");
-                //    trans.InitialBalance = statement.InitialBalance;
-                //    trans.NewBalance = statement.NewBalance;
-                //    trans.Number = statement.Account.Number;
-                //    trans.NumberCustomer = transaction.Account.Number;
-                //    trans.NumeroIdentification = statement.Account.CompanyIdentificationNumber;
-                //    trans.Bic = statement.Account.Bic;
-                //    trans.BicCustomer = transaction.Account.Bic;
-                //    trans.Name = statement.Account.Name;
-                //    trans.CurrencyCode = statement.Account.CurrencyCode;
-                //    trans.Message = Regex.Replace(transaction.Message, @"    ", "");
-                //    trans.StructuredMessage = transaction.StructuredMessage;
-                //    trans.TransactionDate = transaction.TransactionDate.ToString("dd-MM-yyyy");
+        //        }
+        //        //invoice.CurrencyCode = statement.Account.CurrencyCode;
+        //        //foreach (var transaction in statement.Transactions)
+        //        //{
+        //        //    Transactions trans = new Transactions();
+        //        //    CompteBancaire transCompte = new CompteBancaire();
+        //        //    transCompte.Bic = transaction.Account.Bic;
+        //        //    transCompte.CurrencyCode = transaction.Account.CurrencyCode;
+        //        //    transCompte.Iban = transaction.Account.Number;
+        //        //    transCompte.IdentificationNumber = transaction.Account.Number;
+        //        //    trans.AccountingDate = statement.Date.ToString("dd-MM-yyyy");
+        //        //    trans.InitialBalance = statement.InitialBalance;
+        //        //    trans.NewBalance = statement.NewBalance;
+        //        //    trans.Number = statement.Account.Number;
+        //        //    trans.NumberCustomer = transaction.Account.Number;
+        //        //    trans.NumeroIdentification = statement.Account.CompanyIdentificationNumber;
+        //        //    trans.Bic = statement.Account.Bic;
+        //        //    trans.BicCustomer = transaction.Account.Bic;
+        //        //    trans.Name = statement.Account.Name;
+        //        //    trans.CurrencyCode = statement.Account.CurrencyCode;
+        //        //    trans.Message = Regex.Replace(transaction.Message, @"    ", "");
+        //        //    trans.StructuredMessage = transaction.StructuredMessage;
+        //        //    trans.TransactionDate = transaction.TransactionDate.ToString("dd-MM-yyyy");
 
-                //    trans.ValueDate = transaction.ValutaDate;
-                //    trans.Amount = transaction.Amount.ToString(CultureInfo.InvariantCulture);
+        //        //    trans.ValueDate = transaction.ValutaDate;
+        //        //    trans.Amount = transaction.Amount.ToString(CultureInfo.InvariantCulture);
 
-                //    listTransactions.Add(trans);
-                //    listInvoice.Add(invoice);
-                //    Console.WriteLine(transaction.Account.Name + ": " + transaction.Amount);
-                //}
-                //invoice.Transactions = listTransactions;
-                listStatements.Add(sta);
+        //        //    listTransactions.Add(trans);
+        //        //    listInvoice.Add(invoice);
+        //        //    Console.WriteLine(transaction.Account.Name + ": " + transaction.Amount);
+        //        //}
+        //        //invoice.Transactions = listTransactions;
+        //        listStatements.Add(sta);
 
-            }
+        //    }
 
-            return listStatements;
-        }
+        //    return listStatements;
+        //}
         private  List<StatementAccountViewModel> GetBusinessStatements<T>(Uri requestUrl, string data)
 
         {
-            //await CallingHelper(requestUrl);
-            stringLine = new string[] { data };
+         List<StatementAccountViewModel> listStateAccountViewModels = new List<StatementAccountViewModel>();
+
+        //await CallingHelper(requestUrl);
+        var line = data.Split('\n');
             var parser = new Parser();
-            var statements = parser.ParseFile(@"C:\Users\Public\TestFolder\WriteLines.cod");
+            var statements = parser.Parse(line);
+            stringLine = new string[] { data };
+          
 
             foreach (var statement in statements)
             {
@@ -112,10 +115,7 @@ namespace Inocrea.CodaBox.CodaApiClient
                 sta.Bic = statement.Account.Bic;
                 sta.InformationalMessage = statement.Account.Name;
                 sta.CurrencyCode = statement.Account.CurrencyCode;
-                foreach (var tra in statement.Transactions)
-                {
-                    
-                }
+                
                 //invoice.CurrencyCode = statement.Account.CurrencyCode;
                 //foreach (var transaction in statement.Transactions)
                 //{
@@ -154,7 +154,33 @@ namespace Inocrea.CodaBox.CodaApiClient
             return listStateAccountViewModels;
         }
 
-        
+        //private async Task<string> GetAsync<T>(Uri requestUrl)
+        //{
+        //    AddHeaders();
+        //    HttpResponseMessage response;
+        //    try
+        //    {
+        //        response = await _httpClient.GetAsync(requestUrl, HttpCompletionOption.ResponseHeadersRead);
+        //        response.EnsureSuccessStatusCode();
+        //        var data = response.Content.ReadAsStringAsync().Result;
+
+        //        GetBusinessStatements<List<Statements>>(requestUrl, data);
+
+        //        response.EnsureSuccessStatusCode();
+        //        // Above three lines can be replaced with new helper method below
+        //        // string responseBody = await client.GetStringAsync(uri);
+
+        //        return data;
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+        //        throw ex;
+        //    }
+
+
+
+        //}
         private async Task<string> GetAsync<T> (Uri requestUrl)
         {
              AddHeaders();
@@ -163,15 +189,15 @@ namespace Inocrea.CodaBox.CodaApiClient
             {
                 response = await _httpClient.GetAsync(requestUrl, HttpCompletionOption.ResponseHeadersRead);
                 response.EnsureSuccessStatusCode();
-                var data =  response.Content.ReadAsStringAsync().Result;
+                var data1 =  response.Content.ReadAsStringAsync().Result;
                
-                 GetBusinessStatements<List<StatementAccountViewModel>>(requestUrl, data);
+                 GetBusinessStatements<List<CodaParser.Statements.Statement>>(requestUrl, data1);
 
                 response.EnsureSuccessStatusCode();
                 // Above three lines can be replaced with new helper method below
                 // string responseBody = await client.GetStringAsync(uri);
                
-                return data;
+                return data1;
             }
             catch (Exception ex)
             {
@@ -182,44 +208,44 @@ namespace Inocrea.CodaBox.CodaApiClient
            
             
         }
-        public void CleanToFile(string[] lines)
-        {
+        //public void CleanToFile(string[] lines)
+        //{
 
-            // These examples assume a "C:\Users\Public\TestFolder" folder on your machine.
-            // You can modify the path if necessary.
-
-
-            // Example #1: Write an array of strings to a file.
-            // Create a string array that consists of three lines.
-
-            // WriteAllLines creates a file, writes a collection of strings to the file,
-            // and then closes the file.  You do NOT need to call Flush() or Close().
-            System.IO.File.WriteAllLines(@"C:\Users\Public\TestFolder\WriteLines.cod", lines);
+        //    // These examples assume a "C:\Users\Public\TestFolder" folder on your machine.
+        //    // You can modify the path if necessary.
 
 
-            // Example #2: Write one string to a text file.
-            string text = "A class is the most powerful data type in C#. Like a structure, " +
-                          "a class defines the data and behavior of the data type. ";
-            // WriteAllText creates a file, writes the specified string to the file,
-            // and then closes the file.    You do NOT need to call Flush() or Close().
-            System.IO.File.WriteAllText(@"C:\Users\Public\TestFolder\WriteText.txt", text);
-            stringLineErase = new string[] { "" };
-            ;
-            // Example #3: Write only some strings in an array to a file.
-            // The using statement automatically flushes AND CLOSES the stream and calls 
-            // IDisposable.Dispose on the stream object.
-            // NOTE: do not use FileStream for text files because it writes bytes, but StreamWriter
-            // encodes the output as text.
-            using (System.IO.StreamWriter file =
-                new System.IO.StreamWriter(@"C:\Users\Public\TestFolder\WriteLines2.txt"))
-            {
-                foreach (var item in stringLineErase)
-                {
-                    file.Write(string.Empty);
-                }
+        //    // Example #1: Write an array of strings to a file.
+        //    // Create a string array that consists of three lines.
+
+        //    // WriteAllLines creates a file, writes a collection of strings to the file,
+        //    // and then closes the file.  You do NOT need to call Flush() or Close().
+        //    System.IO.File.WriteAllLines(@"C:\Users\Public\TestFolder\WriteLines.cod", lines);
+
+
+        //    // Example #2: Write one string to a text file.
+        //    string text = "A class is the most powerful data type in C#. Like a structure, " +
+        //                  "a class defines the data and behavior of the data type. ";
+        //    // WriteAllText creates a file, writes the specified string to the file,
+        //    // and then closes the file.    You do NOT need to call Flush() or Close().
+        //    System.IO.File.WriteAllText(@"C:\Users\Public\TestFolder\WriteText.txt", text);
+        //    stringLineErase = new string[] { "" };
+        //    ;
+        //    // Example #3: Write only some strings in an array to a file.
+        //    // The using statement automatically flushes AND CLOSES the stream and calls 
+        //    // IDisposable.Dispose on the stream object.
+        //    // NOTE: do not use FileStream for text files because it writes bytes, but StreamWriter
+        //    // encodes the output as text.
+        //    using (System.IO.StreamWriter file =
+        //        new System.IO.StreamWriter(@"C:\Users\Public\TestFolder\WriteLines2.txt"))
+        //    {
+        //        foreach (var item in stringLineErase)
+        //        {
+        //            file.Write(string.Empty);
+        //        }
                 
-            }
-        }
+        //    }
+        //}
        
         private static JsonSerializerSettings MicrosoftDateFormatSettings
         {

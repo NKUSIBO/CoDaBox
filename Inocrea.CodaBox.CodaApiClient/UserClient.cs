@@ -29,67 +29,108 @@ namespace Inocrea.CodaBox.CodaApiClient
           
             var requestUrl = CreateRequestUri(string.Format(System.Globalization.CultureInfo.CurrentCulture,
                 ""));
-            rep =  await  GetAsync<List<StatementAccountViewModel>>(requestUrl);
+
+
+            rep =  await  GetAsync<string>(requestUrl);
+            var line = rep.Split('\n');
+            var parser = new Parser();
+            var statements = parser.Parse(line);
+            var statement = ParsingCod(statements);
+            InsertStatementToDb(statement.Result);
+            //ramener statements model codaParser
+
+            //map avec mon model
+            //inserer dans la db
+
             stringLine = new string[] { rep };
             data = rep;
             //code to insert in db must be here
-            WrittingToFile(stringLine);
+
+            //List<Statements> staInsertResult=new List<Statements>();
+
+            //InsertStatementToDb(staInsertResult);
+            //WrittingToFile(stringLine);
             
 
             var stat = GetStatements();
             return GetBusinessStatements
-                (rep);
+                ();
         }
-
-        public void WrittingToFile(string[] lines)
+        public void InsertStatementToDb(List<Statements> staInsertResult)
         {
-
-            // These examples assume a "C:\Users\Public\TestFolder" folder on your machine.
-            // You can modify the path if necessary.
-
-
-            // Example #1: Write an array of strings to a file.
-            // Create a string array that consists of three lines.
-
-            // WriteAllLines creates a file, writes a collection of strings to the file,
-            // and then closes the file.  You do NOT need to call Flush() or Close().
-            System.IO.File.Delete(@"C:\Users\Public\TestFolder\WriteLines.cod");
-            System.IO.File.WriteAllLines(@"C:\Users\Public\TestFolder\WriteLines.cod", lines);
-
-
-            // Example #2: Write one string to a text file.
-            string text = "A class is the most powerful data type in C#. Like a structure, " +
-                          "a class defines the data and behavior of the data type. ";
-            // WriteAllText creates a file, writes the specified string to the file,
-            // and then closes the file.    You do NOT need to call Flush() or Close().
-            System.IO.File.WriteAllText(@"C:\Users\Public\TestFolder\WriteText.txt", text);
-            stringLineErase = new string[] { "" };
-            ;
-            // Example #3: Write only some strings in an array to a file.
-            // The using statement automatically flushes AND CLOSES the stream and calls 
-            // IDisposable.Dispose on the stream object.
-            // NOTE: do not use FileStream for text files because it writes bytes, but StreamWriter
-            // encodes the output as text.
-            using (System.IO.StreamWriter file =
-                new System.IO.StreamWriter(@"C:\Users\Public\TestFolder\WriteLines2.txt"))
+            ApiServerCoda _api = new ApiServerCoda();
+            HttpClient client = _api.Initial();
+            foreach (var item in staInsertResult)
             {
-
-                foreach (string line in lines)
+                var statementToInsert = JsonConvert.SerializeObject(item);
+                var content = new StringContent(statementToInsert, System.Text.Encoding.UTF8, "application/json");
+                try
                 {
-                    // If the line doesn't contain the word 'Second', write the line to the file.
-                    if (line.Contains("0000026061900005"))
+                    HttpResponseMessage result = client.PostAsync("api/Statements", content).Result;
+                    if (result.IsSuccessStatusCode)
                     {
-                        Console.WriteLine(line);
-                    }
 
-                    // If the line doesn't contain the word 'Second', write the line to the file.
-                    if (!line.Contains("0000026061900005"))
-                    {
-                        file.WriteLine(line);
+                        Console.WriteLine("All is fine");
+
                     }
                 }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
+
             }
         }
+        //public void WrittingToFile(string[] lines)
+        //{
+
+        //    // These examples assume a "C:\Users\Public\TestFolder" folder on your machine.
+        //    // You can modify the path if necessary.
+
+
+        //    // Example #1: Write an array of strings to a file.
+        //    // Create a string array that consists of three lines.
+
+        //    // WriteAllLines creates a file, writes a collection of strings to the file,
+        //    // and then closes the file.  You do NOT need to call Flush() or Close().
+        //    System.IO.File.Delete(@"C:\Users\Public\TestFolder\WriteLines.cod");
+        //    System.IO.File.WriteAllLines(@"C:\Users\Public\TestFolder\WriteLines.cod", lines);
+
+
+        //    // Example #2: Write one string to a text file.
+        //    string text = "A class is the most powerful data type in C#. Like a structure, " +
+        //                  "a class defines the data and behavior of the data type. ";
+        //    // WriteAllText creates a file, writes the specified string to the file,
+        //    // and then closes the file.    You do NOT need to call Flush() or Close().
+        //    System.IO.File.WriteAllText(@"C:\Users\Public\TestFolder\WriteText.txt", text);
+        //    stringLineErase = new string[] { "" };
+        //    ;
+        //    // Example #3: Write only some strings in an array to a file.
+        //    // The using statement automatically flushes AND CLOSES the stream and calls 
+        //    // IDisposable.Dispose on the stream object.
+        //    // NOTE: do not use FileStream for text files because it writes bytes, but StreamWriter
+        //    // encodes the output as text.
+        //    using (System.IO.StreamWriter file =
+        //        new System.IO.StreamWriter(@"C:\Users\Public\TestFolder\WriteLines2.txt"))
+        //    {
+
+        //        foreach (string line in lines)
+        //        {
+        //            // If the line doesn't contain the word 'Second', write the line to the file.
+        //            if (line.Contains("0000026061900005"))
+        //            {
+        //                Console.WriteLine(line);
+        //            }
+
+        //            // If the line doesn't contain the word 'Second', write the line to the file.
+        //            if (!line.Contains("0000026061900005"))
+        //            {
+        //                file.WriteLine(line);
+        //            }
+        //        }
+        //    }
+        //}
 
         private void PostCompte(CompteBancaire compte)
         {
@@ -183,10 +224,12 @@ namespace Inocrea.CodaBox.CodaApiClient
             
             return comptes;
         }
-        private List<StatementAccountViewModel> GetBusinessStatements( string data)
+       
+        private List<StatementAccountViewModel> GetBusinessStatements( )
 
         {
-            
+            List<StatementAccountViewModel> listStateAccountViewModels = new List<StatementAccountViewModel>();
+
             var parser = new Parser();
             var statementsFromDb = GetStatementsFromDbAsync(); ;
            
@@ -274,12 +317,9 @@ namespace Inocrea.CodaBox.CodaApiClient
 
         {
             List<Statements> listStatement = new List<Statements>();
+            listStatement = GetStatementsFromDbAsync().Result;
+           
 
-            CompteBancaire transCompte = new CompteBancaire();
-            var parser = new Parser();
-            var statements = parser.ParseFile(@"C:\Users\Public\TestFolder\WriteLines.cod");
-
-            listStatement=await ParsingCod(statements);
             
             _statementToInsert = listStatement;
             return listStatement; 

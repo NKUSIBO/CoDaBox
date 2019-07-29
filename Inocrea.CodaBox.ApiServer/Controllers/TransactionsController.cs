@@ -5,8 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Inocrea.CodaBox.ApiServer.Models;
-using Inocrea.CodaBox.Dal.Models;
+using Inocrea.CodaBox.ApiServer.Entities;
 
 namespace Inocrea.CodaBox.ApiServer.Controllers
 {
@@ -14,9 +13,9 @@ namespace Inocrea.CodaBox.ApiServer.Controllers
     [ApiController]
     public class TransactionsController : ControllerBase
     {
-        private readonly CodaBoxContext _context;
+        private readonly InosysDBContext _context;
 
-        public TransactionsController(CodaBoxContext context)
+        public TransactionsController(InosysDBContext context)
         {
             _context = context;
         }
