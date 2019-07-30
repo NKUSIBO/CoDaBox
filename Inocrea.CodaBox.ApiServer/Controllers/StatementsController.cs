@@ -71,23 +71,23 @@ namespace Inocrea.CodaBox.ApiServer.Controllers
             return NoContent();
         }
 
-        // POST: api/Statements
-        [HttpPost]
-        public async Task<ActionResult<Statements>> PostStatements(Statements statements)
-        {
-            try
-            {
-                _context.Statements.Add(statements);
-                await _context.SaveChangesAsync();
+        //// POST: api/Statements
+        //[HttpPost]
+        //public async Task<ActionResult<Statements>> PostStatements(Statements statements)
+        //{
+        //    try
+        //    {
+        //        _context.Statements.Add(statements);
+        //        await _context.SaveChangesAsync();
 
-            }
-            catch (Exception ex)
-            {
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                throw ex;
-            }
-            return CreatedAtAction("GetStatements", new { id = statements.StatementId }, statements);
-        }
+        //        throw ex;
+        //    }
+        //    return CreatedAtAction("GetStatements", new { id = statements.StatementId }, statements);
+        //}
 
         // DELETE: api/Statements/5
         [HttpDelete("{id}")]

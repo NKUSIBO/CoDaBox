@@ -10,8 +10,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Downloads\coda-parser-master\CodaParser\CodaParser.csproj" />
     <ProjectReference Include="..\Inocrea.CodaBox.ApiModel\Inocrea.CodaBox.ApiModel.csproj" />
+    <ProjectReference Include="..\..\..\Downloads\coda-parser-master\CodaParser\CodaParser.csproj" />
   </ItemGroup>
 
   <ItemGroup>

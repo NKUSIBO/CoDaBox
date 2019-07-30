@@ -30,7 +30,6 @@ namespace Inocrea.CodaBox.ApiServer.Entities
                 optionsBuilder.UseSqlServer("Server=tcp:inocrea.database.windows.net,1433;Database=InosysDB;Persist Security Info=False;User Id=Inosys@inocrea;Password=Inocrea01!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;;MultipleActiveResultSets=true");
             }
         }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("ProductVersion", "2.2.6-servicing-10079");
