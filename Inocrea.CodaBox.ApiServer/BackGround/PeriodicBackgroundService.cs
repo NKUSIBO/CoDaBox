@@ -5,6 +5,12 @@ using Microsoft.Extensions.Hosting;
 using System.Collections.Generic;
 using System.IO;
 using Inocrea.CodaBox.ApiServer.Entities;
+using System.Net.Http;
+using System.Text;
+using System.ComponentModel;
+using System.Linq;
+
+using Inocrea.CodaBox.ApiServer.Services;
 
 namespace Inocrea.CodaBox.ApiServer.BackGround
 {
@@ -20,9 +26,13 @@ namespace Inocrea.CodaBox.ApiServer.BackGround
                 try
                 {
                     var coda = new CodaProcesse();
+
                     //coda.Start();
-                    await UploadJson();
+                    //await UploadJson();
                     await ExecuteWork();
+
+
+
 
                     stoppingToken.ThrowIfCancellationRequested();
 
@@ -48,6 +58,7 @@ namespace Inocrea.CodaBox.ApiServer.BackGround
             //var json = Newtonsoft.Json.JsonConvert.SerializeObject(DataList);
             //var fileName = "coda" + ".json"; //declaration.json";
             //byte[] data = Encoding.UTF8.GetBytes(json);
+
             //var formContent = new MultipartFormDataContent();
             //formContent.Add(new StreamContent(new MemoryStream(data)), "content", fileName);
             //var client = new HttpClient();
@@ -55,67 +66,44 @@ namespace Inocrea.CodaBox.ApiServer.BackGround
             //var response = await client.PostAsync("https://workdrive.zoho.com/api/v1/upload?parent_id=6j92v79240bb1f6d742aa9a98c72b6e85e937&filename=cod.json", formContent);
         }
 
-
-        private async Task Execute(MemoryStream stream)
+        public string WriteTsv<T>(IEnumerable<T> data)
         {
-            //try
-            //{
+            string output = "";
 
-            //    byte[] data = stream.ToArray();
-
-            //    var fileName = "coda" + ".xlsx"; //declaration.json";
-            //    var formContent = new MultipartFormDataContent();
-            //    formContent.Add(new StreamContent(new MemoryStream(data)), "content", fileName);
-            //    var client = new HttpClient();
-            //    client.DefaultRequestHeaders.Add("Authorization", "Zoho-oauthtoken 1000.973023507b1b3c7ef6125e0ffe1b4f48.2145f45f88073756b8a037f3be0bf2c8");
-            //    var response = await client.PostAsync("https://workdrive.zoho.com/api/v1/upload?parent_id=6j92v79240bb1f6d742aa9a98c72b6e85e937&filename=cod.xlsx", formContent);
-            //}
-            //catch (Exception e)
-            //{
-            //    var ex = e;
-            //}
+            PropertyDescriptorCollection props = TypeDescriptor.GetProperties(typeof(T));
+            foreach (PropertyDescriptor prop in props)
+            {
+                output += prop.DisplayName+ '\t'; // header
+            }
+            output+='\n';
+            foreach (T item in data)
+            {
+                foreach (PropertyDescriptor prop in props)
+                {
+                    output += prop.Converter.ConvertToString(prop.GetValue(item)) + '\t';
+                }
+                output += '\n';
+            }
+            return output;
         }
 
         private async Task ExecuteWork()
         {
-            //DataTable dt = ExportToExcel.ExportGenericTransactions<List<InvoiceModel>>(DataList);
-            //for (int i = 0; i < dt.Columns.Count; i++)
-            //{
+            var Db = new InosysDBContext();
+            var transactions = Db.Transactions.ToList();
+            var output = WriteTsv(transactions);
 
-            //    if ((dt.Columns[i].ColumnName.Contains("DATE") ||
-            //         (dt.Columns[i].ColumnName.Contains("Date"))))
-            //    {
-            //        var name = dt.Columns[i].ColumnName;
-            //        if (!(dt.Columns[i].ColumnName.Contains("FORMAT")))
-            //        {
-            //            dt.Columns.Remove(dt.Columns[i].ColumnName);
-            //        }
+            var stream = new MemoryStream();
+            var writer = new StreamWriter(stream);
+            writer.Write(output);
+            writer.Flush();
+            stream.Position = 0;
 
-            //    }
+            var apiWD = new ApiWorkDrive();
+            
+            await apiWD.UploadXml(stream);
 
-
-            //}
-
-            //using (XLWorkbook wb = new XLWorkbook())
-            //{
-            //    wb.Worksheets.Add(dt);
-            //    using (MemoryStream stream = new MemoryStream())
-            //    {
-            //        try
-            //        {
-            //            wb.SaveAs(stream);
-            //            await Execute(stream);
-            //        }
-            //        catch (Exception ex)
-            //        {
-
-            //            throw;
-            //        }
-            //    }
-            //}
         }
-
-
 
     }
 }
