@@ -20,17 +20,18 @@ namespace Inocrea.CodaBox.ApiServer.Services
         //private string pwd = "XyJn6NQYrm";
 
         private string baseUrl = "https://api.codabox.com/v2/delivery/";
-        private string xCompany = "GF-2cdef81c-6e0e-4aba-850f-d50";
-        private string login = "GF-4e2cee89-e8df-4a1d-b285-f7c";
+        private string xCompany = "e11e853b-97a9-4e63-9385-e4d5f5b84bed";
+        private string login = "GF-2cdef81c-6e0e-4aba-850f-d50";
         private string pwd = "HZyUU7hS8q";
 
         public ApiCodaBoxe()
         {
-            _httpClient = new HttpClient();
-            _httpClient.DefaultRequestHeaders.Add("X-Software-Company", xCompany);
+            SetRequestHeaders("X-Software-Company", xCompany);
             var byteArray = Encoding.ASCII.GetBytes(login+':'+pwd);
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
+            SetAuthorization (new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray)));
         }
+
+
 
         public IEnumerable<FeedClient> GetPod()
         {
