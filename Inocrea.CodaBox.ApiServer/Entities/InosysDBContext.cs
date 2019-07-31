@@ -44,10 +44,6 @@ namespace Inocrea.CodaBox.ApiServer.Entities
                     .HasMaxLength(255)
                     .IsUnicode(false);
 
-                entity.Property(e => e.CompanyId)
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
-
                 entity.Property(e => e.CurrencyCode)
                     .HasMaxLength(255)
                     .IsUnicode(false);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Inocrea.CodaBox.ApiServer.Entities
 {
@@ -12,13 +13,14 @@ namespace Inocrea.CodaBox.ApiServer.Entities
         }
 
         public int Id { get; set; }
-        public string CompanyId { get; set; }
         public string Iban { get; set; }
         public string Bic { get; set; }
         public string IdentificationNumber { get; set; }
         public string CurrencyCode { get; set; }
 
+        [JsonIgnore]
         public virtual ICollection<Statements> Statements { get; set; }
+        [JsonIgnore]
         public virtual ICollection<Transactions> Transactions { get; set; }
     }
 }

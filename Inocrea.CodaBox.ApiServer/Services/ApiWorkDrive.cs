@@ -17,16 +17,13 @@ namespace Inocrea.CodaBox.ApiServer.Services
             SetRequestHeaders("Authorization", "Zoho-oauthtoken "+zoho.Token);
         }
 
-        private async Task UploadJson(ICollection<Transactions> DataList)
+        public async Task UploadJson(string json)
         {
-            if (DataList.Count <= 0) return;
-            var json = Newtonsoft.Json.JsonConvert.SerializeObject(DataList);
-
             byte[] data = Encoding.UTF8.GetBytes(json);
             var fileName = "coda" + ".json"; //declaration.json";
             var uri = new Uri(baseUrl + fileName);
 
-            await PostAsync(uri, data, fileName);
+            await PostFileAsync(uri, data, fileName);
         }
 
         public async Task UploadXml(MemoryStream stream)
@@ -35,7 +32,7 @@ namespace Inocrea.CodaBox.ApiServer.Services
             var fileName = "coda" + ".xls"; //declaration.xls";
             var uri = new Uri(baseUrl + fileName);
 
-            await PostAsync(uri, data, fileName);
+            await PostFileAsync(uri, data, fileName);
         }
 
     }

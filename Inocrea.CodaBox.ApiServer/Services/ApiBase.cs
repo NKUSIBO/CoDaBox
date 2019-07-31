@@ -33,7 +33,6 @@ namespace Inocrea.CodaBox.ApiServer.Services
             {
                 response = await _httpClient.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead);
                 response.EnsureSuccessStatusCode();
-                Console.WriteLine("GET\t" + uri);
             }
             catch (Exception)
             {
@@ -51,7 +50,6 @@ namespace Inocrea.CodaBox.ApiServer.Services
                 //todo put feed
                 //response = await _httpClient.PutAsync(uri, content);
                 //response.EnsureSuccessStatusCode();
-                Console.WriteLine("PUT\t" + uri);
             }
             catch (Exception)
             {
@@ -60,21 +58,21 @@ namespace Inocrea.CodaBox.ApiServer.Services
             return true;
         }
 
-        protected async Task PostAsync(Uri uri, byte[] data, string fileName)
+        protected async Task<bool> PostFileAsync(Uri uri, byte[] data, string fileName)
         {
             var formContent = new MultipartFormDataContent();
             formContent.Add(new StreamContent(new MemoryStream(data)), "content", fileName);
-            var response = await _httpClient.PostAsync(uri, formContent);
+            var rep = await PostAsync(uri, formContent);
+            return true;
         }
 
-        protected async Task<string> PostAsync(Uri uri)
+        protected async Task<string> PostAsync(Uri uri, HttpContent content=null)
         {
             HttpResponseMessage response = null;
             try
             {
-                response = await _httpClient.PostAsync(uri, null);
+                response = await _httpClient.PostAsync(uri, content);
                 response.EnsureSuccessStatusCode();
-                Console.WriteLine("POST\t" + uri);
             }
             catch (Exception)
             {

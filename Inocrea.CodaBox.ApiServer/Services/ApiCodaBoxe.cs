@@ -14,15 +14,15 @@ namespace Inocrea.CodaBox.ApiServer.Services
 {
     public class ApiCodaBoxe:ApiBase
     {
-        //private string baseUrl = "https://sandbox-api.codabox.com/v2/delivery/";
-        //private string xCompany = "641088c3-8fcb-47a3-8cef-de8197f5172c";
-        //private string login = "GF-4e2cee89-e8df-4a1d-b285-f7c";
-        //private string pwd = "XyJn6NQYrm";
+        private string baseUrl = "https://sandbox-api.codabox.com/v2/delivery/";
+        private string xCompany = "641088c3-8fcb-47a3-8cef-de8197f5172c";
+        private string login = "GF-4e2cee89-e8df-4a1d-b285-f7c";
+        private string pwd = "XyJn6NQYrm";
 
-        private string baseUrl = "https://api.codabox.com/v2/delivery/";
-        private string xCompany = "e11e853b-97a9-4e63-9385-e4d5f5b84bed";
-        private string login = "GF-2cdef81c-6e0e-4aba-850f-d50";
-        private string pwd = "HZyUU7hS8q";
+        //private string baseUrl = "https://api.codabox.com/v2/delivery/";
+        //private string xCompany = "e11e853b-97a9-4e63-9385-e4d5f5b84bed";
+        //private string login = "GF-2cdef81c-6e0e-4aba-850f-d50";
+        //private string pwd = "HZyUU7hS8q";
 
         public ApiCodaBoxe()
         {

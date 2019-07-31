@@ -11,6 +11,7 @@ using System.ComponentModel;
 using System.Linq;
 
 using Inocrea.CodaBox.ApiServer.Services;
+using Newtonsoft.Json;
 
 namespace Inocrea.CodaBox.ApiServer.BackGround
 {
@@ -26,13 +27,9 @@ namespace Inocrea.CodaBox.ApiServer.BackGround
                 try
                 {
                     var coda = new CodaProcesse();
-
                     //coda.Start();
-                    //await UploadJson();
+                    await UploadJson();
                     await ExecuteWork();
-
-
-
 
                     stoppingToken.ThrowIfCancellationRequested();
 
@@ -41,7 +38,7 @@ namespace Inocrea.CodaBox.ApiServer.BackGround
                         _cts = CancellationTokenSource.CreateLinkedTokenSource(stoppingToken);
                     }
 
-                    await Task.Delay(TimeSpan.FromHours(1), _cts.Token);
+                    await Task.Delay(TimeSpan.FromDays(1), _cts.Token);
                     stoppingToken.ThrowIfCancellationRequested();
 
                 }
@@ -54,16 +51,26 @@ namespace Inocrea.CodaBox.ApiServer.BackGround
 
         private async Task UploadJson()
         {
-            //if (DataList.Count <= 0) return;
-            //var json = Newtonsoft.Json.JsonConvert.SerializeObject(DataList);
-            //var fileName = "coda" + ".json"; //declaration.json";
-            //byte[] data = Encoding.UTF8.GetBytes(json);
+            var Db = new InosysDBContext();
+            var statements = Db.Statements.ToList();
+            var transactions = Db.Transactions.ToList();
 
-            //var formContent = new MultipartFormDataContent();
-            //formContent.Add(new StreamContent(new MemoryStream(data)), "content", fileName);
-            //var client = new HttpClient();
-            //client.DefaultRequestHeaders.Add("Authorization", "Zoho-oauthtoken 1000.973023507b1b3c7ef6125e0ffe1b4f48.2145f45f88073756b8a037f3be0bf2c8");
-            //var response = await client.PostAsync("https://workdrive.zoho.com/api/v1/upload?parent_id=6j92v79240bb1f6d742aa9a98c72b6e85e937&filename=cod.json", formContent);
+            foreach (var st in statements)
+            {
+                var scb = Db.CompteBancaire.FirstOrDefault(c => c.Id == st.CompteBancaireId);
+                st.CompteBancaire = scb;
+                var tr = transactions.Where(t => t.StatementId == st.StatementId);
+                foreach (var t in tr)
+                {
+                    var cb = Db.CompteBancaire.FirstOrDefault(c => c.Id == t.CompteBancaireId);
+                    t.CompteBancaire = cb;
+                    st.Transactions.Add(t);
+                }
+            }
+            var json = JsonConvert.SerializeObject(statements);
+            var apiWD = new ApiWorkDrive();
+
+            await apiWD.UploadJson(json);
         }
 
         public string WriteTsv<T>(IEnumerable<T> data)
@@ -73,9 +80,9 @@ namespace Inocrea.CodaBox.ApiServer.BackGround
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(typeof(T));
             foreach (PropertyDescriptor prop in props)
             {
-                output += prop.DisplayName+ '\t'; // header
+                output += prop.DisplayName + '\t'; // header
             }
-            output+='\n';
+            output += '\n';
             foreach (T item in data)
             {
                 foreach (PropertyDescriptor prop in props)
@@ -100,7 +107,6 @@ namespace Inocrea.CodaBox.ApiServer.BackGround
             stream.Position = 0;
 
             var apiWD = new ApiWorkDrive();
-            
             await apiWD.UploadXml(stream);
 
         }
