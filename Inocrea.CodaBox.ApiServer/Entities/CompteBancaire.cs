@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 
 namespace Inocrea.CodaBox.ApiServer.Entities
 {
-    public partial class CompteBancaire
+    public class CompteBancaire
     {
         public CompteBancaire()
         {
@@ -12,6 +12,7 @@ namespace Inocrea.CodaBox.ApiServer.Entities
             Transactions = new HashSet<Transactions>();
         }
 
+        [Key]
         public int Id { get; set; }
         public string Iban { get; set; }
         public string Bic { get; set; }

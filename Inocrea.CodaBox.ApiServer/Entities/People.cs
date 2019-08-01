@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Inocrea.CodaBox.ApiServer.Entities
+﻿namespace Inocrea.CodaBox.ApiServer.Entities
 {
-    public partial class People
+    public class People
     {
         public int PeopleId { get; set; }
         public string FirstName { get; set; }

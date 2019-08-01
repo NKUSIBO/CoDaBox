@@ -41,61 +41,60 @@ namespace Inocrea.CodaBox.ApiServer.Controllers
             return compteBancaire;
         }
 
-        // PUT: api/CompteBancaires/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutCompteBancaire(int id, CompteBancaire compteBancaire)
-        {
-            if (id != compteBancaire.Id)
-            {
-                return BadRequest();
-            }
+        //// PUT: api/CompteBancaires/5
+        //[HttpPut("{id}")]
+        //public async Task<IActionResult> PutCompteBancaire(int id, CompteBancaire compteBancaire)
+        //{
+        //    if (id != compteBancaire.Id)
+        //    {
+        //        return BadRequest();
+        //    }
 
-            _context.Entry(compteBancaire).State = EntityState.Modified;
+        //    _context.Entry(compteBancaire).State = EntityState.Modified;
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CompteBancaireExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+        //    try
+        //    {
+        //        await _context.SaveChangesAsync();
+        //    }
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+        //        if (!CompteBancaireExists(id))
+        //        {
+        //            return NotFound();
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
+        //    return NoContent();
+        //}
 
-            return NoContent();
-        }
+        //// POST: api/CompteBancaires
+        //[HttpPost]
+        //public async Task<ActionResult<CompteBancaire>> PostCompteBancaire(CompteBancaire compteBancaire)
+        //{
+        //    _context.CompteBancaire.Add(compteBancaire);
+        //    await _context.SaveChangesAsync();
 
-        // POST: api/CompteBancaires
-        [HttpPost]
-        public async Task<ActionResult<CompteBancaire>> PostCompteBancaire(CompteBancaire compteBancaire)
-        {
-            _context.CompteBancaire.Add(compteBancaire);
-            await _context.SaveChangesAsync();
+        //    return CreatedAtAction("GetCompteBancaire", new { id = compteBancaire.Id }, compteBancaire);
+        //}
 
-            return CreatedAtAction("GetCompteBancaire", new { id = compteBancaire.Id }, compteBancaire);
-        }
+        //// DELETE: api/CompteBancaires/5
+        //[HttpDelete("{id}")]
+        //public async Task<ActionResult<CompteBancaire>> DeleteCompteBancaire(int id)
+        //{
+        //    var compteBancaire = await _context.CompteBancaire.FindAsync(id);
+        //    if (compteBancaire == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-        // DELETE: api/CompteBancaires/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<CompteBancaire>> DeleteCompteBancaire(int id)
-        {
-            var compteBancaire = await _context.CompteBancaire.FindAsync(id);
-            if (compteBancaire == null)
-            {
-                return NotFound();
-            }
+        //    _context.CompteBancaire.Remove(compteBancaire);
+        //    await _context.SaveChangesAsync();
 
-            _context.CompteBancaire.Remove(compteBancaire);
-            await _context.SaveChangesAsync();
-
-            return compteBancaire;
-        }
+        //    return compteBancaire;
+        //}
 
         private bool CompteBancaireExists(int id)
         {
