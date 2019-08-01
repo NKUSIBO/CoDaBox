@@ -18,7 +18,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Inocrea.CodaBox.Web", "Inoc
 		{43F9507B-1954-471D-BFE7-E811AC11A51A} = {43F9507B-1954-471D-BFE7-E811AC11A51A}
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Inocrea.CodaBox.ApiServer", "Inocrea.CodaBox.ApiServer\Inocrea.CodaBox.ApiServer.csproj", "{43F9507B-1954-471D-BFE7-E811AC11A51A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Inocrea.CodaBox.ApiServer1", "Inocrea.CodaBox.ApiServer\Inocrea.CodaBox.ApiServer1.csproj", "{43F9507B-1954-471D-BFE7-E811AC11A51A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Inocrea.CodaBox.ApiServer", "D:\Inocrea.CodaBox.ApiServer\Inocrea.CodaBox.ApiServer.csproj", "{927F629E-B906-4662-8059-B6A89AD15730}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -56,6 +58,10 @@ Global
 		{43F9507B-1954-471D-BFE7-E811AC11A51A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{43F9507B-1954-471D-BFE7-E811AC11A51A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{43F9507B-1954-471D-BFE7-E811AC11A51A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{927F629E-B906-4662-8059-B6A89AD15730}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{927F629E-B906-4662-8059-B6A89AD15730}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{927F629E-B906-4662-8059-B6A89AD15730}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{927F629E-B906-4662-8059-B6A89AD15730}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
