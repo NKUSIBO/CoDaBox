@@ -26,7 +26,9 @@
 
 
 
-
+                        <th>
+                            @Html.DisplayNameFor(model => model.StatementId)
+                        </th>
 
                         <th>
                             @Html.DisplayNameFor(model => model.Iban)
@@ -68,7 +70,10 @@
 
                         </th>
 
+                        <th>
+                            
 
+                        </th>
                     </tr>
                 </thead>
 
@@ -80,15 +85,16 @@
 @section scripts {
     <script type='text/javascript' src='https://cdn.datatables.net/v/dt/dt-1.10.13/datatables.min.js'></script>
     <script>
-
+        var yourGlobalVariable;
         $(document).ready(function () {
-            $('#example')
-                .dataTable({
+            var table = $('#example')
+                .DataTable({
                     'processing': true,
                     'serverSide': true,
+
                     'ajax': {
                         'url': 'Home/LoadTransaction',
-                        ' dataFilter': function (data) {
+                        ' dataFilter': function(data) {
                             var json = jQuery.parseJSON(data);
                             json.recordsTotal = json.total;
                             json.recordsFiltered = json.total;
@@ -98,10 +104,12 @@
                         },
 
                         'type': 'POST'
-                    },
 
+                    },
+                    'data': yourGlobalVariable,
                     'columns':
                         [
+                            { data: 'StatementId', name: 'StatementId', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
                             { data: 'Iban', name: 'Iban', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
                             { data: 'InformationalMessage', name: 'InformationalMessage', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
                             { data: 'Date', name: 'Date', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
@@ -112,19 +120,44 @@
                            
                             { data: 'NewBalance', name: 'NewBalance', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
                             { data: 'InitialBalance', name: 'InitialBalance', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
+                            { data: 'null', name: '', 'sDefaultContent': '"<button>Click!</button>', 'autoWidth': true }
+                  
                         ],
+                   
                     'ordering': true,
                     'paging': true,
                     'searching': true,
                     'pagingType': 'full_numbers',
-                    'pageLength': 10,
-                    "mRender": function(data, type, full) {
-                        return '<a class="btn btn-info btn-sm" href=#/' + full[0] + '>' + 'Edit' + '</a>';
-                    }
-
+                    'pageLength': 10
+                    
+                   
 
                 });
+          
+                //now use AJAX with data, which is on the form [ { col1 : value, col2: value ..}]
+             
+            //$('#example').on('dblclick','tr', function() {
+            //    var currentRowData = table.row(this).data();
+            //    alert(currentRowData[1]); // wil give you the value of this clicked row and first index (td)
+            //    //your stuff goes here
+            //});
+            //$('#example').on('click',
+            //    'tbody tr',
+            //    function() {
+            //        console.log('API row values : ', table.row(this).data());
+            //        alert(table.row(this).data().);
+            //    });
 
+          
+           
+            $("#example tbody").delegate("tr", "click", function () {
+
+                var firstCellText = $("td:first", this).text();
+            
+                window.open('https://localhost:44374/Transactions?index='+firstCellText);
+                @*window.location.href = "@Url.Action("Index", "Transactions")" + "/" + firstCellText;*@
+            });
+        });
             //$('#example thead tr').clone(true).appendTo( '#example thead' );
             //$('#example thead tr:eq(1) th').each( function (i) {
             //    var title = $(this).text();
@@ -139,9 +172,22 @@
             //        }
             //    } );
             //} );
+            //$('#example body').on('click','tr.group',function(){
+            //    var data = $('#example').DataTable().row(this).data();
+            //    alert(data);
+            //});
+            //$('#example').on('click', 'tbody > tr > td', function ()
+            //{
+            //    for (var i = 0; i < table.rows('.selected').data().length; i++) { 
+            //        alert( table.rows('.selected').data()[i]);
+            //    }
+            //});
+            //$('#example tbody').on( 'click', 'button', function () {
+            //    var data = table.row($(this).parents('tr')).data();
 
-
-        });
+            //    alert( data[1] +"'s salary is: "+ data[5] );
+            //} );
+          
 
 
             //(function($) {

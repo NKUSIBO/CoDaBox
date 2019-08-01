@@ -6,10 +6,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Inocrea.CodaBox.ApiServer.Entities;
+using Microsoft.AspNet.OData;
 
 namespace Inocrea.CodaBox.ApiServer.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class TransactionsController : ControllerBase
     {
@@ -22,6 +23,7 @@ namespace Inocrea.CodaBox.ApiServer.Controllers
 
         // GET: api/Transactions
         [HttpGet]
+        
         public async Task<ActionResult<IEnumerable<Transactions>>> GetTransactions()
         {
             return await _context.Transactions.ToListAsync();
@@ -37,6 +39,15 @@ namespace Inocrea.CodaBox.ApiServer.Controllers
             {
                 return NotFound();
             }
+
+            return transactions;
+        }
+        [HttpGet("{statementId}")]
+        public async Task<List<Transactions>> GetTransactionsByStatement(int statementId)
+        {
+            var transactions = await _context.Transactions.Where(i=>i.StatementId==statementId).ToListAsync();
+
+            
 
             return transactions;
         }

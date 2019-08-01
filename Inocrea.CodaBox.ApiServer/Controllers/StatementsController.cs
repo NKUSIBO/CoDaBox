@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Inocrea.CodaBox.ApiServer.Entities;
+using Microsoft.AspNet.OData;
 
 namespace Inocrea.CodaBox.ApiServer.Controllers
 {
@@ -22,6 +23,7 @@ namespace Inocrea.CodaBox.ApiServer.Controllers
 
         // GET: api/Statements
         [HttpGet]
+        //[EnableQuery()]
         public async Task<ActionResult<IEnumerable<Statements>>> GetStatements()
         {
             return await _context.Statements.ToListAsync();

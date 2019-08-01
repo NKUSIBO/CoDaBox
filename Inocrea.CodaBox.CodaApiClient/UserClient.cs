@@ -236,7 +236,7 @@ namespace Inocrea.CodaBox.CodaApiClient
             foreach (var statement in statementsFromDb.Result)
             {
                 StatementAccountViewModel sta = new StatementAccountViewModel();
-
+                sta.StatementId = statement.StatementId;
                 sta.Date = statement.Date;
                 sta.InitialBalance = statement.InitialBalance;
                 sta.NewBalance = statement.NewBalance;
@@ -409,7 +409,8 @@ namespace Inocrea.CodaBox.CodaApiClient
                     Date = statement.Date,
                     InitialBalance = statement.InitialBalance,
                     NewBalance = statement.NewBalance,
-                    InformationalMessage = statement.Account.Name
+                    InformationalMessage = statement.Account.Name,
+                   
                 };
 
                 foreach (var transaction in statement.Transactions)

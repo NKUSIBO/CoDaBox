@@ -1,5 +1,4 @@
 ﻿using System;
-using Inocrea.CodaBox.Web.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -23,14 +22,7 @@ namespace Inocrea.CodaBox.ApiServer.Entities
 
         // Unable to generate entity type for table 'history.HistoryPeople'. Please see the warning messages.
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=tcp:inocrea.database.windows.net,1433;Database=InosysDB;Persist Security Info=False;User Id=Inosys@inocrea;Password=Inocrea01!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;;MultipleActiveResultSets=true");
-            }
-        }
+    
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -46,9 +38,7 @@ namespace Inocrea.CodaBox.ApiServer.Entities
                     .HasMaxLength(255)
                     .IsUnicode(false);
 
-                entity.Property(e => e.CompanyId)
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
+               
 
                 entity.Property(e => e.CurrencyCode)
                     .HasMaxLength(255)

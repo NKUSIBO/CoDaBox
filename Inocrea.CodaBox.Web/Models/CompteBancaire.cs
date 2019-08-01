@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Inocrea.CodaBox.Dal.Models
+namespace Inocrea.CodaBox.ApiServer.Entities
 {
     public partial class CompteBancaire
     {
@@ -12,13 +12,11 @@ namespace Inocrea.CodaBox.Dal.Models
         }
 
         public int Id { get; set; }
+     
         public string Iban { get; set; }
-        public int CompanyId { get; set; }
-        public string CurrencyCode { get; set; }
         public string Bic { get; set; }
         public string IdentificationNumber { get; set; }
-        public int? StatementsId { get; set; }
-        public int? TransactionsId { get; set; }
+        public string CurrencyCode { get; set; }
 
         public virtual ICollection<Statements> Statements { get; set; }
         public virtual ICollection<Transactions> Transactions { get; set; }

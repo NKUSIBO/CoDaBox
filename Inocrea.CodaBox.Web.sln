@@ -14,6 +14,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Inocrea.CodaBox.Dal", "Inocrea.CodaBox.Dal\Inocrea.CodaBox.Dal.csproj", "{F50B3563-B3FC-4640-88EE-6A68E5E193BF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Inocrea.CodaBox.Web", "Inocrea.CodaBox.Web\Inocrea.CodaBox.Web.csproj", "{D19D019B-5E0A-4607-989B-E6CFC52A4C35}"
+	ProjectSection(ProjectDependencies) = postProject
+		{43F9507B-1954-471D-BFE7-E811AC11A51A} = {43F9507B-1954-471D-BFE7-E811AC11A51A}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Inocrea.CodaBox.ApiServer", "Inocrea.CodaBox.ApiServer\Inocrea.CodaBox.ApiServer.csproj", "{43F9507B-1954-471D-BFE7-E811AC11A51A}"
 EndProject

@@ -16,7 +16,7 @@ namespace Inocrea.CodaBox.ApiServer.Entities
         public string Message { get; set; }
         public int? AdresseId { get; set; }
 
-        public virtual CompteBancaire CompteBancaire { get; set; }
+        public virtual Inocrea.CodaBox.ApiServer.Entities.CompteBancaire CompteBancaire { get; set; }
         public virtual Statements Statement { get; set; }
     }
 }
