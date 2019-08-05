@@ -32,11 +32,16 @@ namespace Inocrea.CodaBox.ApiServer.BackGround
 
         private IEnumerable<Statements> GetCodas(IEnumerable<FeedEntry> feedEntries, int id)
         {
+            var ApiWD = new ApiWorkDrive();
             List<Statements> feedStatements = new List<Statements>();
             foreach (var feed in feedEntries)
             {
                 var index = feed.FeedIndex;
-                var statements = client.GetCoda(index);
+                var pdf = client.GetCodaFile(index,"pdf");
+                ApiWD.UploadFile(pdf, "pdf");
+                var cod = client.GetCodaFile(index,"cod");
+                ApiWD.UploadFile(cod, "cod");
+                var statements = client.GetStatements(cod);
                 statements = SaveStatement(statements);
                 client.PutFeed(id, index);
             }

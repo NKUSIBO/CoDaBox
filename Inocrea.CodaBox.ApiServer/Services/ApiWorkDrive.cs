@@ -26,6 +26,15 @@ namespace Inocrea.CodaBox.ApiServer.Services
             await PostFileAsync(uri, data, fileName);
         }
 
+        public async Task UploadFile(string txt, string extension)
+        {
+            byte[] data = Encoding.UTF8.GetBytes(txt);
+            var fileName = "coda." + extension; //declaration.json";
+            var uri = new Uri(baseUrl + fileName);
+
+            await PostFileAsync(uri, data, fileName);
+        }
+
         public async Task UploadXml(MemoryStream stream)
         {
             byte[] data = stream.ToArray();

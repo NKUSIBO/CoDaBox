@@ -10,7 +10,7 @@ namespace Inocrea.CodaBox.Web.Helper
     {
         public HttpClient Initial()
         {
-            var client = new HttpClient {BaseAddress = new Uri("https://localhost:44330/") };
+            var client = new HttpClient {BaseAddress = new Uri("https://localhost:5001/") };
             return client;
         }
     }
