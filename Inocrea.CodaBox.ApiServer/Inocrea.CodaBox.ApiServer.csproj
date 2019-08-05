@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
@@ -27,6 +27,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Downloads\CoDaBox-columnFilter\CoDaBox-columnFilter\CodaParser\CodaParser.csproj" />
+    <ProjectReference Include="..\..\..\..\Downloads\Inocrea.InoConnect\Inocrea.InoConnect\Identity\Identity.csproj" />
+    <ProjectReference Include="..\..\Ino-Connect\Inocrea.InoConnect\Common\Common.csproj" />
   </ItemGroup>
 
 </Project>
