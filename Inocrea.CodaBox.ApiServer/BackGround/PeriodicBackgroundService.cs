@@ -25,7 +25,7 @@ namespace Inocrea.CodaBox.ApiServer.BackGround
                 try
                 {
                     var coda = new CodaProcesse();
-                    coda.Start();
+                    //coda.Start();
                     //await UploadJson();
                     //await ExecuteWork();
 

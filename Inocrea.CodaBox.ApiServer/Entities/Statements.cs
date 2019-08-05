@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Inocrea.CodaBox.ApiServer.Entities
 {
-    public partial class Statements
+    public class Statements
     {
-        public Statements()
-        {
-            Transactions = new HashSet<Transactions>();
-        }
+        public Statements() => Transactions = new HashSet<Transactions>();
 
+        [Key]
         public int StatementId { get; set; }
+        [ForeignKey("CompteBancaire")]
         public int CompteBancaireId { get; set; }
+
         public double InitialBalance { get; set; }
         public double NewBalance { get; set; }
         public string InformationalMessage { get; set; }
