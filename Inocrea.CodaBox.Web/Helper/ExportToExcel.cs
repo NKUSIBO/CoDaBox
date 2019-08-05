@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using Inocrea.CodaBox.ApiModel.ViewModel;
 
 namespace Inocrea.CodaBox.Web.Helper
 {
@@ -44,7 +45,7 @@ namespace Inocrea.CodaBox.Web.Helper
                 }
                 return table;
             }
-            public static DataTable ExportGenericTransactions<T>(List<Transactions> listToExport)
+            public static DataTable ExportGenericTransactions<T>(List<StatementAccountViewModel> listToExport)
             {
                 List<string> propertEntity = new List<string>();
                 DataTable dt = new DataTable("DataToExcel");
@@ -131,7 +132,51 @@ namespace Inocrea.CodaBox.Web.Helper
 
             }
 
-        }
+            public static DataTable ExportTransactions<T>(List<TransactionsAccountViewModel> listToExport)
+            {
+                List<string> propertEntity = new List<string>();
+                DataTable dt = new DataTable("DataToExcel");
+                foreach (var item in listToExport)
+                {
+
+
+                    foreach (var prop in item.GetType().GetProperties())
+                    {
+
+
+                        var propType = "";
+
+
+
+
+                        propType = prop.PropertyType.Name;
+
+
+                        if (!dt.Columns.Contains(prop.Name))
+                        {
+                            dt.Columns.Add(new DataColumn(prop.Name));
+                            propertEntity.Add(prop.Name);
+
+                        }
+
+
+
+
+
+                    }
+
+                }
+                List<object> propValue = new List<object>();
+
+                var dataToExportToExcel = listToExport;
+
+                return ToDataTable(dataToExportToExcel, dt);
+
+
+
+            }
+
+    }
 
     
 }

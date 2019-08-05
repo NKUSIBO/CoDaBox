@@ -1,0 +1,67 @@
+﻿@model Inocrea.CodaBox.ApiServer.Entities.Transactions
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Transactions</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.StructuredMessage)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.StructuredMessage)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.TransactionDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.TransactionDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ValueDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ValueDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Amount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Amount)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Message)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Message)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AdresseId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AdresseId)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CompteBancaire)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CompteBancaire.Iban)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Statement)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Statement.StatementId)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

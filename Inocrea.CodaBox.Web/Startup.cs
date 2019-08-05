@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Inocrea.CodaBox.ApiServer.Entities;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Hosting;
@@ -37,20 +39,22 @@ namespace Inocrea.CodaBox.Web
                         = new DefaultContractResolver();
                 });
             services.Configure<CookiePolicyOptions>(options =>
-             {
-                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                 options.CheckConsentNeeded = context => true;
-                 options.MinimumSameSitePolicy = SameSiteMode.None;
-             });
-
-             services.AddDbContext<ApplicationDbContext>(options =>
+            {
+                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
+            services.AddDbContext<InosysDBContext>(options =>
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<ApplicationDbContext>(options =>
                  options.UseSqlServer(
                      Configuration.GetConnectionString("DefaultConnection")));
-             services.AddDefaultIdentity<IdentityUser>()
-                 .AddEntityFrameworkStores<ApplicationDbContext>();
-             services.Configure<SettingsModels>(Configuration.GetSection("ApiSettings"));
-
-             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddDefaultIdentity<IdentityUser>()
+                .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.Configure<SettingsModels>(Configuration.GetSection("ApiSettings"));
+            services.Configure<SettingsModelsApiServer>(Configuration.GetSection("ApiServerSettings"));
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
