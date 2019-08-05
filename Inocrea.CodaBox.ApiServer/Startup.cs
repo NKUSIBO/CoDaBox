@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Inocrea.CodaBox.ApiServer.BackGround;
 using Inocrea.CodaBox.ApiServer.Entities;
 using Inocrea.CodaBox.ApiServer.Models;
 using Microsoft.AspNet.OData.Extensions;
@@ -41,7 +42,8 @@ namespace Inocrea.CodaBox.ApiServer
             {
                 c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
             });
-            
+            services.AddHostedService<PeriodicBackgroundService>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -21,9 +21,6 @@
 
 
                     <tr>
-
-
-
                         <th>
                             @Html.DisplayNameFor(model => model.IdentificationNumber)
                         </th>
@@ -52,21 +49,9 @@
                             @Html.DisplayNameFor(model => model.ValueDate)
                         </th>
 
-                        
-
-
                         <th>
                             @Html.DisplayNameFor(model => model.TransactionDate)
                         </th>
-
-
-
-
-
-
-
-
-                       
                     </tr>
                 </thead>
 
@@ -86,7 +71,7 @@
                     'serverSide': true,
 
                     'ajax': {
-                         'url': 'Transactions/TransactionsByStatements',
+                        'url': 'Transactions/TransactionsByStatements',
                         ' dataFilter': function (data) {
                             var json = jQuery.parseJSON(data);
                             json.recordsTotal = json.total;
@@ -110,10 +95,10 @@
                             { data: 'Amount', name: 'Amount', 'sDefaultContent': '0', 'autoWidth': true },
 
                             { data: 'StructuredMessage', name: 'StructuredMessage', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
-                            { data: 'ValueDate', name: 'ValueDate', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
+                            { data: 'ValueDateFrmt', name: 'ValueDateFrmt', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
 
 
-                            { data: 'TransactionDate', name: 'TransactionDate', 'sDefaultContent': '0-0-0000', 'autoWidth': true }
+                            { data: 'TransactionDateFrmt', name: 'TransactionDateFrmt', 'sDefaultContent': '0-0-0000', 'autoWidth': true }
 
 
                         ],

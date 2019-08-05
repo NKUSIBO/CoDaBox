@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 using System.Text;
 
@@ -14,8 +15,16 @@ namespace Inocrea.CodaBox.ApiModel.ViewModel
         [DataMember]
         public string InformationalMessage { get; set; }
         [DataMember]
-
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{dd/MM/yyyy}")]
         public DateTime Date { get; set; }
+        public string Date_Frmt
+        {
+            get
+            {
+                return Date.ToString("dd/MM/yyyy");
+            }
+        }
+
         [DataMember]
         public int StatementId { get; set; }
         [DataMember]

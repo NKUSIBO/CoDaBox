@@ -70,10 +70,7 @@
 
                         </th>
 
-                        <th>
-                            
-
-                        </th>
+                        
                     </tr>
                 </thead>
 
@@ -93,6 +90,7 @@
                     'serverSide': true,
 
                     'ajax': {
+                            
                         'url': 'Home/LoadTransaction',
                         ' dataFilter': function(data) {
                             var json = jQuery.parseJSON(data);
@@ -112,7 +110,7 @@
                             { data: 'StatementId', name: 'StatementId', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
                             { data: 'Iban', name: 'Iban', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
                             { data: 'InformationalMessage', name: 'InformationalMessage', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
-                            { data: 'Date', name: 'Date', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
+                            { data: 'Date_Frmt', name: 'Date_Frmt', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
                             { data: 'IdentificationNumber', name: 'IdentificationNumber', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
                           
                             { data: 'CurrencyCode', 'sDefaultContent': '0-0-0000', name: 'CurrencyCode', 'autoWidth': true },
@@ -120,8 +118,7 @@
                            
                             { data: 'NewBalance', name: 'NewBalance', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
                             { data: 'InitialBalance', name: 'InitialBalance', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
-                            { data: 'null', name: '', 'sDefaultContent': '"<button>Click!</button>', 'autoWidth': true }
-                  
+                            
                         ],
                    
                     'ordering': true,
@@ -150,7 +147,7 @@
 
           
            
-            $("#example tbody").delegate("tr", "click", function () {
+            $("#example tbody").delegate("tr", "dblclick", function () {
 
                 var firstCellText = $("td:first", this).text();
             

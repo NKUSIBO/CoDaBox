@@ -8,7 +8,21 @@ namespace Inocrea.CodaBox.ApiModel.ViewModel
     {
         public string StructuredMessage { get; set; }
         public DateTime TransactionDate { get; set; }
+        public string TransactionDateFrmt
+        {
+            get
+            {
+                return TransactionDate.ToString("dd/MM/yyyy");
+            }
+        }
         public DateTime ValueDate { get; set; }
+        public string ValueDateFrmt
+        {
+            get
+            {
+                return ValueDate.ToString("dd/MM/yyyy");
+            }
+        }
         public double Amount { get; set; }
         public int Id { get; set; }
         public string Message { get; set; }
@@ -16,7 +30,6 @@ namespace Inocrea.CodaBox.ApiModel.ViewModel
         public string CurrencyCode { get; set; }
         public string Bic { get; set; }
         public string IdentificationNumber { get; set; }
-        public int? StatementsId { get; set; }
-        public int? TransactionsId { get; set; }
+      
     }
 }

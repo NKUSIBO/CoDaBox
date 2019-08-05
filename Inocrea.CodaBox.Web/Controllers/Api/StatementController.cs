@@ -68,7 +68,7 @@ namespace Inocrea.CodaBox.Web.Controllers.Api
         public async Task<IActionResult> LoadTransaction()
         {
             var requestFormData = Request.Form;
-            List<StatementAccountViewModel> data = await ApiClientFactory.Instance.GetInvoice();
+            List<StatementAccountViewModel> data = await ApiClientFactory.Instance.GetStatements();
             
 
             try
@@ -86,9 +86,10 @@ namespace Inocrea.CodaBox.Web.Controllers.Api
 
                 //return Json(response);
             }
-            catch (Exception ex)
+            catch (Exception )
             {
-
+               
+ 
                 return BadRequest();
             }
 
