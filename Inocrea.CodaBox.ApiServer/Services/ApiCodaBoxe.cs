@@ -64,10 +64,15 @@ namespace Inocrea.CodaBox.ApiServer.Services
             return feed.FeedEntries;
         }
 
-        public IEnumerable<Statements> GetCoda(Guid index)
+        public string GetCodaFile(Guid index, string extension)
         {
-            var uri = new Uri(baseUrl + "download/" + index + "/cod/");
+            var uri = new Uri(baseUrl + "download/" + index + '/'+ extension + '/');
             var data = GetAsync(uri).Result;
+            return data;
+        }
+
+        public IEnumerable<Statements> GetStatements(string data)
+        {
             data = data.Replace('\r','\n');
             var line = data.Split('\n');
 

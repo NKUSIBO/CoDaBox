@@ -151,7 +151,7 @@
 
                 var firstCellText = $("td:first", this).text();
             
-                window.open('https://localhost:5002/Transactions?index='+firstCellText);
+                window.open('../Transactions?index='+firstCellText);
                 @*window.location.href = "@Url.Action("Index", "Transactions")" + "/" + firstCellText;*@
             });
         });
