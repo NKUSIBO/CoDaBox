@@ -1,7 +1,6 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
+
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Configuration;
 
 namespace Inocrea.CodaBox.ApiServer.Entities

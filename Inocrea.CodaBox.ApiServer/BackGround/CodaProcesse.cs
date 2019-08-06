@@ -24,13 +24,13 @@ namespace Inocrea.CodaBox.ApiServer.BackGround
             {
                 var id = feed.Id;
                 var feedEntries = client.GetFeed(id);
-                var cod = GetCodas(feedEntries, id);
+                var cod = GetCodasAsync(feedEntries, id);
                 allStatements.AddRange(cod);
             }
             return ok;
         }
 
-        private IEnumerable<Statements> GetCodas(IEnumerable<FeedEntry> feedEntries, int id)
+        private IEnumerable<Statements> GetCodasAsync(IEnumerable<FeedEntry> feedEntries, int id)
         {
             var ApiWD = new ApiWorkDrive();
             List<Statements> feedStatements = new List<Statements>();
@@ -38,10 +38,11 @@ namespace Inocrea.CodaBox.ApiServer.BackGround
             {
                 var index = feed.FeedIndex;
                 var pdf = client.GetCodaFile(index,"pdf");
-                ApiWD.UploadFile(pdf, "pdf");
+                _= ApiWD.UploadFile(pdf, "coda.pdf");
                 var cod = client.GetCodaFile(index,"cod");
-                ApiWD.UploadFile(cod, "cod");
-                var statements = client.GetStatements(cod);
+                _= ApiWD.UploadFile(cod, "coda.cod");
+                var statements = client.GetStatementsAsync(cod).Result;
+
                 statements = SaveStatement(statements);
                 client.PutFeed(id, index);
             }

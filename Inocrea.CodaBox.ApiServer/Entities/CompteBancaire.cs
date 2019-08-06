@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 
 namespace Inocrea.CodaBox.ApiServer.Entities
 {
+    [JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
     public class CompteBancaire
     {
         public CompteBancaire()

@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Inocrea.CodaBox.ApiServer.Entities;
-using Microsoft.AspNet.OData;
 
 namespace Inocrea.CodaBox.ApiServer.Controllers
 {
@@ -34,11 +31,10 @@ namespace Inocrea.CodaBox.ApiServer.Controllers
         public async Task<ActionResult<Transactions>> GetTransactions(int id)
         {
             var transactions = await _context.Transactions.FindAsync(id);
+            if (transactions == null) return NotFound();
 
-            if (transactions == null)
-            {
-                return NotFound();
-            }
+            var cb = await _context.CompteBancaire.FindAsync(transactions.CompteBancaireId);
+            transactions.CompteBancaire = cb;
 
             return transactions;
         }

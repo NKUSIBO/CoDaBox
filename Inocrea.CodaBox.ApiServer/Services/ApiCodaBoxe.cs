@@ -8,6 +8,8 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using Inocrea.CodaBox.ApiServer.Entities;
 using CodaParser;
+using Inocrea.CodaBox.ApiServer.BackGround;
+using System.Threading.Tasks;
 
 namespace Inocrea.CodaBox.ApiServer.Services
 {
@@ -71,7 +73,7 @@ namespace Inocrea.CodaBox.ApiServer.Services
             return data;
         }
 
-        public IEnumerable<Statements> GetStatements(string data)
+        public async Task<IEnumerable<Statements>> GetStatementsAsync(string data)
         {
             data = data.Replace('\r','\n');
             var line = data.Split('\n');
@@ -91,6 +93,7 @@ namespace Inocrea.CodaBox.ApiServer.Services
 
             foreach (var st in statements)
             {
+
                 var account = st.Account;
                 var compteBancaire = new CompteBancaire
                 {
