@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using Inocrea.CodaBox.ApiServer.Entities;
 
 namespace Inocrea.CodaBox.ApiServer.Services
 {
@@ -26,19 +24,17 @@ namespace Inocrea.CodaBox.ApiServer.Services
             await PostFileAsync(uri, data, fileName);
         }
 
-        public async Task UploadFile(string txt, string extension)
+        public async Task UploadFile(string txt, string fileName)
         {
             byte[] data = Encoding.UTF8.GetBytes(txt);
-            var fileName = "coda." + extension; //declaration.json";
             var uri = new Uri(baseUrl + fileName);
 
             await PostFileAsync(uri, data, fileName);
         }
 
-        public async Task UploadXml(MemoryStream stream)
+        public async Task UploadXls(MemoryStream stream, string fileName)
         {
             byte[] data = stream.ToArray();
-            var fileName = "coda" + ".xls"; //declaration.xls";
             var uri = new Uri(baseUrl + fileName);
 
             await PostFileAsync(uri, data, fileName);

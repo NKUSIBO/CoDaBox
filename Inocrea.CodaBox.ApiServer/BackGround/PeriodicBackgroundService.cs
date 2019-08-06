@@ -25,10 +25,10 @@ namespace Inocrea.CodaBox.ApiServer.BackGround
                 try
                 {
                     var coda = new CodaProcesse();
-                    coda.Start();
-                    //await UploadJson();
-                    //await ExecuteWork();
+                    //coda.Start();
 
+                    await ExecuteWork();
+                    await UploadJson();
                     stoppingToken.ThrowIfCancellationRequested();
 
                     if (_cts == null || _cts.Token.IsCancellationRequested)
@@ -96,6 +96,7 @@ namespace Inocrea.CodaBox.ApiServer.BackGround
         {
             var Db = new InosysDBContext();
             var transactions = Db.Transactions.ToList();
+
             var output = WriteTsv(transactions);
 
             var stream = new MemoryStream();
@@ -105,7 +106,7 @@ namespace Inocrea.CodaBox.ApiServer.BackGround
             stream.Position = 0;
 
             var apiWD = new ApiWorkDrive();
-            await apiWD.UploadXml(stream);
+            await apiWD.UploadXls(stream, "coda.xls");
 
         }
 
