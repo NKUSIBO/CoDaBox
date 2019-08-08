@@ -8,6 +8,8 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using Inocrea.CodaBox.ApiServer.Entities;
 using CodaParser;
+using System.Threading.Tasks;
+using System.IO;
 
 namespace Inocrea.CodaBox.ApiServer.Services
 {
@@ -19,18 +21,15 @@ namespace Inocrea.CodaBox.ApiServer.Services
         //private string pwd = "XyJn6NQYrm";
 
         private string baseUrl = "https://api.codabox.com/v2/delivery/";
-        private string xCompany = "e11e853b-97a9-4e63-9385-e4d5f5b84bed";
-        private string login = "GF-2cdef81c-6e0e-4aba-850f-d50";
-        private string pwd = "HZyUU7hS8q";
+        private CodaIdentity codaID;
 
-        public ApiCodaBoxe()
+        public ApiCodaBoxe(CodaIdentity codaID)
         {
-            SetRequestHeaders("X-Software-Company", xCompany);
-            var byteArray = Encoding.ASCII.GetBytes(login+':'+pwd);
+            this.codaID = codaID;
+            SetRequestHeaders("X-Software-Company", codaID.XCompany);
+            var byteArray = Encoding.ASCII.GetBytes(codaID.Login+':'+codaID.Pwd);
             SetAuthorization (new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray)));
         }
-
-
 
         public IEnumerable<FeedClient> GetPod()
         {
@@ -64,10 +63,22 @@ namespace Inocrea.CodaBox.ApiServer.Services
             return feed.FeedEntries;
         }
 
-        public IEnumerable<Statements> GetCoda(Guid index)
+        public string GetCodaFile(Guid index, string extension)
         {
-            var uri = new Uri(baseUrl + "download/" + index + "/cod/");
+            var uri = new Uri(baseUrl + "download/" + index + '/'+ extension + '/');
             var data = GetAsync(uri).Result;
+            return data;
+        }
+
+        public Stream GetCodaFilePdf(Guid index, string extension)
+        {
+            var uri = new Uri(baseUrl + "download/" + index + '/' + extension + '/');
+            var data = GetStreamAsync(uri).Result;
+            return data;
+        }
+
+        public async Task<IEnumerable<Statements>> GetStatementsAsync(string data)
+        {
             data = data.Replace('\r','\n');
             var line = data.Split('\n');
 
@@ -86,6 +97,7 @@ namespace Inocrea.CodaBox.ApiServer.Services
 
             foreach (var st in statements)
             {
+
                 var account = st.Account;
                 var compteBancaire = new CompteBancaire
                 {
@@ -101,7 +113,7 @@ namespace Inocrea.CodaBox.ApiServer.Services
                     InformationalMessage = st.InformationalMessage,
                     InitialBalance = (double)st.InitialBalance,
                     NewBalance = (double)st.NewBalance,
-                    CompteBancaire = compteBancaire
+                    CompteBancaire = compteBancaire,
                 };
 
                 foreach (var tr in st.Transactions)
@@ -111,19 +123,35 @@ namespace Inocrea.CodaBox.ApiServer.Services
                     {
                         Iban = trAccount.Number.Replace(" ",""),
                         Bic = trAccount.Bic,
-                        CurrencyCode = trAccount.CurrencyCode
+                        CurrencyCode = trAccount.CurrencyCode,
                     };
+
+                    SepaDirectDebit sepa=null;
+                    //todo sepa
+                    //if (tr.SepaDirectDebit != null)
+                    //{
+                    //    var sepaParse = tr.SepaDirectDebit;
+                    //    sepa = new SepaDirectDebit
+                    //    {
+                    //        CreditorIdentificationCode = sepaParse.CreditorIdentificationCode,
+                    //        PaidReason = sepaParse.PaidReason,
+                    //        MandateReference = sepaParse.MandateReference,
+                    //        Scheme = sepaParse.Scheme,
+                    //        Type = sepaParse.Type
+                    //    };
+                    //}
 
                     var myTr = new Transactions
                     {
                         Amount = (double)tr.Amount,
-                        //todo
-                        //Message = tr.Message,
+                        Message = tr.Message,
                         StructuredMessage = tr.StructuredMessage,
                         TransactionDate = tr.TransactionDate,
                         ValueDate = tr.ValutaDate,
-                        CompteBancaire = cb
+                        CompteBancaire = cb,
+                        SepaDirectDebit = sepa
                     };
+
                     mySt.Transactions.Add(myTr);
                 }
                 sts.Add(mySt);

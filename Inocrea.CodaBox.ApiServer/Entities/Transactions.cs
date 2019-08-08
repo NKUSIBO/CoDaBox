@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Inocrea.CodaBox.ApiServer.Entities
 {
     public partial class Transactions
     {
         public int Id { get; set; }
-
+        [JsonIgnore]
         public int StatementId { get; set; }
         public int CompteBancaireId { get; set; }
         public string StructuredMessage { get; set; }
@@ -18,5 +19,6 @@ namespace Inocrea.CodaBox.ApiServer.Entities
 
         public virtual CompteBancaire CompteBancaire { get; set; }
         public virtual Statements Statement { get; set; }
+        public virtual SepaDirectDebit SepaDirectDebit { get; set; }
     }
 }

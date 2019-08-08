@@ -38,7 +38,24 @@ namespace Inocrea.CodaBox.ApiServer.Services
             {
                 throw new ApiException(_httpClient, "GET", uri, response);
             }
+
             var data = await response.Content.ReadAsStringAsync();
+            return data;
+        }
+
+        protected async Task<Stream> GetStreamAsync(Uri uri)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                response = await _httpClient.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead);
+                response.EnsureSuccessStatusCode();
+            }
+            catch (Exception)
+            {
+                throw new ApiException(_httpClient, "GET", uri, response);
+            }
+            var data = await response.Content.ReadAsStreamAsync();
             return data;
         }
 
@@ -62,6 +79,14 @@ namespace Inocrea.CodaBox.ApiServer.Services
         {
             var formContent = new MultipartFormDataContent();
             formContent.Add(new StreamContent(new MemoryStream(data)), "content", fileName);
+            var rep = await PostAsync(uri, formContent);
+            return true;
+        }
+
+        protected async Task<bool> PostFilePdfAsync(Uri uri, Stream data, string fileName)
+        {
+            var formContent = new MultipartFormDataContent();
+            formContent.Add(new StreamContent(data), "content", fileName);
             var rep = await PostAsync(uri, formContent);
             return true;
         }
