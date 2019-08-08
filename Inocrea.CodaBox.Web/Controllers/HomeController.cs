@@ -16,6 +16,7 @@ using ClosedXML.Excel;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Inocrea.CodaBox.ApiModel.ViewModel;
 using Inocrea.CodaBox.Web.Factory;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
@@ -197,6 +198,7 @@ namespace Inocrea.CodaBox.Web.Controllers
             }
         }
         [HttpPost]
+       
         public async Task<IActionResult> LoadTransaction()
         {
            

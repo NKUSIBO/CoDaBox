@@ -5,10 +5,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Inocrea.CodaBox.ApiServer.Entities;
 
+using Microsoft.AspNet.OData;
+using Microsoft.AspNetCore.Authorization;
+
+
 namespace Inocrea.CodaBox.ApiServer.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
+    [Authorize]
     public class TransactionsController : ControllerBase
     {
         private readonly InosysDBContext _context;

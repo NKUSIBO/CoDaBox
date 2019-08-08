@@ -7,9 +7,11 @@ namespace Inocrea.CodaBox.ApiServer.Entities
 {
     public class InosysDBContext : DbContext
     {
-        public InosysDBContext() {}
 
-        public InosysDBContext(DbContextOptions<InosysDBContext> options) : base(options){}
+        public InosysDBContext() { }
+
+        public InosysDBContext(DbContextOptions<InosysDBContext> options) : base(options) { }
+
 
         public virtual DbSet<CompteBancaire> CompteBancaire { get; set; }
         public virtual DbSet<Statements> Statements { get; set; }

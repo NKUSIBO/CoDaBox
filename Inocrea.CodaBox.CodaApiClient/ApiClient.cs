@@ -76,8 +76,40 @@ namespace Inocrea.CodaBox.CodaApiClient
             var json = JsonConvert.SerializeObject(content, MicrosoftDateFormatSettings);
             return new StringContent(json, Encoding.UTF8, "application/json");
         }
-        
 
-   
+        /// <summary>
+        /// Common method for making POST calls
+        /// </summary>
+        private async Task<Message<T>> PostAsync<T>(Uri requestUrl, T content)
+        {
+            AddHeaders();
+            var response = await _httpClient.PostAsync(requestUrl.ToString(), CreateHttpContent<T>(content));
+            response.EnsureSuccessStatusCode();
+            var messageRet = new Message<T>
+            {
+                Data= default(T),
+                IsSuccess = response.IsSuccessStatusCode,
+                ReturnMessage = response.ToString()
+
+
+            };
+
+            var data = await response.Content.ReadAsStringAsync();
+            return messageRet;
+        }
+        private async Task<Message<T1>> PostAsync<T1, T2>(Uri requestUrl, T2 content)
+        {
+            AddHeaders();
+            var response = await _httpClient.PostAsync(requestUrl.ToString(), CreateHttpContent<T2>(content));
+            response.EnsureSuccessStatusCode();
+            var data = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<Message<T1>>(data);
+        }
+        private void AddHeaders()
+        {
+            //_httpClient.DefaultRequestHeaders.Remove("X-Software-Company");
+            //_httpClient.DefaultRequestHeaders.Add("X-Software-Company", "641088c3-8fcb-47a3-8cef-de8197f5172c");
+        }
+
     }
 }

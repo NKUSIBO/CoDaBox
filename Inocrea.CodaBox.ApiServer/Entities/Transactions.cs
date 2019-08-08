@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+
+
 using Newtonsoft.Json;
 
 namespace Inocrea.CodaBox.ApiServer.Entities
@@ -10,10 +13,14 @@ namespace Inocrea.CodaBox.ApiServer.Entities
     {
         [Key]
         public int Id { get; set; }
-        public virtual CompteBancaire CompteBancaire { get; set; }
 
-        [JsonIgnore]
-        public virtual Statements Statement { get; set; }
+     }
+
+     
+      
+
+      
+
         public string StructuredMessage { get; set; }
         public DateTime TransactionDate { get; set; }
         public DateTime ValueDate { get; set; }
@@ -26,6 +33,10 @@ namespace Inocrea.CodaBox.ApiServer.Entities
         [ForeignKey("CompteBancaire"), JsonIgnore]
         public int CompteBancaireId { get; set; }
 
+
+        public virtual CompteBancaire CompteBancaire { get; set; }
+        [JsonIgnore]
+        public virtual Statements Statement { get; set; }
         public virtual SepaDirectDebit SepaDirectDebit { get; set; }
 
     }
