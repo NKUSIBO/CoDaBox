@@ -16,6 +16,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
 
 namespace Inocrea.CodaBox.ApiServer.Controllers
 {
@@ -29,47 +31,66 @@ namespace Inocrea.CodaBox.ApiServer.Controllers
             readonly SignInManager<ApplicationUser> signInManager;
             readonly IConfiguration configuration;
             readonly ILogger<AccountController> logger;
+            private readonly IHttpContextAccessor httpContextAccessor;
+
 
 
             public AccountController(
                UserManager<ApplicationUser> userManager,
                SignInManager<ApplicationUser> signInManager,
                IConfiguration configuration,
+               IHttpContextAccessor httpContextAccessor,
                ILogger<AccountController> logger)
             {
                 this.userManager = userManager;
                 this.signInManager = signInManager;
                 this.configuration = configuration;
+                this.httpContextAccessor = httpContextAccessor;
                 this.logger = logger;
             }
 
+            private Task<ApplicationUser> GetCurrentUserAsync() => userManager.GetUserAsync(HttpContext.User);
 
-            [HttpPost]
+        [HttpPost]
             [Route("token")]
-            public async Task<IActionResult> CreateToken([FromBody] LoginModel loginModel)
+            public async Task<IActionResult> CreateToken([FromBody] LoginModel model)
             {
-                if (ModelState.IsValid)
-                {
-                    var loginResult = await signInManager.PasswordSignInAsync(loginModel.Username, loginModel.Password, isPersistent: false, lockoutOnFailure: false);
+            var user = await userManager.FindByNameAsync(model.Username);
+            if (user != null && await userManager.CheckPasswordAsync(user, model.Password))
+            {
+                var claim = new[] {
+                    new Claim(JwtRegisteredClaimNames.Sub, user.UserName)
+                };
+                var signinKey = new SymmetricSecurityKey(
+                    Encoding.UTF8.GetBytes(configuration["Jwt:SigningKey"]));
 
-                    if (!loginResult.Succeeded)
+                int expiryInMinutes = Convert.ToInt32(configuration["Jwt:ExpiryInMinutes"]);
+
+                var token = new JwtSecurityToken(
+                    issuer: configuration["Jwt:Site"],
+                    audience: configuration["Jwt:Site"],
+                    expires: DateTime.Now.AddHours(expiryInMinutes),
+                    signingCredentials: new SigningCredentials(signinKey, SecurityAlgorithms.HmacSha256)
+                );
+
+                return Ok(
+                    new
                     {
-                        return BadRequest();
-                    }
-
-                    var user = await userManager.FindByNameAsync(loginModel.Username);
-
-                    return Ok(GetToken(user));
-                }
-                return BadRequest(ModelState);
-
+                        token = new JwtSecurityTokenHandler().WriteToken(token),
+                        expiration = token.ValidTo
+                    });
             }
+            return Unauthorized();
+
+        }
 
             [Authorize]
             [HttpPost]
             [Route("refreshtoken")]
             public async Task<IActionResult> RefreshToken()
             {
+                var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
                 var user = await userManager.FindByNameAsync(
                     User.Identity.Name ??
                     User.Claims.Where(c => c.Properties.ContainsKey("unique_name")).Select(c => c.Value).FirstOrDefault()
@@ -112,9 +133,9 @@ namespace Inocrea.CodaBox.ApiServer.Controllers
 
             }
 
-        private String GetToken(IdentityUser user)
-        {
-            var utcNow = DateTime.UtcNow;
+          private String GetToken(IdentityUser user)
+          {
+            var utcNow = DateTime.Now.AddHours(1);
 
             using (RSA privateRsa = RSA.Create())
             {
@@ -137,8 +158,8 @@ namespace Inocrea.CodaBox.ApiServer.Controllers
                 var jwt = new JwtSecurityToken(
                     signingCredentials: signingCredentials,
                     claims: claims,
-                    notBefore: utcNow,
-                    expires: utcNow.AddSeconds(this.configuration.GetValue<int>("Tokens:Lifetime")),
+                    notBefore: utcNow.AddHours(1),
+                    expires: DateTime.Now.AddHours(3),
                     audience: this.configuration.GetValue<string>("Tokens:Audience"),
                     issuer: this.configuration.GetValue<string>("Tokens:Issuer")
                 );
@@ -146,7 +167,7 @@ namespace Inocrea.CodaBox.ApiServer.Controllers
                 return new JwtSecurityTokenHandler().WriteToken(jwt);
             }
 
-        }
+          }
 
     }
     

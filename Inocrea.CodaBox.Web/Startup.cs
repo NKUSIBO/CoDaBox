@@ -13,8 +13,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Inocrea.CodaBox.Web.Data;
 using Inocrea.CodaBox.Web.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
 
 namespace Inocrea.CodaBox.Web
@@ -50,15 +52,17 @@ namespace Inocrea.CodaBox.Web
             services.AddDbContext<ApplicationDbContext>(options =>
                  options.UseSqlServer(
                      Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>()
+            services.AddDefaultIdentity<ApplicationUser>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.Configure<SettingsModels>(Configuration.GetSection("ApiSettings"));
             services.Configure<SettingsModelsApiServer>(Configuration.GetSection("ApiServerSettings"));
+         
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ApplicationDbContext dbContext)
         {
 
             if (env.IsDevelopment())

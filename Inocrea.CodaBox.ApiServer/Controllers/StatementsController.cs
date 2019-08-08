@@ -7,11 +7,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Inocrea.CodaBox.ApiServer.Entities;
 using Microsoft.AspNet.OData;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Inocrea.CodaBox.ApiServer.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class StatementsController : ControllerBase
     {
         private readonly InosysDBContext _context;
@@ -23,6 +26,7 @@ namespace Inocrea.CodaBox.ApiServer.Controllers
 
         // GET: api/Statements
         [HttpGet]
+       
         //[EnableQuery()]
         public async Task<ActionResult<IEnumerable<Statements>>> GetStatements()
         {

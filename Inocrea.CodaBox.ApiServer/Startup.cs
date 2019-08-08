@@ -15,6 +15,7 @@ using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -31,8 +32,14 @@ namespace Inocrea.CodaBox.ApiServer
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
+                .AddEnvironmentVariables();
+            Configuration = builder.Build();
             Configuration = configuration;
         }
 
@@ -41,6 +48,8 @@ namespace Inocrea.CodaBox.ApiServer
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
             #region Add CORS  
             services.AddCors(options => options.AddPolicy("Cors", builder =>
             {
@@ -56,36 +65,26 @@ namespace Inocrea.CodaBox.ApiServer
             services.AddDbContext<ApplicationUserDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<ApplicationUser,IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationUserDbContext>();
-
+            services.AddDefaultIdentity<ApplicationUser>()
+                .AddEntityFrameworkStores<ApplicationUserDbContext>()
+                .AddDefaultTokenProviders();
             #endregion
 
             #region Add Authentication  
-            RSA publicRsa = RSA.Create();
-            publicRsa.FromXmlFile(Path.Combine(Directory.GetCurrentDirectory(),
-                "Keys",
-                Configuration.GetValue<String>("Tokens:PublicKey")
-            ));
-            RsaSecurityKey signingKey = new RsaSecurityKey(publicRsa);
-
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(config =>
-            {
-                config.RequireHttpsMetadata = false;
-                config.SaveToken = true;
-                config.TokenValidationParameters = new TokenValidationParameters()
+            services.AddAuthentication(option => {
+                option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                option.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options => {
+                options.SaveToken = true;
+                options.RequireHttpsMetadata = true;
+                options.TokenValidationParameters = new TokenValidationParameters()
                 {
-                    IssuerSigningKey = signingKey,
-                    ValidateAudience = true,
-                    ValidAudience = Configuration["Tokens:Audience"],
                     ValidateIssuer = true,
-                    ValidIssuer = Configuration["Tokens:Issuer"],
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true
+                    ValidateAudience = true,
+                    ValidAudience = Configuration["Jwt:Site"],
+                    ValidIssuer = Configuration["Jwt:Site"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:SigningKey"]))
                 };
             });
 
@@ -106,7 +105,11 @@ namespace Inocrea.CodaBox.ApiServer
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            app.UseCors("Cors");
+            app.UseCors(x => x
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
+
             app.UseAuthentication();
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
@@ -119,17 +122,17 @@ namespace Inocrea.CodaBox.ApiServer
               
             });
 
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
+            //if (env.IsDevelopment())
+            //{
+            //    app.UseDeveloperExceptionPage();
+            //}
+            //else
+            //{
+            //    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+            //    app.UseHsts();
+            //}
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseMvc();
             
         }
