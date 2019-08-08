@@ -14,7 +14,7 @@ namespace Inocrea.CodaBox.ApiServer.Entities
         [Key]
         public int Id { get; set; }
 
-     }
+     
 
      
       
