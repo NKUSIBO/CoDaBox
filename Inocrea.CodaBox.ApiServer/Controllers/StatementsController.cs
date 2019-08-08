@@ -1,14 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+
 using Inocrea.CodaBox.ApiServer.Entities;
+
 using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+
 
 namespace Inocrea.CodaBox.ApiServer.Controllers
 {
@@ -38,82 +40,21 @@ namespace Inocrea.CodaBox.ApiServer.Controllers
         public async Task<ActionResult<Statements>> GetStatements(int id)
         {
             var statements = await _context.Statements.FindAsync(id);
+            if (statements == null) return NotFound();
 
-            if (statements == null)
+            var transactions = _context.Transactions.Where(t => t.StatementId == id).ToList();
+            var cb = await _context.CompteBancaire.FindAsync(statements.CompteBancaireId);
+            statements.CompteBancaire = cb;
+            foreach(var tr in transactions)
             {
-                return NotFound();
+                var cbt = await _context.CompteBancaire.FindAsync(tr.CompteBancaireId);
+                tr.CompteBancaire = cbt;
             }
+
+            statements.Transactions = transactions;
 
             return statements;
         }
 
-        // PUT: api/Statements/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutStatements(int id, Statements statements)
-        {
-            if (id != statements.StatementId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(statements).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!StatementsExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Statements
-        [HttpPost]
-        public async Task<ActionResult<Statements>> PostStatements(Statements statements)
-        {
-            try
-            {
-                _context.Statements.Add(statements);
-                await _context.SaveChangesAsync();
-
-            }
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
-            return CreatedAtAction("GetStatements", new { id = statements.StatementId }, statements);
-        }
-
-        // DELETE: api/Statements/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Statements>> DeleteStatements(int id)
-        {
-            var statements = await _context.Statements.FindAsync(id);
-            if (statements == null)
-            {
-                return NotFound();
-            }
-
-            _context.Statements.Remove(statements);
-            await _context.SaveChangesAsync();
-
-            return statements;
-        }
-
-        private bool StatementsExists(int id)
-        {
-            return _context.Statements.Any(e => e.StatementId == id);
-        }
     }
 }

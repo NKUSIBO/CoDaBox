@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+
+    <PackageReference Include="Microsoft.AspNetCore.App">
+      <PrivateAssets Condition="'%(PackageReference.Version)' == ''">all</PrivateAssets>
+      <Publish Condition="'%(PackageReference.Version)' == ''">true</Publish>
+    </PackageReference>
+
     <Compile Remove="Helper\**" />
     <Content Remove="Helper\**" />
     <EmbeddedResource Remove="Helper\**" />
@@ -14,7 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.App" />
+    
+
     <PackageReference Include="Microsoft.AspNetCore.OData" Version="7.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="2.2.6" />
@@ -27,13 +34,20 @@
   </ItemGroup>
 
   <ItemGroup>
+
+    <Folder Include="Helper\" />
+    <Folder Include="ViewModels\" />
+
     <Folder Include="Areas\Identity\Pages\Account\" />
+
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\CodaParser\CodaParser.csproj" />
+
+
     <ProjectReference Include="..\Common\Common.csproj" />
     <ProjectReference Include="..\Identity\Identity.csproj" />
-  </ItemGroup>
 
+  </ItemGroup>
 </Project>
