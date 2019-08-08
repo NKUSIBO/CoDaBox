@@ -6,11 +6,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Inocrea.CodaBox.ApiServer.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Inocrea.CodaBox.ApiServer.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CompteBancairesController : ControllerBase
     {
         private readonly InosysDBContext _context;

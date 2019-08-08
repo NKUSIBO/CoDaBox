@@ -27,13 +27,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Downloads\CoDaBox-columnFilter\CoDaBox-columnFilter\CodaParser\CodaParser.csproj" />
-    <ProjectReference Include="..\..\..\..\Downloads\Inocrea.InoConnect\Inocrea.InoConnect\Identity\Identity.csproj" />
-    <ProjectReference Include="..\..\Ino-Connect\Inocrea.InoConnect\Common\Common.csproj" />
+    <Folder Include="Areas\Identity\Pages\Account\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Identity\Pages\Account\" />
+    <ProjectReference Include="..\CodaParser\CodaParser.csproj" />
+    <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\Identity\Identity.csproj" />
   </ItemGroup>
 
 </Project>
