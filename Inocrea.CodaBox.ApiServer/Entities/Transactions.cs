@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
@@ -24,5 +25,8 @@ namespace Inocrea.CodaBox.ApiServer.Entities
         public int StatementId { get; set; }
         [ForeignKey("CompteBancaire"), JsonIgnore]
         public int CompteBancaireId { get; set; }
+
+        public virtual SepaDirectDebit SepaDirectDebit { get; set; }
+
     }
 }

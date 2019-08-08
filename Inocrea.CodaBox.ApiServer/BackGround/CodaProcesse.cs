@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Inocrea.CodaBox.ApiServer.Entities;
 using Inocrea.CodaBox.ApiServer.Services;
-using CompteBancaire = Inocrea.CodaBox.ApiServer.Entities.CompteBancaire;
-using Statements = Inocrea.CodaBox.ApiServer.Entities.Statements;
 
 namespace Inocrea.CodaBox.ApiServer.BackGround
 {
@@ -12,13 +11,19 @@ namespace Inocrea.CodaBox.ApiServer.BackGround
     {
         private ApiCodaBoxe client;
         private InosysDBContext Db;
-        private string xxx;
-        public bool Start()
+
+        public async Task<bool> Start()
         {
             Db = new InosysDBContext();
             var ok = true;
+
+            //todo foreach coda ID
+            //pour recuperer les infos de tout les clients
+
+            var codaId = Db.CodaIdentities.Find(1);
+
             List<Statements> allStatements = new List<Statements>();
-            client = new ApiCodaBoxe();
+            client = new ApiCodaBoxe(codaId);
             var feedClients = client.GetPod();
             foreach (var feed in feedClients)
             {
@@ -36,11 +41,12 @@ namespace Inocrea.CodaBox.ApiServer.BackGround
             List<Statements> feedStatements = new List<Statements>();
             foreach (var feed in feedEntries)
             {
+                var md = feed.Metadata;
                 var index = feed.FeedIndex;
-                var pdf = client.GetCodaFile(index,"pdf");
-                _= ApiWD.UploadFile(pdf, "coda.pdf");
-                var cod = client.GetCodaFile(index,"cod");
-                _= ApiWD.UploadFile(cod, "coda.cod");
+                var pdf = client.GetCodaFilePdf(index, "pdf");
+                _ = ApiWD.UploadFilePdf(pdf, md.NewBalanceDate.ToString("yyyy-MM-dd") + ' ' + md.Iban + ".pdf");
+                var cod = client.GetCodaFile(index, "cod");
+                _ = ApiWD.UploadFile(cod, md.NewBalanceDate.ToString("yyyy-MM-dd") + ' ' + md.Iban + ".cod");
                 var statements = client.GetStatementsAsync(cod).Result;
 
                 statements = SaveStatement(statements);
@@ -55,11 +61,11 @@ namespace Inocrea.CodaBox.ApiServer.BackGround
             foreach (var st in statements)
             {
                 st.CompteBancaire = BankAccount(st.CompteBancaire);
-
                 foreach (var tr in st.Transactions)
-                {
                     tr.CompteBancaire = BankAccount(tr.CompteBancaire);
-                }
+
+                _ = Export.WriteTsvAsync(st.Transactions, st.Date.ToString("yyyy-MM-dd") + ' ' + st.CompteBancaire.Iban + ".xls");
+
                 Db.Statements.Add(st);
                 Db.SaveChanges();
             }

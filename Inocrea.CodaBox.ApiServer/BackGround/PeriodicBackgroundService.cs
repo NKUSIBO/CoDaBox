@@ -25,9 +25,9 @@ namespace Inocrea.CodaBox.ApiServer.BackGround
                 try
                 {
                     var coda = new CodaProcesse();
-                    //coda.Start();
+                    await coda.Start();
 
-                    await ExecuteWork();
+                    //await ExecuteWork();
                     await UploadJson();
                     stoppingToken.ThrowIfCancellationRequested();
 
@@ -43,6 +43,10 @@ namespace Inocrea.CodaBox.ApiServer.BackGround
                 catch (OperationCanceledException)
                 {
                     // Log errors
+                }
+                catch (Exception e)
+                {
+
                 }
             }
         }

@@ -40,5 +40,11 @@ namespace Inocrea.CodaBox.ApiServer.Services
             await PostFileAsync(uri, data, fileName);
         }
 
+        public async Task UploadFilePdf(Stream pdf, string fileName)
+        {
+            var uri = new Uri(baseUrl + fileName);
+
+            await PostFilePdfAsync(uri, pdf, fileName);
+        }
     }
 }

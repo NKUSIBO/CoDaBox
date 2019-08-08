@@ -59,6 +59,11 @@ namespace CodaParser.StatementParsers
             var transactionParser = new TransactionParser();
             var transactions = transactionLines.Select(l => transactionParser.Parse(l));
 
+            foreach(var tr in transactionLines)
+            {
+                var tamam = transactionParser.Parse(tr);
+            }
+
             return new Statement(
                 date,
                 account,

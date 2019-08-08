@@ -24,5 +24,11 @@ namespace Inocrea.CodaBox.ApiServer.Entities
         public virtual ICollection<Statements> Statements { get; set; }
         [JsonIgnore]
         public virtual ICollection<Transactions> Transactions { get; set; }
+
+
+        public override string ToString()
+        {
+            return Iban;
+        }
     }
 }

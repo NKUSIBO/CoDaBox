@@ -14,6 +14,7 @@ namespace Inocrea.CodaBox.ApiServer.Entities
         public virtual DbSet<CompteBancaire> CompteBancaire { get; set; }
         public virtual DbSet<Statements> Statements { get; set; }
         public virtual DbSet<Transactions> Transactions { get; set; }
+        public virtual DbSet<CodaIdentity> CodaIdentities { get; set; }
 
         // Unable to generate entity type for table 'history.HistoryPeople'. Please see the warning messages.
 
