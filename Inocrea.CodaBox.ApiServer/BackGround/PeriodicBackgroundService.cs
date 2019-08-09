@@ -29,7 +29,7 @@ namespace Inocrea.CodaBox.ApiServer.BackGround
                     await coda.Start();
 
                     //await ExecuteWork();
-                    await UploadJson();
+                    //await UploadJson();
                     stoppingToken.ThrowIfCancellationRequested();
 
                     if (_cts == null || _cts.Token.IsCancellationRequested)
@@ -52,29 +52,29 @@ namespace Inocrea.CodaBox.ApiServer.BackGround
             }
         }
 
-        private async Task UploadJson()
-        {
-            var Db = new InosysDBContext();
-            var statements = Db.Statements.ToList();
-            var transactions = Db.Transactions.ToList();
+        //private async Task UploadJson()
+        //{
+        //    var Db = new InosysDBContext();
+        //    var statements = Db.Statements.ToList();
+        //    var transactions = Db.Transactions.ToList();
 
-            foreach (var st in statements)
-            {
-                var scb = Db.CompteBancaire.FirstOrDefault(c => c.Id == st.CompteBancaireId);
-                st.CompteBancaire = scb;
-                var tr = transactions.Where(t => t.StatementId == st.StatementId);
-                foreach (var t in tr)
-                {
-                    var cb = Db.CompteBancaire.FirstOrDefault(c => c.Id == t.CompteBancaireId);
-                    t.CompteBancaire = cb;
-                    st.Transactions.Add(t);
-                }
-            }
-            var json = JsonConvert.SerializeObject(statements);
-            var apiWD = new ApiWorkDrive();
+        //    foreach (var st in statements)
+        //    {
+        //        var scb = Db.CompteBancaire.FirstOrDefault(c => c.Id == st.CompteBancaireId);
+        //        st.CompteBancaire = scb;
+        //        var tr = transactions.Where(t => t.StatementId == st.StatementId);
+        //        foreach (var t in tr)
+        //        {
+        //            var cb = Db.CompteBancaire.FirstOrDefault(c => c.Id == t.CompteBancaireId);
+        //            t.CompteBancaire = cb;
+        //            st.Transactions.Add(t);
+        //        }
+        //    }
+        //    var json = JsonConvert.SerializeObject(statements);
+        //    var apiWD = new ApiWorkDrive();
 
-            await apiWD.UploadJson(json);
-        }
+        //    await apiWD.UploadJson(json);
+        //}
 
         public string WriteTsv<T>(IEnumerable<T> data)
         {
