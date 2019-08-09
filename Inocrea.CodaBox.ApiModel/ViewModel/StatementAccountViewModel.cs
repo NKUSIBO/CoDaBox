@@ -10,9 +10,9 @@ namespace Inocrea.CodaBox.ApiModel.ViewModel
     public class StatementAccountViewModel
     {
         [DataMember]
-        public decimal InitialBalance { get; set; }
+        public double InitialBalance { get; set; }
         [DataMember]
-        public decimal NewBalance { get; set; }
+        public double NewBalance { get; set; }
         [DataMember]
         public string InformationalMessage { get; set; }
         [DataMember]

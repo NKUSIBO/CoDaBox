@@ -6,20 +6,17 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Inocrea.CodaBox.Web.Models;
 using Inocrea.CodaBox.Web.Helper;
-using Inocrea.CodaBox.ApiModel;
 using System.Data;
 using System.Globalization;
 using System.IO;
 using System.Net.Http;
 using System.Reflection;
 using ClosedXML.Excel;
-using DocumentFormat.OpenXml.Wordprocessing;
 using Inocrea.CodaBox.ApiModel.ViewModel;
+using Inocrea.CodaBox.ApiModel.Models;
 using Inocrea.CodaBox.Web.Factory;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
 
 namespace Inocrea.CodaBox.Web.Controllers
