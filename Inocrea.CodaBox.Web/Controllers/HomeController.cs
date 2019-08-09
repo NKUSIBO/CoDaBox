@@ -14,6 +14,7 @@ using System.Net.Http;
 using System.Reflection;
 using ClosedXML.Excel;
 using DocumentFormat.OpenXml.Wordprocessing;
+using Inocrea.CodaBox.ApiModel.Models;
 using Inocrea.CodaBox.ApiModel.ViewModel;
 using Inocrea.CodaBox.Web.Factory;
 using Microsoft.AspNetCore.Authorization;

@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Common.Extensions;
 using Identity.Entities;
+using Inocrea.CodaBox.ApiModel.Models;
 using Inocrea.CodaBox.ApiServer.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -133,7 +134,7 @@ namespace Inocrea.CodaBox.ApiServer.Controllers
 
             }
 
-          private String GetToken(IdentityUser user)
+            private String GetToken(IdentityUser user)
           {
             var utcNow = DateTime.Now.AddHours(1);
 
@@ -168,6 +169,17 @@ namespace Inocrea.CodaBox.ApiServer.Controllers
             }
 
           }
+
+
+           [HttpPost]
+           [Route("Logout")]
+           [AllowAnonymous]
+            public async Task<IActionResult> Logout()
+            {
+                await signInManager.SignOutAsync();
+                return Ok();
+
+            }
 
     }
     

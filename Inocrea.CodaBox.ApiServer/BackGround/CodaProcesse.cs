@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Inocrea.CodaBox.ApiModel.Models;
 using Inocrea.CodaBox.ApiServer.Entities;
 using Inocrea.CodaBox.ApiServer.Services;
 

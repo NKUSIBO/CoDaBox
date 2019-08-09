@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Inocrea.CodaBox.ApiServer.Entities;
-using Inocrea.CodaBox.ApiServer.ViewModels;
+using Inocrea.CodaBox.ApiModel.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Inocrea.CodaBox.ApiServer.Controllers

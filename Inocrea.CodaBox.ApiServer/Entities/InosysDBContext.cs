@@ -1,5 +1,5 @@
 ﻿using System.IO;
-
+using Inocrea.CodaBox.ApiModel.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 

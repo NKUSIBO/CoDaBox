@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 using Newtonsoft.Json;
 
-namespace Inocrea.CodaBox.ApiServer.Entities
+namespace Inocrea.CodaBox.ApiModel.Models
 {
     public class Transactions
     {
@@ -37,7 +37,7 @@ namespace Inocrea.CodaBox.ApiServer.Entities
         public virtual CompteBancaire CompteBancaire { get; set; }
         [JsonIgnore]
         public virtual Statements Statement { get; set; }
-        public virtual SepaDirectDebit SepaDirectDebit { get; set; }
+        //public virtual SepaDirectDebit SepaDirectDebit { get; set; }
 
     }
 }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Inocrea.CodaBox.ApiModel;
+using Inocrea.CodaBox.ApiModel.Models;
 using Inocrea.CodaBox.ApiModel.ViewModel;
 using Inocrea.CodaBox.Web.Factory;
 using Inocrea.CodaBox.Web.Helper;

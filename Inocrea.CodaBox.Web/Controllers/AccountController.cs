@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿
 using System.Threading.Tasks;
 using Inocrea.CodaBox.ApiModel.Models;
 using Inocrea.CodaBox.Web.Factory;
@@ -39,7 +37,22 @@ namespace Inocrea.CodaBox.Web.Controllers
         public async Task<IActionResult> Login(LoginModel loginModel)
         {
             var saved = await ApiClientFactory.Instance.LogUser(loginModel);
-            return View();
+            if (saved.IsSuccess)
+            {
+                RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                RedirectToAction("Login", "Account");
+            }
+
+            return Redirect("/");
+
+        }
+        public async Task<IActionResult> Logout()
+        {
+            var saved = await ApiClientFactory.Instance.LogOut();
+            return Ok(saved.IsSuccess);
         }
     }
 }

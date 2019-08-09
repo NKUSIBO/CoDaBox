@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Inocrea.CodaBox.ApiServer.Entities
+namespace Inocrea.CodaBox.ApiModel.Models
 {
     [Table("SepaDirectDebits")]
     public class SepaDirectDebit

@@ -1,9 +1,10 @@
-﻿using Inocrea.CodaBox.ApiServer.Entities;
+﻿using Inocrea.CodaBox.ApiModel.Models;
 
-namespace Inocrea.CodaBox.ApiServer.ViewModels
+namespace Inocrea.CodaBox.ApiModel.ViewModels
 {
-    public class BalanceViewModel2 : CompteBancaire
+    public class BalanceViewModel
     {
+        public CompteBancaire CompteBancaire {get;set;}
         public string Date { get; set; }
         public double InitialBalance { get;set; }
         public double NewBalance { get;set; }

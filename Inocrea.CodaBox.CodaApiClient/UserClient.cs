@@ -9,7 +9,6 @@ using Inocrea.CodaBox.ApiModel.Models;
 using Inocrea.CodaBox.ApiModel.ViewModel;
 using Inocrea.CodaBox.CodaApiClient.Helper;
 using Newtonsoft.Json;
-using CompteBancaire = Inocrea.CodaBox.ApiModel.CompteBancaire;
 
 namespace Inocrea.CodaBox.CodaApiClient
 {
@@ -150,6 +149,12 @@ namespace Inocrea.CodaBox.CodaApiClient
             var requestUrl = CreateRequestUri(string.Format(System.Globalization.CultureInfo.InvariantCulture,
                 "api/Account/token"));
             return await PostAsync<LoginModel>(requestUrl, model);
+        }
+        public async Task<Message<LoginModel>> LogOut()
+        {
+            var requestUrl = CreateRequestUri(string.Format(System.Globalization.CultureInfo.InvariantCulture,
+                "api/Account/logout"));
+            return await PostAsync<LoginModel>(requestUrl,null);
         }
 
     }

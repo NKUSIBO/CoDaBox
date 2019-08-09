@@ -10,6 +10,7 @@ using System.Linq;
 
 using Inocrea.CodaBox.ApiServer.Services;
 using Newtonsoft.Json;
+using Inocrea.CodaBox.ApiModel.Models;
 
 namespace Inocrea.CodaBox.ApiServer.BackGround
 {
