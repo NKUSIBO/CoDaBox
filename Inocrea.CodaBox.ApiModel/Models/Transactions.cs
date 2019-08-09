@@ -14,13 +14,6 @@ namespace Inocrea.CodaBox.ApiModel.Models
         [Key]
         public int Id { get; set; }
 
-     
-
-     
-      
-
-      
-
         public string StructuredMessage { get; set; }
         public DateTime TransactionDate { get; set; }
         public DateTime ValueDate { get; set; }
@@ -37,7 +30,7 @@ namespace Inocrea.CodaBox.ApiModel.Models
         public virtual CompteBancaire CompteBancaire { get; set; }
         [JsonIgnore]
         public virtual Statements Statement { get; set; }
-        public virtual SepaDirectDebit SepaDirectDebit { get; set; }
+        //public virtual SepaDirectDebit SepaDirectDebit { get; set; }
 
     }
 }

@@ -149,7 +149,7 @@ namespace Inocrea.CodaBox.ApiServer.Services
                         TransactionDate = tr.TransactionDate,
                         ValueDate = tr.ValutaDate,
                         CompteBancaire = cb,
-                        SepaDirectDebit = sepa
+                        //SepaDirectDebit = sepa
                     };
 
                     mySt.Transactions.Add(myTr);
