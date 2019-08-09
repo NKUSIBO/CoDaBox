@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Inocrea.CodaBox.ApiServer.Entities;
 using Microsoft.AspNetCore.Authorization;
+using Inocrea.CodaBox.ApiModel.Models;
 
 namespace Inocrea.CodaBox.ApiServer.Controllers
 {

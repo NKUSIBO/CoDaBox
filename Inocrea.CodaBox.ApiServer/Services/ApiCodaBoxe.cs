@@ -6,7 +6,7 @@ using System.Text;
 using Newtonsoft.Json;
 
 using System.Collections.Generic;
-using Inocrea.CodaBox.ApiServer.Entities;
+using Inocrea.CodaBox.ApiModel.Models;
 using CodaParser;
 using System.Threading.Tasks;
 using System.IO;
