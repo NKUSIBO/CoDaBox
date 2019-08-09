@@ -54,7 +54,32 @@ namespace Inocrea.CodaBox.CodaApiClient
            
             
         }
-       
+        private async Task<T> GetDetailAsync<T>(Uri requestUrl)
+        {
+            //AddHeaders();
+            HttpResponseMessage response;
+            try
+            {
+                response = await _httpClient.GetAsync(requestUrl, HttpCompletionOption.ResponseHeadersRead);
+                response.EnsureSuccessStatusCode();
+                var data1 = response.Content.ReadAsStringAsync().Result;
+
+                var stat = JsonConvert.DeserializeObject<T>(data1);
+                response.EnsureSuccessStatusCode();
+
+
+                return stat;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+
+
+        }
+
         private static JsonSerializerSettings MicrosoftDateFormatSettings
         {
             get
@@ -82,20 +107,28 @@ namespace Inocrea.CodaBox.CodaApiClient
         /// </summary>
         private async Task<Message<T>> PostAsync<T>(Uri requestUrl, T content)
         {
-            AddHeaders();
-            var response = await _httpClient.PostAsync(requestUrl.ToString(), CreateHttpContent<T>(content));
-            response.EnsureSuccessStatusCode();
-            var messageRet = new Message<T>
+            try
             {
-                Data= default(T),
-                IsSuccess = response.IsSuccessStatusCode,
-                ReturnMessage = response.ToString()
+                AddHeaders();
+                var response = await _httpClient.PostAsync(requestUrl.ToString(), CreateHttpContent<T>(content));
+                response.EnsureSuccessStatusCode();
+                var messageRet = new Message<T>
+                {
+                    Data = default(T),
+                    IsSuccess = response.IsSuccessStatusCode,
+                    ReturnMessage = response.ToString()
 
 
-            };
+                };
 
-            var data = await response.Content.ReadAsStringAsync();
-            return messageRet;
+                var data = await response.Content.ReadAsStringAsync();
+                return messageRet;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
         private async Task<Message<T1>> PostAsync<T1, T2>(Uri requestUrl, T2 content)
         {

@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Linq;
@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using System.Security.Claims;
+
 using Microsoft.AspNetCore.Http;
 
 namespace Inocrea.CodaBox.ApiServer.Controllers
@@ -121,7 +121,7 @@ namespace Inocrea.CodaBox.ApiServer.Controllers
                     if (identityResult.Succeeded)
                     {
                         await signInManager.SignInAsync(user, isPersistent: false);
-                        return Ok(GetToken(user));
+                        return Ok();
                     }
                     else
                     {

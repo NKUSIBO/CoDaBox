@@ -55,7 +55,20 @@ namespace Inocrea.CodaBox.CodaApiClient
         }
 
 
+        public async Task<CompteBancaire> GetCompteBancaire(int compteId)
+        {
 
+            var requestUrl = CreateRequestUri(string.Format(System.Globalization.CultureInfo.CurrentCulture,
+                "api/CompteBancaires/" + compteId));
+
+
+            var compte = await GetDetailAsync<CompteBancaire>(requestUrl);
+
+
+
+
+            return compte;
+        }
         public async Task<CompteBancaire> GetCompte(int id)
         {
             CompteBancaire role = new CompteBancaire();
@@ -78,7 +91,8 @@ namespace Inocrea.CodaBox.CodaApiClient
             {
                 StatementAccountViewModel sta = new StatementAccountViewModel();
                 CompteBancaire cp=new CompteBancaire();
-                cp = GetCompte(statement.CompteBancaireId).Result;
+                cp = GetCompteBancaire(statement.CompteBancaireId).Result;
+                //cp = GetCompte(statement.CompteBancaireId).Result;
                 statement.CompteBancaire = cp;
                 sta.StatementId = statement.StatementId;
                 sta.Date = statement.Date;
@@ -128,7 +142,7 @@ namespace Inocrea.CodaBox.CodaApiClient
         public async Task<Message<RegisterModel>> SaveUser(RegisterModel model)
         {
             var requestUrl = CreateRequestUri(string.Format(System.Globalization.CultureInfo.InvariantCulture,
-                "api/Account/Register"));
+                "api/Account/register"));
             return await PostAsync<RegisterModel>(requestUrl, model);
         }
         public async Task<Message<LoginModel>> LogUser(LoginModel model)
