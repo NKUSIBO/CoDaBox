@@ -9,7 +9,7 @@ using Inocrea.CodaBox.ApiModel.Models;
 using Inocrea.CodaBox.ApiModel.ViewModel;
 using Inocrea.CodaBox.CodaApiClient.Helper;
 using Newtonsoft.Json;
-using CompteBancaire = Inocrea.CodaBox.ApiModel.CompteBancaire;
+using CompteBancaire = Inocrea.CodaBox.ApiModel.Models.CompteBancaire;
 
 namespace Inocrea.CodaBox.CodaApiClient
 {

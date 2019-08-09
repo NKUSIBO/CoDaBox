@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 
-namespace Inocrea.CodaBox.ApiServer.Entities
+namespace Inocrea.CodaBox.ApiModel.Models
 {
     [JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
     public class CompteBancaire

@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Inocrea.CodaBox.ApiModel.ViewModels;
 using Inocrea.CodaBox.ApiServer.Entities;
 using Inocrea.CodaBox.ApiServer.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Inocrea.CodaBox.ApiServer.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class BalanceController : ControllerBase
     {

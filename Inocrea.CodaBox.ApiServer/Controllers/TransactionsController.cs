@@ -7,7 +7,7 @@ using Inocrea.CodaBox.ApiServer.Entities;
 
 using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Authorization;
-
+using Inocrea.CodaBox.ApiModel.Models;
 
 namespace Inocrea.CodaBox.ApiServer.Controllers
 {

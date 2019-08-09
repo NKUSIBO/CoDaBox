@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
 
-namespace Inocrea.CodaBox.ApiServer.Entities
+namespace Inocrea.CodaBox.ApiModel.Models
 {
     [JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
     public class Statements
