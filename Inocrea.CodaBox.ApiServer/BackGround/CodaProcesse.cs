@@ -68,16 +68,7 @@ namespace Inocrea.CodaBox.ApiServer.BackGround
                 _ = Export.WriteTsvAsync(st.Transactions, st.Date.ToString("yyyy-MM-dd") + ' ' + st.CompteBancaire.Iban + ".xls");
 
                 Db.Statements.Add(st);
-
-                var i = -3000;
-                try
-                {
-                    i = Db.SaveChanges();
-                }
-                catch (Exception e)
-                {
-
-                }
+                Db.SaveChanges();
             }
             return Statements;
         }
