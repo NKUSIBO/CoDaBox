@@ -1,4 +1,5 @@
 ﻿
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Inocrea.CodaBox.ApiModel.Models;
 using Inocrea.CodaBox.Web.Factory;
@@ -39,6 +40,7 @@ namespace Inocrea.CodaBox.Web.Controllers
             var saved = await ApiClientFactory.Instance.LogUser(loginModel);
             if (saved.IsSuccess)
             {
+                var userIdentity = new ClaimsIdentity("Custom");
                 RedirectToAction("Index", "Home");
             }
             else

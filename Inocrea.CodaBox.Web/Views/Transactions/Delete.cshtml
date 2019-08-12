@@ -1,4 +1,4 @@
-﻿@model Inocrea.CodaBox.ApiServer.Entities.Transactions
+﻿@model Inocrea.CodaBox.ApiModel.Models.Transactions
 
 @{
     ViewData["Title"] = "Delete";
@@ -61,8 +61,8 @@
             @Html.DisplayFor(model => model.Statement.StatementId)
         </dd>
     </dl>
-    
-    <form asp-action="Delete">
+
+    <form asp-action="Index">
         <input type="hidden" asp-for="Id" />
         <input type="submit" value="Delete" class="btn btn-default" /> |
         <a asp-action="Index">Back to List</a>
