@@ -24,7 +24,7 @@ namespace Inocrea.CodaBox.Web.Controllers
         public static int _index;
         private readonly IOptions<SettingsModels> _appSettings;
 
-        private static List<TransactionsAccountViewModel> _listData = new List<TransactionsAccountViewModel>();
+        private  static List<TransactionsAccountViewModel> _listData = new List<TransactionsAccountViewModel>();
 
         private static string _name = "";
 
@@ -52,6 +52,7 @@ namespace Inocrea.CodaBox.Web.Controllers
             List<TransactionsAccountViewModel> data = await ApiClientFactory.Instance.GetTransactions(_index);
             try
             {
+                _listData.Clear();
                 _listData = ProcessCollection(data, requestFormData);
                 int transFiltered = GetTotalRecordsFiltered(requestFormData, data, _listData);
                 dynamic response = new
@@ -105,7 +106,7 @@ namespace Inocrea.CodaBox.Web.Controllers
                         {
                             return lstElements
                                 .Where(x => x.ValueDate==StringToDate(searchText)
-                                            || x.TransactionDate==StringToDate(searchText) || x.StructuredMessage.ToString().ToLower().Contains(searchText.ToLower())||x.Iban.ToLower().Contains(searchText.ToLower()))
+                                            || x.Amount.ToString(CultureInfo.InvariantCulture).ToLower().Contains(searchText.ToLower()) || x.Message.ToString().ToLower().Contains(searchText.ToLower())||x.Iban.ToLower().Contains(searchText.ToLower()))
                                 .Skip(skip)
                                 .Take(pageSize)
                                 .OrderBy(prop.GetValue).ToList();
@@ -113,7 +114,7 @@ namespace Inocrea.CodaBox.Web.Controllers
 
                         return lstElements
                                 .Where(x => x.ValueDate == StringToDate(searchText)
-                                            || x.TransactionDate == StringToDate(searchText) || x.StructuredMessage.ToString().ToLower().Contains(searchText.ToLower()) || x.Iban.ToLower().Contains(searchText.ToLower()))
+                                            || x.Amount.ToString(CultureInfo.InvariantCulture).ToLower().Contains(searchText.ToLower()) || x.Message.ToString().ToLower().Contains(searchText.ToLower()) || x.Iban.ToLower().Contains(searchText.ToLower()))
                                 .Take(pageSize)
                                 .OrderByDescending(prop.GetValue).ToList();
                     }
@@ -176,14 +177,39 @@ namespace Inocrea.CodaBox.Web.Controllers
             for (int i = 0; i < dt.Columns.Count; i++)
             {
 
-                if ((dt.Columns[i].ColumnName.ToString().Contains("DATE") ||
-                     (dt.Columns[i].ColumnName.ToString().Contains("Date"))))
-                {
+               
                     name = dt.Columns[i].ColumnName;
-                    if (!(dt.Columns[i].ColumnName.ToString().Contains("FORMAT")))
+                    switch (name)
                     {
-                        dt.Columns.Remove(dt.Columns[i].ColumnName.ToString());
-                    }
+                        case "TransactionDate": dt.Columns.Remove(dt.Columns[i].ColumnName);
+                            break;
+
+                        case "ValueDate":
+                        dt.Columns.Remove(dt.Columns[i].ColumnName);
+                        break;
+                        case "Date":
+                            dt.Columns[i].ColumnName = "Date";
+                            dt.Columns.Remove("ValueDate");
+                        break;
+                        case "Amount":
+                            dt.Columns[i].ColumnName = "Montant";
+                            break;
+                        case "Bic":
+                            dt.Columns[i].ColumnName = "Bic";
+                            break;
+                       
+                        case "StructuredMessage":
+                            dt.Columns[i].ColumnName = "MessageStructuree";
+                            break;
+                        case "CurrencyCode":
+                            dt.Columns[i].ColumnName = "CurrencyCode";
+                            break;
+                        case "Iban":
+                            dt.Columns[i].ColumnName = "CompteBancaire";
+                            break;
+                        default:
+                          dt.Columns.Remove(dt.Columns[i].ColumnName);
+                          break;
 
                 }
 

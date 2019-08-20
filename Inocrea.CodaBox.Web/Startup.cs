@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Identity.DbContext;
+using Identity.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Hosting;
@@ -22,10 +23,24 @@ namespace Inocrea.CodaBox.Web
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IHostingEnvironment env)
         {
-            Configuration = configuration;
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
+
+            // add this file name to your .gitignore file
+            // so you can create it and use on your local dev machine
+            // remember last config source added wins if it has the same settings
+            builder.AddJsonFile("appsettings.dev.json", optional: true);
+            builder.AddEnvironmentVariables();
+
+            Configuration = builder.Build();
+
+            environment = env;
         }
+        public IHostingEnvironment environment { get; set; }
 
         public IConfiguration Configuration { get; }
 
@@ -51,8 +66,11 @@ namespace Inocrea.CodaBox.Web
             services.AddDbContext<ApplicationDbContext>(options =>
                  options.UseSqlServer(
                      Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<ApplicationUserDbContext>(options =>
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<ApplicationUser>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<ApplicationUserDbContext>();
             services.Configure<SettingsModels>(Configuration.GetSection("ApiSettings"));
             services.Configure<SettingsModelsApiServer>(Configuration.GetSection("ApiServerSettings"));
          

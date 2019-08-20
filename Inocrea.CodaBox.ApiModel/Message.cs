@@ -16,5 +16,7 @@ namespace Inocrea.CodaBox.ApiModel
 
         [DataMember(Name = "Data")]
         public T Data { get; set; }
+
+       
     }
 }

@@ -9,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Inocrea.CodaBox.ApiModel;
+using Inocrea.CodaBox.ApiModel.Models;
+using Inocrea.CodaBox.CodaApiClient.Helper;
 using Newtonsoft.Json;
 
 namespace Inocrea.CodaBox.CodaApiClient
@@ -25,13 +27,14 @@ namespace Inocrea.CodaBox.CodaApiClient
             BaseEndpoint = baseEndpoint ?? throw new ArgumentNullException("baseEndpoint");
             _httpClient = new HttpClient();
         }
-        
-      
 
-       
+        private static LoginModel User;
+
+
+
         private async Task<List<T>> GetAsync<T> (Uri requestUrl)
         {
-             //AddHeaders();
+            if (User != null) AddHeaders();
              HttpResponseMessage response;
             try
             {
@@ -56,7 +59,7 @@ namespace Inocrea.CodaBox.CodaApiClient
         }
         private async Task<T> GetDetailAsync<T>(Uri requestUrl)
         {
-            //AddHeaders();
+            if (User != null) AddHeaders();
             HttpResponseMessage response;
             try
             {
@@ -92,12 +95,15 @@ namespace Inocrea.CodaBox.CodaApiClient
         }
         private Uri CreateRequestUri(string relativePath, string queryString = "")
         {
+            if (User != null) AddHeaders();
+
             var endpoint = new Uri(BaseEndpoint, relativePath);
             var uriBuilder = new UriBuilder(endpoint) {Query = queryString};
             return uriBuilder.Uri;
         }
         private HttpContent CreateHttpContent<T>(T content)
         {
+            if (User != null) AddHeaders();
             var json = JsonConvert.SerializeObject(content, MicrosoftDateFormatSettings);
             return new StringContent(json, Encoding.UTF8, "application/json");
         }
@@ -109,19 +115,26 @@ namespace Inocrea.CodaBox.CodaApiClient
         {
             try
             {
-                AddHeaders();
+                if(User!=null)AddHeaders();
                 var response = await _httpClient.PostAsync(requestUrl.ToString(), CreateHttpContent<T>(content));
                 response.EnsureSuccessStatusCode();
+                var data = await response.Content.ReadAsStringAsync();
+               // LoginModel user = new LoginModel();
+                var  resData = JsonConvert.DeserializeObject<T>(data);
+                if (requestUrl.ToString().Contains("token"))
+                {
+                     User= JsonConvert.DeserializeObject<LoginModel>(data);
+                }
                 var messageRet = new Message<T>
                 {
-                    Data = default(T),
+                    Data = resData,
                     IsSuccess = response.IsSuccessStatusCode,
                     ReturnMessage = response.ToString()
 
 
                 };
 
-                var data = await response.Content.ReadAsStringAsync();
+                
                 return messageRet;
             }
             catch (Exception ex)
@@ -132,7 +145,7 @@ namespace Inocrea.CodaBox.CodaApiClient
         }
         private async Task<Message<T1>> PostAsync<T1, T2>(Uri requestUrl, T2 content)
         {
-            AddHeaders();
+            if (User != null) AddHeaders();
             var response = await _httpClient.PostAsync(requestUrl.ToString(), CreateHttpContent<T2>(content));
             response.EnsureSuccessStatusCode();
             var data = await response.Content.ReadAsStringAsync();
@@ -140,6 +153,11 @@ namespace Inocrea.CodaBox.CodaApiClient
         }
         private void AddHeaders()
         {
+          
+
+                _httpClient.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Bearer", User.Token); 
+            
             //_httpClient.DefaultRequestHeaders.Remove("X-Software-Company");
             //_httpClient.DefaultRequestHeaders.Add("X-Software-Company", "641088c3-8fcb-47a3-8cef-de8197f5172c");
         }

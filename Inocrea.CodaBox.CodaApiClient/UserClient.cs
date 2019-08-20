@@ -10,6 +10,9 @@ using Inocrea.CodaBox.ApiModel.ViewModel;
 using Inocrea.CodaBox.CodaApiClient.Helper;
 using Newtonsoft.Json;
 
+using CompteBancaire = Inocrea.CodaBox.ApiModel.Models.CompteBancaire;
+
+
 namespace Inocrea.CodaBox.CodaApiClient
 {
     public partial class ApiClient
@@ -20,8 +23,13 @@ namespace Inocrea.CodaBox.CodaApiClient
 
         private List<Transactions> repTra = new List<Transactions>();
 
-
-        public async Task<List<StatementAccountViewModel>> GetStatements()
+        public async Task<List<StatementAccountViewModel>> GetStatementsAccountVm()
+        {
+            await GetStatements();
+            return await GetBusinessStatements
+               (repSta);
+        }
+        public async Task<List<Statements>> GetStatements()
         {
           
             var requestUrl = CreateRequestUri(string.Format(System.Globalization.CultureInfo.CurrentCulture,
@@ -29,12 +37,12 @@ namespace Inocrea.CodaBox.CodaApiClient
 
 
             repSta =  await  GetAsync<Statements>(requestUrl);
-          
-            
 
-           
-            return GetBusinessStatements
-                (repSta);
+
+
+            return repSta;
+            //return await GetBusinessStatementsAsync
+            //    (repSta);
         }
 
         public async Task<List<TransactionsAccountViewModel>> GetTransactions(int statementId)
@@ -82,7 +90,7 @@ namespace Inocrea.CodaBox.CodaApiClient
             return role;
         }
      
-        private List<StatementAccountViewModel> GetBusinessStatements(List<Statements> statementsList )
+        private async Task<List<StatementAccountViewModel>> GetBusinessStatements(List<Statements> statementsList )
 
         {
             List<StatementAccountViewModel> listStateAccountViewModels=new List<StatementAccountViewModel>();
@@ -90,18 +98,19 @@ namespace Inocrea.CodaBox.CodaApiClient
             {
                 StatementAccountViewModel sta = new StatementAccountViewModel();
                 CompteBancaire cp=new CompteBancaire();
-                cp = GetCompteBancaire(statement.CompteBancaireId).Result;
+                //cp = await GetCompteBancaire(statement.CompteBancaireId);
                 //cp = GetCompte(statement.CompteBancaireId).Result;
-                statement.CompteBancaire = cp;
+                cp = statement.CompteBancaire;
+                
                 sta.StatementId = statement.StatementId;
                 sta.Date = statement.Date;
                 sta.InitialBalance = statement.InitialBalance;
                 sta.NewBalance = statement.NewBalance;
-                sta.Iban = statement.CompteBancaire.Iban;
-                sta.IdentificationNumber = statement.CompteBancaire.IdentificationNumber;
-                sta.Bic = statement.CompteBancaire.Bic;
+                sta.Iban = cp.Iban;
+                sta.IdentificationNumber = cp.IdentificationNumber;
+                sta.Bic = cp.Bic;
                 sta.InformationalMessage = statement.InformationalMessage;
-                sta.CurrencyCode = statement.CompteBancaire.CurrencyCode;
+                sta.CurrencyCode = cp.CurrencyCode;
                
                 listStateAccountViewModels.Add(sta);
 
@@ -120,17 +129,19 @@ namespace Inocrea.CodaBox.CodaApiClient
             {
                 TransactionsAccountViewModel tra = new TransactionsAccountViewModel();
                 CompteBancaire cp = new CompteBancaire();
-                cp = GetCompte(transactions.CompteBancaireId).Result;
-                transactions.CompteBancaire = cp;
+                //cp = transactions.CompteBancaire;
+                //cp = GetCompteBancaire(transactions.CompteBancaireId).Result;
+                cp = transactions.CompteBancaire;
                 tra.Amount = transactions.Amount;
+                tra.Message = transactions.Message;
                 tra.StructuredMessage = transactions.StructuredMessage;
                 tra.ValueDate = transactions.ValueDate;
                 tra.TransactionDate = transactions.TransactionDate;
-                tra.Iban = transactions.CompteBancaire.Iban;
-                tra.IdentificationNumber = transactions.CompteBancaire.IdentificationNumber;
-                tra.Bic = transactions.CompteBancaire.Bic;
+                tra.Iban = cp.Iban;
+                tra.IdentificationNumber = cp.IdentificationNumber;
+                tra.Bic = cp.Bic;
                 
-                tra.CurrencyCode = transactions.CompteBancaire.CurrencyCode;
+                tra.CurrencyCode = cp.CurrencyCode;
 
                 listStateAccountViewModels.Add(tra);
 

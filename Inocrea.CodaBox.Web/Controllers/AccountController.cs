@@ -15,11 +15,7 @@ namespace Inocrea.CodaBox.Web.Controllers
     {
         private readonly IOptions<SettingsModels> _appSettings;
 
-        public AccountController(IOptions<SettingsModels> app)
-        {
-            _appSettings = app;
-            AppSettings.ApiUrl = _appSettings.Value.WebApiBaseUrl;
-        }
+        
         public async Task<IActionResult> Register()
         {
             return View();

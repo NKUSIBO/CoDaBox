@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.645
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28917.181
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Inocrea.CodaBox.ApiModel", "Inocrea.CodaBox.ApiModel\Inocrea.CodaBox.ApiModel.csproj", "{DA54A2FC-F1D2-4BE2-A553-CBCC4D483E08}"
 EndProject
@@ -10,6 +10,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Inocrea.CodaBox.Web", "Inocrea.CodaBox.Web\Inocrea.CodaBox.Web.csproj", "{D19D019B-5E0A-4607-989B-E6CFC52A4C35}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Inocrea.CodaBox.ApiServer", "Inocrea.CodaBox.ApiServer\Inocrea.CodaBox.ApiServer.csproj", "{42866FBB-166E-4AAE-8EA1-22C5392B5F91}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DA54A2FC-F1D2-4BE2-A553-CBCC4D483E08} = {DA54A2FC-F1D2-4BE2-A553-CBCC4D483E08}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity", "Identity\Identity.csproj", "{3E251CA2-5A2B-4169-B249-573FCFC4E5B6}"
 EndProject
@@ -17,7 +20,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodaParser", "CodaParser\CodaParser.csproj", "{852CA81E-2593-4565-B376-160829531524}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodaWeb", "CodaWeb\CodaWeb.csproj", "{D0B72521-F034-4F8E-987E-9D07226112BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodaWeb", "CodaWeb\CodaWeb.csproj", "{D0B72521-F034-4F8E-987E-9D07226112BA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

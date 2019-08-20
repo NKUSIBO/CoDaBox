@@ -21,9 +21,7 @@
 
 
                     <tr>
-                        <th>
-                            @Html.DisplayNameFor(model => model.IdentificationNumber)
-                        </th>
+                       
 
                         <th>
                             @Html.DisplayNameFor(model => model.CurrencyCode)
@@ -42,16 +40,16 @@
                         </th>
 
                         <th>
-                            @Html.DisplayNameFor(model => model.StructuredMessage)
+                            @Html.DisplayNameFor(model => model.Message)
                         </th>
 
                         <th>
                             @Html.DisplayNameFor(model => model.ValueDate)
                         </th>
 
-                        <th>
-                            @Html.DisplayNameFor(model => model.TransactionDate)
-                        </th>
+                        @*<th>
+            @Html.DisplayNameFor(model => model.TransactionDate)
+        </th>*@
                     </tr>
                 </thead>
 
@@ -87,18 +85,18 @@
 
                     'columns':
                         [
-                            { data: 'IdentificationNumber', name: 'IdentificationNumber', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
+                          
                             { data: 'CurrencyCode', name: 'CurrencyCode', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
                             { data: 'Iban', name: 'Iban', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
                             { data: 'Bic', name: 'Bic', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
 
                             { data: 'Amount', name: 'Amount', 'sDefaultContent': '0', 'autoWidth': true },
 
-                            { data: 'StructuredMessage', name: 'StructuredMessage', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
-                            { data: 'ValueDateFrmt', name: 'ValueDateFrmt', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
+                            { data: 'Message', name: 'Message', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
+                            { data: 'Date', name: 'Date', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
 
 
-                            { data: 'TransactionDateFrmt', name: 'TransactionDateFrmt', 'sDefaultContent': '0-0-0000', 'autoWidth': true }
+                            //{ data: 'TransactionDateFrmt', name: 'TransactionDateFrmt', 'sDefaultContent': '0-0-0000', 'autoWidth': true }
 
 
                         ],

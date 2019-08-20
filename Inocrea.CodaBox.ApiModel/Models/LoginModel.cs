@@ -12,5 +12,9 @@ namespace Inocrea.CodaBox.ApiModel.Models
 
         [Required]
         public String Password { get; set; }
+
+        public  string Token { get; set; }
+
+        public DateTime Expiration { get; set; }
     }
 }

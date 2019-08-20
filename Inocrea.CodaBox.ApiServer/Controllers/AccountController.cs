@@ -73,12 +73,15 @@ namespace Inocrea.CodaBox.ApiServer.Controllers
                     expires: DateTime.Now.AddHours(expiryInMinutes),
                     signingCredentials: new SigningCredentials(signinKey, SecurityAlgorithms.HmacSha256)
                 );
-
+                
                 return Ok(
-                    new
+                    new LoginModel
                     {
-                        token = new JwtSecurityTokenHandler().WriteToken(token),
-                        expiration = token.ValidTo
+                        Username = model.Username,
+                        Password = model.Password,
+
+                        Token = new JwtSecurityTokenHandler().WriteToken(token),
+                        Expiration = token.ValidTo
                     });
             }
             return Unauthorized();
@@ -118,6 +121,8 @@ namespace Inocrea.CodaBox.ApiServer.Controllers
                         Email = registerModel.Email
                     };
 
+                try
+                {
                     var identityResult = await this.userManager.CreateAsync(user, registerModel.Password);
                     if (identityResult.Succeeded)
                     {
@@ -128,6 +133,12 @@ namespace Inocrea.CodaBox.ApiServer.Controllers
                     {
                         return BadRequest(identityResult.Errors);
                     }
+                }
+                catch (Exception ex)
+                {
+
+                    throw ex;
+                }
                 }
                 return BadRequest(ModelState);
 

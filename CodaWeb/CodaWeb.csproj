@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="ClosedXML" Version="0.94.2" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.9" />
@@ -17,6 +18,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Identity\Identity.csproj" />
+    <ProjectReference Include="..\Inocrea.CodaBox.ApiModel\Inocrea.CodaBox.ApiModel.csproj" />
+    <ProjectReference Include="..\Inocrea.CodaBox.CodaApiClient\Inocrea.CodaBox.CodaApiClient.csproj" />
   </ItemGroup>
 
 </Project>

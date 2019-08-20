@@ -18,7 +18,7 @@ namespace Inocrea.CodaBox.ApiModel.ViewModel
         [DataMember]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{dd/MM/yyyy}")]
         public DateTime Date { get; set; }
-        public string Date_Frmt
+        public string DateFrmt
         {
             get
             {
@@ -39,4 +39,11 @@ namespace Inocrea.CodaBox.ApiModel.ViewModel
         [DataMember]
         public List<Transactions> Transactions { get; set; }
     }
+    //public class StatementAccountViewModel
+    //{
+    //    [DataMember]
+    //    public CompteBancaire Compte { get; set; }
+    //    [DataMember]
+    //    public Statements Stat { get; set; }
+    //}
 }

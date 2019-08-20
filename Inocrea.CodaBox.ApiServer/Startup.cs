@@ -26,16 +26,24 @@ namespace Inocrea.CodaBox.ApiServer
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration, IHostingEnvironment env)
+        public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
-                .AddEnvironmentVariables();
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
+
+            // add this file name to your .gitignore file
+            // so you can create it and use on your local dev machine
+            // remember last config source added wins if it has the same settings
+            builder.AddJsonFile("appsettings.dev.json", optional: true);
+            builder.AddEnvironmentVariables();
+
             Configuration = builder.Build();
-            Configuration = configuration;
+
+            environment = env;
         }
+        public IHostingEnvironment environment { get; set; }
 
         public IConfiguration Configuration { get; }
 
@@ -116,17 +124,17 @@ namespace Inocrea.CodaBox.ApiServer
               
             });
 
-            //if (env.IsDevelopment())
-            //{
-            //    app.UseDeveloperExceptionPage();
-            //}
-            //else
-            //{
-            //    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-            //    app.UseHsts();
-            //}
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
+            }
 
-            //app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
             app.UseMvc();
             
         }

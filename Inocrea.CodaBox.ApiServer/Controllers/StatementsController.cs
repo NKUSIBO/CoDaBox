@@ -7,8 +7,6 @@ using Microsoft.EntityFrameworkCore;
 
 using Inocrea.CodaBox.ApiServer.Entities;
 
-using Microsoft.AspNet.OData;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Inocrea.CodaBox.ApiModel.Models;
 
@@ -32,7 +30,7 @@ namespace Inocrea.CodaBox.ApiServer.Controllers
         //[EnableQuery()]
         public async Task<ActionResult<IEnumerable<Statements>>> GetStatements()
         {
-            return await _context.Statements.ToListAsync();
+            return await _context.Statements.Include(x=>x.CompteBancaire).ToListAsync();
         }
 
         // GET: api/Statements/5

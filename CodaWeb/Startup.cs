@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CodaWeb.Data;
+using CodaWeb.Models;
 using Identity.DbContext;
 using Identity.Entities;
 using Microsoft.Extensions.Configuration;
@@ -41,7 +42,7 @@ namespace CodaWeb
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<ApplicationUser>()
                 .AddEntityFrameworkStores<ApplicationUserDbContext>();
-
+            services.Configure<SettingsModels>(Configuration.GetSection("ApiSettings"));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 

@@ -6,11 +6,13 @@ using System.Text;
 using Newtonsoft.Json;
 
 using System.Collections.Generic;
-using Inocrea.CodaBox.ApiServer.Entities;
+using Inocrea.CodaBox.ApiModel.Models;
 using CodaParser;
 using System.Threading.Tasks;
 using System.IO;
-using Inocrea.CodaBox.ApiModel.Models;
+using CodaParser.Values;
+
+using Inocrea.CodaBox.ApiServer.Models;
 
 namespace Inocrea.CodaBox.ApiServer.Services
 {
@@ -78,7 +80,7 @@ namespace Inocrea.CodaBox.ApiServer.Services
             return data;
         }
 
-        public async Task<IEnumerable<Statements>> GetStatementsAsync(string data)
+        public async Task<IEnumerable<ApiModel.Models.Statements>> GetStatementsAsync(string data)
         {
             data = data.Replace('\r','\n');
             var line = data.Split('\n');
@@ -94,13 +96,13 @@ namespace Inocrea.CodaBox.ApiServer.Services
 
             }
 
-            var sts = new List<Statements>();
+            var sts = new List<ApiModel.Models.Statements>();
 
             foreach (var st in statements)
             {
 
                 var account = st.Account;
-                var compteBancaire = new CompteBancaire
+                var compteBancaire = new ApiModel.Models.CompteBancaire
                 {
                     Iban = account.Number.Replace(" ", ""),
                     Bic = account.Bic,
@@ -108,7 +110,7 @@ namespace Inocrea.CodaBox.ApiServer.Services
                     CurrencyCode = account.CurrencyCode
                 };
 
-                var mySt = new Statements
+                var mySt = new ApiModel.Models.Statements
                 {
                     Date = st.Date,
                     InformationalMessage = st.InformationalMessage,
@@ -120,29 +122,29 @@ namespace Inocrea.CodaBox.ApiServer.Services
                 foreach (var tr in st.Transactions)
                 {
                     var trAccount = tr.Account;
-                    var cb = new CompteBancaire
+                    var cb = new ApiModel.Models.CompteBancaire
                     {
                         Iban = trAccount.Number.Replace(" ",""),
                         Bic = trAccount.Bic,
                         CurrencyCode = trAccount.CurrencyCode,
                     };
 
-                    SepaDirectDebit sepa=null;
+                    ApiModel.Models.SepaDirectDebit sepa =null;
                     //todo sepa
-                    //if (tr.SepaDirectDebit != null)
-                    //{
-                    //    var sepaParse = tr.SepaDirectDebit;
-                    //    sepa = new SepaDirectDebit
-                    //    {
-                    //        CreditorIdentificationCode = sepaParse.CreditorIdentificationCode,
-                    //        PaidReason = sepaParse.PaidReason,
-                    //        MandateReference = sepaParse.MandateReference,
-                    //        Scheme = sepaParse.Scheme,
-                    //        Type = sepaParse.Type
-                    //    };
-                    //}
+                    if (tr.SepaDirectDebit != null)
+                    {
+                        var sepaParse = tr.SepaDirectDebit;
+                        sepa = new ApiModel.Models.SepaDirectDebit
+                        {
+                            CreditorIdentificationCode = sepaParse.CreditorIdentificationCode,
+                            PaidReason = sepaParse.PaidReason,
+                            MandateReference = sepaParse.MandateReference,
+                            Scheme = sepaParse.Scheme,
+                            Type = sepaParse.Type
+                        };
+                    }
 
-                    var myTr = new Transactions
+                    var myTr = new ApiModel.Models.Transactions
                     {
                         Amount = (double)tr.Amount,
                         Message = tr.Message,
@@ -150,7 +152,8 @@ namespace Inocrea.CodaBox.ApiServer.Services
                         TransactionDate = tr.TransactionDate,
                         ValueDate = tr.ValutaDate,
                         CompteBancaire = cb,
-                        //SepaDirectDebit = sepa
+                        SepaDirectDebit = sepa,
+
                     };
 
                     mySt.Transactions.Add(myTr);
