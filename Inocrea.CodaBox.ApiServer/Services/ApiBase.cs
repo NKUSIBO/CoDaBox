@@ -64,9 +64,8 @@ namespace Inocrea.CodaBox.ApiServer.Services
             HttpResponseMessage response = null;
             try
             {
-                //todo put feed
-                //response = await _httpClient.PutAsync(uri, content);
-                //response.EnsureSuccessStatusCode();
+                response = await _httpClient.PutAsync(uri, content);
+                response.EnsureSuccessStatusCode();
             }
             catch (Exception)
             {
