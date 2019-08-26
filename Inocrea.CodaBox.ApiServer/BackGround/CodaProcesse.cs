@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Inocrea.CodaBox.ApiModel.Models;
 using Inocrea.CodaBox.ApiServer.Entities;
+using Inocrea.CodaBox.ApiServer.Models;
 using Inocrea.CodaBox.ApiServer.Services;
 
 namespace Inocrea.CodaBox.ApiServer.BackGround
@@ -64,8 +65,12 @@ namespace Inocrea.CodaBox.ApiServer.BackGround
                 st.CompteBancaire = BankAccount(st.CompteBancaire);
                 foreach (var tr in st.Transactions)
                     tr.CompteBancaire = BankAccount(tr.CompteBancaire);
+                var trs = new List<TrasactionXls>();
 
-                _ = Export.WriteTsvAsync(st.Transactions, st.Date.ToString("yyyy-MM-dd") + ' ' + st.CompteBancaire.Iban + ".xls");
+                foreach (var tr in st.Transactions)
+                    trs.Add(new TrasactionXls(tr));
+
+                _ = Export.WriteTsvAsync(trs, st.Date.ToString("yyyy-MM-dd") + ' ' + st.CompteBancaire.Iban + ".xls");
 
                 Db.Statements.Add(st);
                 Db.SaveChanges();

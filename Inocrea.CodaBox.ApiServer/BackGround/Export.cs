@@ -35,7 +35,6 @@ namespace Inocrea.CodaBox.ApiServer.BackGround
             writer.Flush();
             stream.Position = 0;
 
-
             var apiWD = new ApiWorkDrive();
             await apiWD.UploadXls(stream, fileName);
 
