@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using Inocrea.CodaBox.ApiModel.Models;
-using Inocrea.CodaBox.ApiServer.Entities;
-using Inocrea.CodaBox.ApiServer.Services;
+using Inocrea.CodaBox.Back.Entities;
+using Inocrea.CodaBox.Back.Models;
+using Inocrea.CodaBox.Back.Services;
 using Newtonsoft.Json;
 
-namespace Inocrea.CodaBox.ApiServer.BackGround
+namespace Inocrea.CodaBox.Back.BackGround
 {
     public class CodaProcesse
     {
@@ -31,7 +31,8 @@ namespace Inocrea.CodaBox.ApiServer.BackGround
             foreach (var feed in feedClients)
             {
                 var id = feed.Id;
-                var feedEntries = client.GetRedownloadFeed(id);
+                //var feedEntries = client.GetRedownloadFeed(id);
+                var feedEntries = client.GetFeed(id);
                 var cod = GetCodasAsync(feedEntries, id);
                 if (cod != null) allStatements.AddRange(cod);
             }
@@ -64,7 +65,8 @@ namespace Inocrea.CodaBox.ApiServer.BackGround
 
                 if (codPath.ContainsKey(md.Iban))
                 {
-                    cod = client.GetCodaRedownFile(index, "cod");
+                    //cod = client.GetCodaRedownFile(index, "cod");
+                    cod = client.GetCodaFile(index, "cod");
                     var directory = codPath[md.Iban];
                     var codOk = ApiWD.UploadFile(cod, directory, name).Result;
                     if (!codOk) continue;
@@ -72,7 +74,8 @@ namespace Inocrea.CodaBox.ApiServer.BackGround
 
                 if (pdfPath.ContainsKey(md.Iban))
                 {
-                    var pdf = client.GetCodaRedownFilePdf(index, "pdf");
+                    //var pdf = client.GetCodaRedownFilePdf(index, "pdf");
+                    var pdf = client.GetCodaFilePdf(index, "pdf");
                     var directory = pdfPath[md.Iban];
                     var pdfOk = ApiWD.UploadFile(pdf, directory, name).Result;
                     if (!pdfOk) continue;

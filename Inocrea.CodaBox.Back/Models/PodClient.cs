@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace Inocrea.CodaBox.ApiServer
+namespace Inocrea.CodaBox.Back.Models
 {
     public class PodClient
     {
