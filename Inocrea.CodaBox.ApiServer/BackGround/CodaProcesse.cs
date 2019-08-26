@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Inocrea.CodaBox.ApiModel.Models;
 using Inocrea.CodaBox.ApiServer.Entities;
 using Inocrea.CodaBox.ApiServer.Services;
+using Newtonsoft.Json;
 
 namespace Inocrea.CodaBox.ApiServer.BackGround
 {
@@ -13,7 +15,7 @@ namespace Inocrea.CodaBox.ApiServer.BackGround
         private ApiCodaBoxe client;
         private InosysDBContext Db;
 
-        public async Task<bool> Start()
+        public bool Start()
         {
             Db = new InosysDBContext();
             var ok = true;
@@ -29,9 +31,9 @@ namespace Inocrea.CodaBox.ApiServer.BackGround
             foreach (var feed in feedClients)
             {
                 var id = feed.Id;
-                var feedEntries = client.GetFeed(id);
+                var feedEntries = client.GetRedownloadFeed(id);
                 var cod = GetCodasAsync(feedEntries, id);
-                allStatements.AddRange(cod);
+                if (cod != null) allStatements.AddRange(cod);
             }
             return ok;
         }
@@ -39,19 +41,48 @@ namespace Inocrea.CodaBox.ApiServer.BackGround
         private IEnumerable<Statements> GetCodasAsync(IEnumerable<FeedEntry> feedEntries, int id)
         {
             var ApiWD = new ApiWorkDrive();
+            var Path = "/Users/bilal/Downloads/Coda/";
+
+            var jsonPdf = File.ReadAllText(Path + "PdfPath.json");
+            var jsonCod = File.ReadAllText(Path + "CodPath.json");
+
+            var pdfPath = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonPdf);
+            var codPath = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonCod);
+
             List<Statements> feedStatements = new List<Statements>();
             foreach (var feed in feedEntries)
             {
                 var md = feed.Metadata;
                 var index = feed.FeedIndex;
-                var pdf = client.GetCodaFilePdf(index, "pdf");
-                _ = ApiWD.UploadFilePdf(pdf, md.NewBalanceDate.ToString("yyyy-MM-dd") + ' ' + md.Iban + ".pdf");
-                var cod = client.GetCodaFile(index, "cod");
-                _ = ApiWD.UploadFile(cod, md.NewBalanceDate.ToString("yyyy-MM-dd") + ' ' + md.Iban + ".cod");
-                var statements = client.GetStatementsAsync(cod).Result;
+                var name = md.NewBalanceDate.ToString("yyyy-MM-dd") + ' ' + md.Iban + ".cod";
 
-                statements = SaveStatement(statements);
-                client.PutFeed(id, index);
+                var cod=string.Empty;
+                var ok = true;
+                //Hack: ceci exclu les coda autre que inocrea & co
+
+                if (!pdfPath.ContainsKey(md.Iban) && !codPath.ContainsKey(md.Iban)) continue;
+
+                if (codPath.ContainsKey(md.Iban))
+                {
+                    cod = client.GetCodaRedownFile(index, "cod");
+                    var directory = codPath[md.Iban];
+                    var codOk = ApiWD.UploadFile(cod, directory, name).Result;
+                    if (!codOk) continue;
+                }
+
+                if (pdfPath.ContainsKey(md.Iban))
+                {
+                    var pdf = client.GetCodaRedownFilePdf(index, "pdf");
+                    var directory = pdfPath[md.Iban];
+                    var pdfOk = ApiWD.UploadFile(pdf, directory, name).Result;
+                    if (!pdfOk) continue;
+                }
+
+                //var statements = client.GetStatementsAsync(cod).Result;
+                //statements = SaveStatement(statements);
+
+                //client.PutFeed(id, index);
+
             }
             return feedStatements;
         }

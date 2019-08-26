@@ -63,6 +63,20 @@ namespace Inocrea.CodaBox.ApiServer.Services
             return feed.FeedEntries;
         }
 
+        public string GetCodaRedownFile(Guid index, string extension)
+        {
+            var uri = new Uri(baseUrl + "redownload/" + index + '/' + extension + '/');
+            var data = GetAsync(uri).Result;
+            return data;
+        }
+
+        public Stream GetCodaRedownFilePdf(Guid index, string extension)
+        {
+            var uri = new Uri(baseUrl + "redownload/" + index + '/' + extension + '/');
+            var data = GetStreamAsync(uri).Result;
+            return data;
+        }
+
         public string GetCodaFile(Guid index, string extension)
         {
             var uri = new Uri(baseUrl + "download/" + index + '/'+ extension + '/');

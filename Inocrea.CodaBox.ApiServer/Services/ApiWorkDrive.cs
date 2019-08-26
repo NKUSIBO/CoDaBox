@@ -7,7 +7,7 @@ namespace Inocrea.CodaBox.ApiServer.Services
 {
     public class ApiWorkDrive : ApiBase
     {
-        private string baseUrl = "https://workdrive.zoho.com/api/v1/upload?parent_id=6j92v79240bb1f6d742aa9a98c72b6e85e937&filename=";
+        private string baseUrl = "https://workdrive.zoho.com/api/v1/upload?";
 
         public ApiWorkDrive()
         {
@@ -15,36 +15,33 @@ namespace Inocrea.CodaBox.ApiServer.Services
             SetRequestHeaders("Authorization", "Zoho-oauthtoken "+zoho.Token);
         }
 
-        public async Task UploadJson(string json)
+        public async Task<bool> UploadJson(string json)
         {
             byte[] data = Encoding.UTF8.GetBytes(json);
             var fileName = "coda" + ".json"; //declaration.json";
             var uri = new Uri(baseUrl + fileName);
 
-            await PostFileAsync(uri, data, fileName);
+            return await PostFileAsync(uri, data, fileName);
         }
 
-        public async Task UploadFile(string txt, string fileName)
+        public async Task<bool> UploadFile(string txt, string id, string fileName)
         {
             byte[] data = Encoding.UTF8.GetBytes(txt);
-            var uri = new Uri(baseUrl + fileName);
+            var uri = new Uri(baseUrl + "parent_id=" + id + "&filename=" + fileName);
 
-            await PostFileAsync(uri, data, fileName);
+            return await PostFileAsync(uri, data, fileName);
         }
 
         public async Task UploadXls(MemoryStream stream, string fileName)
         {
-            byte[] data = stream.ToArray();
-            var uri = new Uri(baseUrl + fileName);
-
-            await PostFileAsync(uri, data, fileName);
+            throw new NotImplementedException();
         }
 
-        public async Task UploadFilePdf(Stream pdf, string fileName)
+        public async Task<bool> UploadFile(Stream pdf, string id, string fileName)
         {
-            var uri = new Uri(baseUrl + fileName);
+            var uri = new Uri(baseUrl + "parent_id=" + id + "&filename=" + fileName);
 
-            await PostFilePdfAsync(uri, pdf, fileName);
+            return await PostFilePdfAsync(uri, pdf, fileName);
         }
     }
 }
