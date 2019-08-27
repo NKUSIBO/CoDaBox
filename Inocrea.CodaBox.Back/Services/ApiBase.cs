@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -79,6 +80,7 @@ namespace Inocrea.CodaBox.Back.Services
             var formContent = new MultipartFormDataContent();
             formContent.Add(new StreamContent(new MemoryStream(data)), "content", fileName);
             var rep = await PostAsync(uri, formContent);
+            if (rep == "409") return false;
             return true;
         }
 
@@ -87,6 +89,7 @@ namespace Inocrea.CodaBox.Back.Services
             var formContent = new MultipartFormDataContent();
             formContent.Add(new StreamContent(data), "content", fileName);
             var rep = await PostAsync(uri, formContent);
+            if (rep == "409") return false;
             return true;
         }
 
@@ -96,6 +99,8 @@ namespace Inocrea.CodaBox.Back.Services
             try
             {
                 response = await _httpClient.PostAsync(uri, content);
+                if (response.StatusCode == HttpStatusCode.Conflict)
+                    return "409";
                 response.EnsureSuccessStatusCode();
             }
             catch (Exception)

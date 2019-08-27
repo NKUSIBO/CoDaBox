@@ -50,35 +50,45 @@ namespace Inocrea.CodaBox.Back.BackGround
             var pdfPath = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonPdf);
             var codPath = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonCod);
 
+            var exclu = string.Empty;
+
             List<Statements> feedStatements = new List<Statements>();
             foreach (var feed in feedEntries)
             {
                 var md = feed.Metadata;
                 var index = feed.FeedIndex;
-                var name = md.NewBalanceDate.ToString("yyyy-MM-dd") + ' ' + md.Iban + ".cod";
+                var name = md.NewBalanceDate.ToString("yyyy-MM-dd") + ' ' + md.Iban;
 
                 var cod=string.Empty;
                 var ok = true;
                 //Hack: ceci exclu les coda autre que inocrea & co
 
-                if (!pdfPath.ContainsKey(md.Iban) && !codPath.ContainsKey(md.Iban)) continue;
-
+                if (!pdfPath.ContainsKey(md.Iban) && !codPath.ContainsKey(md.Iban))
+                {
+                    exclu += name + '\n';
+                    continue;
+                }
                 if (codPath.ContainsKey(md.Iban))
                 {
                     //cod = client.GetCodaRedownFile(index, "cod");
                     cod = client.GetCodaFile(index, "cod");
                     var directory = codPath[md.Iban];
-                    var codOk = ApiWD.UploadFile(cod, directory, name).Result;
-                    if (!codOk) continue;
-                }
+                    var codOk = ApiWD.UploadFile(cod, directory, name + ".cod").Result;
+                    _ = ApiWD.UploadFile(cod, "g4xh16d20b8ee120a4156ba185622f0637fbb", name + ".cod");
 
+                    if (!codOk)
+                        exclu += name + '\n';
+                }
                 if (pdfPath.ContainsKey(md.Iban))
                 {
                     //var pdf = client.GetCodaRedownFilePdf(index, "pdf");
                     var pdf = client.GetCodaFilePdf(index, "pdf");
                     var directory = pdfPath[md.Iban];
-                    var pdfOk = ApiWD.UploadFile(pdf, directory, name).Result;
-                    if (!pdfOk) continue;
+                    var pdfOk = ApiWD.UploadFile(pdf, directory, name + ".pdf").Result;
+                    _ = ApiWD.UploadFile(pdf, "g4xh16d20b8ee120a4156ba185622f0637fbb", name + ".pdf");
+
+                    if (!pdfOk)
+                        exclu += name + '\n';
                 }
 
                 //var statements = client.GetStatementsAsync(cod).Result;
@@ -87,6 +97,10 @@ namespace Inocrea.CodaBox.Back.BackGround
                 //client.PutFeed(id, index);
 
             }
+
+            if(exclu!= string.Empty)
+                _=ApiWD.UploadFile(exclu, "g4xh16d20b8ee120a4156ba185622f0637fbb", id.ToString()+".txt");
+
             return feedStatements;
         }
 

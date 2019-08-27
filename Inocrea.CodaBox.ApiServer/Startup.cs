@@ -4,6 +4,7 @@ using System.Text;
 using Identity.DbContext;
 using Identity.Entities;
 using Inocrea.CodaBox.ApiServer.Entities;
+using Inocrea.CodaBox.Back.BackGround;
 using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;

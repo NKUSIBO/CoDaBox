@@ -6,10 +6,11 @@ using System.Text;
 using Newtonsoft.Json;
 
 using System.Collections.Generic;
-using Inocrea.CodaBox.ApiModel.Models;
+using Inocrea.CodaBox.Back.Models;
 using CodaParser;
 using System.Threading.Tasks;
 using System.IO;
+using Inocrea.CodaBox.ApiModel.Models;
 
 namespace Inocrea.CodaBox.ApiServer.Services
 {
