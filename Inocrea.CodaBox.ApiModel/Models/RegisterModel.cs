@@ -18,6 +18,10 @@ namespace Inocrea.CodaBox.ApiModel.Models
         [Required]
         [EmailAddress]
         public String Email { get; set; }
+        [Required]
+        public int CompanyId { get; set; }
+
+        public virtual Company Company { get; set; }
 
         [Required]
         [Compare("Password")]

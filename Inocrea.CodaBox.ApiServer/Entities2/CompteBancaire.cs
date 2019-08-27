@@ -1,11 +1,9 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using Newtonsoft.Json;
+﻿using System;
+using System.Collections.Generic;
 
-namespace Inocrea.CodaBox.ApiModel.Models
+namespace Inocrea.CodaBox.ApiServer.Entities2
 {
-    [JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
-    public class CompteBancaire
+    public partial class CompteBancaire
     {
         public CompteBancaire()
         {
@@ -23,10 +21,5 @@ namespace Inocrea.CodaBox.ApiModel.Models
         public virtual Company Company { get; set; }
         public virtual ICollection<Statements> Statements { get; set; }
         public virtual ICollection<Transactions> Transactions { get; set; }
-
-        public override string ToString()
-        {
-            return Iban;
-        }
     }
 }

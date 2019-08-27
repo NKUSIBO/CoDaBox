@@ -28,7 +28,7 @@ namespace Inocrea.CodaBox.ApiServer.Controllers
             {
                 var compteBancaire = await _context.CompteBancaire.FindAsync(id);
                 if (compteBancaire == null) { return NotFound(); }
-                var statementID = _context.Statements.Where(s => s.CompteBancaireId == compteBancaire.Id).Max(s => s.StatementId);
+                var statementID = _context.Statements.Where(s => s.CompteBancaireId == compteBancaire.CompteBancaireId).Max(s => s.StatementId);
                 var statement = _context.Statements.Find(statementID);
 
                 var cb = new BalanceViewModel
@@ -57,7 +57,7 @@ namespace Inocrea.CodaBox.ApiServer.Controllers
             {
                 var compteBancaire = await _context.CompteBancaire.FindAsync(id);
                 if (compteBancaire == null) { return NotFound(); }
-                var statementID = _context.Statements.Where(s => s.CompteBancaireId == compteBancaire.Id).Max(s => s.StatementId);
+                var statementID = _context.Statements.Where(s => s.CompteBancaireId == compteBancaire.CompteBancaireId).Max(s => s.StatementId);
                 var statement = _context.Statements.Find(statementID);
 
                 var cb = compteBancaire as BalanceViewModel2;

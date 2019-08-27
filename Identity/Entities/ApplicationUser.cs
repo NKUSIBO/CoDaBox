@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Inocrea.CodaBox.ApiModel.Models;
 using Microsoft.AspNetCore.Identity;
 
 namespace Identity.Entities
@@ -14,9 +15,12 @@ namespace Identity.Entities
            
             [MaxLength(250)]
             public String LastName { get; set; }
+            public int CompanyId { get; set; }
+
+            public virtual Company Company { get; set; }
 
 
 
-        }
+    }
     
 }

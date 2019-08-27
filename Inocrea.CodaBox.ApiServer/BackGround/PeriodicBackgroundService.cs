@@ -60,12 +60,12 @@ namespace Inocrea.CodaBox.ApiServer.BackGround
 
             foreach (var st in statements)
             {
-                var scb = Db.CompteBancaire.FirstOrDefault(c => c.Id == st.CompteBancaireId);
+                var scb = Db.CompteBancaire.FirstOrDefault(c => c.CompteBancaireId == st.CompteBancaireId);
                 st.CompteBancaire = scb;
                 var tr = transactions.Where(t => t.StatementId == st.StatementId);
                 foreach (var t in tr)
                 {
-                    var cb = Db.CompteBancaire.FirstOrDefault(c => c.Id == t.CompteBancaireId);
+                    var cb = Db.CompteBancaire.FirstOrDefault(c => c.CompteBancaireId == t.CompteBancaireId);
                     t.CompteBancaire = cb;
                     st.Transactions.Add(t);
                 }

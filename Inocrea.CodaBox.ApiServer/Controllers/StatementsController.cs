@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Identity.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +9,7 @@ using Inocrea.CodaBox.ApiServer.Entities;
 
 using Microsoft.AspNetCore.Authorization;
 using Inocrea.CodaBox.ApiModel.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace Inocrea.CodaBox.ApiServer.Controllers
 {
@@ -18,10 +19,13 @@ namespace Inocrea.CodaBox.ApiServer.Controllers
     public class StatementsController : ControllerBase
     {
         private readonly InosysDBContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public StatementsController(InosysDBContext context)
+        public StatementsController(InosysDBContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
+
         }
 
         // GET: api/Statements
@@ -30,7 +34,18 @@ namespace Inocrea.CodaBox.ApiServer.Controllers
         //[EnableQuery()]
         public async Task<ActionResult<IEnumerable<Statements>>> GetStatements()
         {
-            return await _context.Statements.Include(x=>x.CompteBancaire).ToListAsync();
+            try
+            {
+                var userN = HttpContext.User.Identities.FirstOrDefault()?.Claims.FirstOrDefault()?.Value;
+                var statementByUser =  _context.Set<Statements>().FromSql("dbo.sp_statsByUser @UserName = {0}", userN);
+                return  new ActionResult<IEnumerable<Statements>>(statementByUser);
+
+            }
+            catch (System.Exception ex)
+            {
+
+                throw ex;
+            }
         }
 
         // GET: api/Statements/5

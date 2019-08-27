@@ -60,7 +60,8 @@ namespace Inocrea.CodaBox.ApiServer.Controllers
             if (user != null && await userManager.CheckPasswordAsync(user, model.Password))
             {
                 var claim = new[] {
-                    new Claim(JwtRegisteredClaimNames.Sub, user.UserName)
+                    new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+                   
                 };
                 var signinKey = new SymmetricSecurityKey(
                     Encoding.UTF8.GetBytes(configuration["Jwt:SigningKey"]));
@@ -71,6 +72,7 @@ namespace Inocrea.CodaBox.ApiServer.Controllers
                     issuer: configuration["Jwt:Site"],
                     audience: configuration["Jwt:Site"],
                     expires: DateTime.Now.AddHours(expiryInMinutes),
+                    claims: claim,
                     signingCredentials: new SigningCredentials(signinKey, SecurityAlgorithms.HmacSha256)
                 );
                 
@@ -118,7 +120,8 @@ namespace Inocrea.CodaBox.ApiServer.Controllers
                         UserName = registerModel.Username,
                         FirstName = registerModel.FirstName,
                         LastName = registerModel.LastName,
-                        Email = registerModel.Email
+                        Email = registerModel.Email,
+                        CompanyId=registerModel.CompanyId,
                     };
 
                 try
