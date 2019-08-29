@@ -44,8 +44,8 @@ namespace Inocrea.CodaBox.Back.BackGround
             var ApiWD = new ApiWorkDrive();
             var Path = "/Users/bilal/Downloads/Coda/";
 
-            var jsonPdf = File.ReadAllText(Path + "PdfPath.json");
-            var jsonCod = File.ReadAllText(Path + "CodPath.json");
+            var jsonPdf = File.ReadAllText("PdfPath.json");
+            var jsonCod = File.ReadAllText("CodPath.json");
 
             var pdfPath = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonPdf);
             var codPath = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonCod);
@@ -91,10 +91,10 @@ namespace Inocrea.CodaBox.Back.BackGround
                         exclu += name + '\n';
                 }
 
-                //var statements = client.GetStatementsAsync(cod).Result;
-                //statements = SaveStatement(statements);
+                var statements = client.GetStatementsAsync(cod).Result;
+                statements = SaveStatement(statements);
 
-                //client.PutFeed(id, index);
+                client.PutFeed(id, index);
 
             }
 
@@ -106,7 +106,6 @@ namespace Inocrea.CodaBox.Back.BackGround
 
         private IEnumerable<Statements> SaveStatement(IEnumerable<Statements> statements)
         {
-            List<Statements> Statements = new List<Statements>();
             foreach (var st in statements)
             {
                 st.CompteBancaire = BankAccount(st.CompteBancaire);
@@ -118,7 +117,7 @@ namespace Inocrea.CodaBox.Back.BackGround
                 Db.Statements.Add(st);
                 Db.SaveChanges();
             }
-            return Statements;
+            return statements;
         }
 
         private CompteBancaire BankAccount(CompteBancaire bankAccount)
