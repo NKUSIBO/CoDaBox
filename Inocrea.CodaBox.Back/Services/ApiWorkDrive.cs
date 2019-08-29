@@ -12,7 +12,7 @@ namespace Inocrea.CodaBox.Back.Services
         public ApiWorkDrive()
         {
             var zoho = new ApiZoho();
-            SetRequestHeaders("Authorization", "Zoho-oauthtoken "+zoho.Token);
+            SetRequestHeaders("Authorization", "Zoho-oauthtoken " + zoho.Token);
         }
 
         public async Task<bool> UploadJson(string json)
@@ -34,13 +34,13 @@ namespace Inocrea.CodaBox.Back.Services
 
         public async Task UploadXls(MemoryStream stream, string fileName)
         {
-            throw new NotImplementedException();
+            var uri = new Uri(baseUrl + "parent_id=6j92v79240bb1f6d742aa9a98c72b6e85e937" + "&filename=" + fileName);
+            await PostFileAsync(uri, stream, fileName);
         }
 
         public async Task<bool> UploadFile(Stream pdf, string id, string fileName)
         {
             var uri = new Uri(baseUrl + "parent_id=" + id + "&filename=" + fileName);
-
             return await PostFilePdfAsync(uri, pdf, fileName);
         }
     }

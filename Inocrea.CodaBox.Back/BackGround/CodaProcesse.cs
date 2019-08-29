@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Inocrea.CodaBox.ApiModel.Models;
+using Inocrea.CodaBox.ApiServer.Models;
 using Inocrea.CodaBox.Back.Entities;
 using Inocrea.CodaBox.Back.Models;
 using Inocrea.CodaBox.Back.Services;
@@ -59,7 +60,7 @@ namespace Inocrea.CodaBox.Back.BackGround
                 var index = feed.FeedIndex;
                 var name = md.NewBalanceDate.ToString("yyyy-MM-dd") + ' ' + md.Iban;
 
-                var cod=string.Empty;
+                var cod = string.Empty;
                 var ok = true;
                 //Hack: ceci exclu les coda autre que inocrea & co
 
@@ -98,8 +99,8 @@ namespace Inocrea.CodaBox.Back.BackGround
 
             }
 
-            if(exclu!= string.Empty)
-                _=ApiWD.UploadFile(exclu, "g4xh16d20b8ee120a4156ba185622f0637fbb", id.ToString()+".txt");
+            if (exclu != string.Empty)
+                _ = ApiWD.UploadFile(exclu, "g4xh16d20b8ee120a4156ba185622f0637fbb", id.ToString() + ".txt");
 
             return feedStatements;
         }
@@ -112,7 +113,11 @@ namespace Inocrea.CodaBox.Back.BackGround
                 foreach (var tr in st.Transactions)
                     tr.CompteBancaire = BankAccount(tr.CompteBancaire);
 
-                _ = Export.WriteTsvAsync(st.Transactions, st.Date.ToString("yyyy-MM-dd") + ' ' + st.CompteBancaire.Iban + ".xls");
+                List<TrasactionXls> trasactionXls = new List<TrasactionXls>();
+                foreach (var tr in st.Transactions)
+                    trasactionXls.Add(new TrasactionXls(tr));
+
+                _ = Export.WriteTsvAsync(trasactionXls, st.Date.ToString("yyyy-MM-dd") + ' ' + st.CompteBancaire.Iban + ".xls");
 
                 Db.Statements.Add(st);
                 Db.SaveChanges();

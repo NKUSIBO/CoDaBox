@@ -93,6 +93,14 @@ namespace Inocrea.CodaBox.Back.Services
             return true;
         }
 
+        protected async Task<bool> PostFileAsync(Uri uri, MemoryStream data, string fileName)
+        {
+            var formContent = new MultipartFormDataContent();
+            formContent.Add(new StreamContent(data), "content", fileName);
+            var rep = await PostAsync(uri, formContent);
+            return true;
+        }
+
         protected async Task<string> PostAsync(Uri uri, HttpContent content=null)
         {
             HttpResponseMessage response = null;
