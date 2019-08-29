@@ -33,6 +33,7 @@ namespace Inocrea.CodaBox.ApiModel.Models
         [ForeignKey("CompteBancaire")]
         public int CompteBancaireId { get; set; }
 
+        [JsonIgnore]
 
         public virtual CompteBancaire CompteBancaire { get; set; }
         [JsonIgnore]

@@ -19,24 +19,24 @@ namespace Inocrea.CodaBox.CodaApiClient
     {
         readonly ApiServerCoda _api = new ApiServerCoda();
        
-        private List<Statements> repSta = new List<Statements>();
+        private List<StatementAccountViewModel> repSta = new List<StatementAccountViewModel>();
 
         private List<Transactions> repTra = new List<Transactions>();
 
         public async Task<List<StatementAccountViewModel>> GetStatementsAccountVm()
         {
             await GetStatements();
-            return await GetBusinessStatements
-               (repSta);
+            return 
+               repSta;
         }
-        public async Task<List<Statements>> GetStatements()
+        public async Task<List<StatementAccountViewModel>> GetStatements()
         {
           
             var requestUrl = CreateRequestUri(string.Format(System.Globalization.CultureInfo.CurrentCulture,
                 "api/Statements"));
 
 
-            repSta =  await  GetAsync<Statements>(requestUrl);
+            repSta =  await  GetAsync<StatementAccountViewModel>(requestUrl);
 
 
 
@@ -128,10 +128,10 @@ namespace Inocrea.CodaBox.CodaApiClient
             foreach (var transactions in transactionsList)
             {
                 TransactionsAccountViewModel tra = new TransactionsAccountViewModel();
-                CompteBancaire cp = new CompteBancaire();
+
                 //cp = transactions.CompteBancaire;
-                //cp = GetCompteBancaire(transactions.CompteBancaireId).Result;
-                cp = transactions.CompteBancaire;
+                CompteBancaire cp = GetCompteBancaire(transactions.CompteBancaireId).Result;
+                transactions.CompteBancaire=cp;
                 tra.Amount = transactions.Amount;
                 tra.Message = transactions.Message;
                 tra.StructuredMessage = transactions.StructuredMessage;

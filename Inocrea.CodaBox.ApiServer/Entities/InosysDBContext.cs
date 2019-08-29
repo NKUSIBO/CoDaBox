@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using Inocrea.CodaBox.ApiModel.Models;
+using Inocrea.CodaBox.ApiModel.ViewModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -13,7 +14,7 @@ namespace Inocrea.CodaBox.ApiServer.Entities
 
         public InosysDBContext(DbContextOptions<InosysDBContext> options) : base(options) { }
 
-
+        
         public virtual DbSet<CompteBancaire> CompteBancaire { get; set; }
         public virtual DbSet<Statements> Statements { get; set; }
         public virtual DbSet<Transactions> Transactions { get; set; }

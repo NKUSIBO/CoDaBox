@@ -47,8 +47,16 @@ namespace Inocrea.CodaBox.ApiServer.Controllers
         [HttpGet("{statementId}")]
         public async Task<List<Transactions>> GetTransactionsByStatement(int statementId)
         {
-            var transactions = await _context.Transactions.Where(i=>i.StatementId==statementId).Include(t=>t.CompteBancaire).ToListAsync();
-            return transactions;
+            try
+            {
+                var transactions = await _context.Transactions.Where(i => i.StatementId == statementId).Include(t => t.CompteBancaire).ToListAsync();
+                return transactions;
+            }
+            catch (System.Exception ex)
+            {
+
+                throw ex;
+            }
         }
 
     }

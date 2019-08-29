@@ -40,7 +40,7 @@ namespace Inocrea.CodaBox.CodaApiClient
             {
                 response = await _httpClient.GetAsync(requestUrl, HttpCompletionOption.ResponseHeadersRead);
                 response.EnsureSuccessStatusCode();
-                var data1 =  response.Content.ReadAsStringAsync().Result;
+                var data1 = await  response.Content.ReadAsStringAsync();
 
                 var stat = JsonConvert.DeserializeObject<List<T>>(data1);
                 response.EnsureSuccessStatusCode();

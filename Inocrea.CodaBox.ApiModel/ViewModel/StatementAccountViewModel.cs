@@ -9,6 +9,8 @@ namespace Inocrea.CodaBox.ApiModel.ViewModel
 {
     public class StatementAccountViewModel
     {
+       
+
         [DataMember]
         public double InitialBalance { get; set; }
         [DataMember]
@@ -25,7 +27,7 @@ namespace Inocrea.CodaBox.ApiModel.ViewModel
                 return Date.ToString("dd/MM/yyyy");
             }
         }
-
+        [Key]
         [DataMember]
         public int StatementId { get; set; }
         [DataMember]

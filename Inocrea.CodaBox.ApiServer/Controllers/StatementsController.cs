@@ -9,6 +9,7 @@ using Inocrea.CodaBox.ApiServer.Entities;
 
 using Microsoft.AspNetCore.Authorization;
 using Inocrea.CodaBox.ApiModel.Models;
+using Inocrea.CodaBox.ApiModel.ViewModel;
 using Microsoft.AspNetCore.Identity;
 
 namespace Inocrea.CodaBox.ApiServer.Controllers
