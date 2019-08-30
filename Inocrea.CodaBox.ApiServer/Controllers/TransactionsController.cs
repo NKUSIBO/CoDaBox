@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -8,6 +9,7 @@ using Inocrea.CodaBox.ApiServer.Entities;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Authorization;
 using Inocrea.CodaBox.ApiModel.Models;
+using Inocrea.CodaBox.ApiModel.ViewModel;
 
 namespace Inocrea.CodaBox.ApiServer.Controllers
 {
@@ -58,6 +60,22 @@ namespace Inocrea.CodaBox.ApiServer.Controllers
                 throw ex;
             }
         }
+        [HttpGet("{statementId}/{datepickerStart}/{datepickerEnd}")]
+        public  IEnumerable<Transactions> GetTransactionsByDate(int statementId,  DateTime? datepickerStart,  DateTime? datepickerEnd)
+        {
+            try
+            {
 
+                
+                var userN = HttpContext.User.Identities.FirstOrDefault()?.Claims.FirstOrDefault()?.Value;
+                var transactionsByDate =  _context.Set<Transactions>().FromSql("dbo.sp_transactionByDate @StartDate = {0},@EndDate = {1},@UserName = {2},@StatementId = {3}", datepickerStart, datepickerEnd, userN, statementId);
+                return transactionsByDate;
+            }
+            catch (System.Exception ex)
+            {
+
+                throw ex;
+            }
+        }
     }
 }

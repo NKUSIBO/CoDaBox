@@ -30,9 +30,9 @@ namespace Inocrea.CodaBox.Web.Entities
         public int AccessFailedCount { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string IdCompany { get; set; }
+        public int CompanyId { get; set; }
 
-        public Company IdCompanyNavigation { get; set; }
+        public Company Company { get; set; }
         public ICollection<AspNetUserClaims> AspNetUserClaims { get; set; }
         public ICollection<AspNetUserLogins> AspNetUserLogins { get; set; }
         public ICollection<AspNetUserRoles> AspNetUserRoles { get; set; }

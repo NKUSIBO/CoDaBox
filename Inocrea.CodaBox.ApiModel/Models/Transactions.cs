@@ -26,7 +26,7 @@ namespace Inocrea.CodaBox.ApiModel.Models
         public DateTime ValueDate { get; set; }
         public double Amount { get; set; }
         public string Message { get; set; }
-        public int? AdresseId { get; set; }
+      
 
         [ForeignKey("Statements")]
         public int StatementId { get; set; }

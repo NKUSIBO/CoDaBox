@@ -11,12 +11,29 @@
     <EmbeddedResource Remove="Entities\**" />
     <None Remove="Entities\**" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Entities\AspNetRoleClaims.cs" />
+    <Compile Include="Entities\AspNetRoles.cs" />
+    <Compile Include="Entities\AspNetUserClaims.cs" />
+    <Compile Include="Entities\AspNetUserLogins.cs" />
+    <Compile Include="Entities\AspNetUserRoles.cs" />
+    <Compile Include="Entities\AspNetUsers.cs" />
+    <Compile Include="Entities\AspNetUserTokens.cs" />
+    <Compile Include="Entities\Company.cs" />
+    <Compile Include="Entities\CompteBancaire.cs" />
+    <Compile Include="Entities\INosysDevContext.cs" />
+    <Compile Include="Entities\SepaDirectDebits.cs" />
+    <Compile Include="Entities\Statements.cs" />
+    <Compile Include="Entities\Transactions.cs" />
+  </ItemGroup>
   <ItemGroup>
     <Content Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Bootstrap.Datepicker" Version="1.8.0.1" />
     <PackageReference Include="ClosedXML" Version="0.94.2" />
     <PackageReference Include="Microsoft.AspNetCore.App">
       <PrivateAssets Condition="'%(PackageReference.Version)' == ''">all</PrivateAssets>
@@ -27,6 +44,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="2.1.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.9" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="PagedList.Mvc" Version="4.5.0" />
     <PackageReference Include="System.Linq.Dynamic.Core" Version="1.0.18" />
   </ItemGroup>
 

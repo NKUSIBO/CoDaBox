@@ -23,7 +23,8 @@ namespace Inocrea.CodaBox.Web.Controllers
     {
         public static int _index;
         private readonly IOptions<SettingsModels> _appSettings;
-
+        DateTime dateIn=new DateTime();
+        DateTime dateOut = new DateTime();
         private  static List<TransactionsAccountViewModel> _listData = new List<TransactionsAccountViewModel>();
 
         private static string _name = "";
@@ -40,15 +41,46 @@ namespace Inocrea.CodaBox.Web.Controllers
             return View();
         }
 
+        public async Task<ActionResult> IndexByDate(DateTime? datepickerStart, DateTime? datepickerEnd)
+        {
+            List<TransactionsAccountViewModel> data = await ApiClientFactory.Instance.GetTransactionsByDateAsync(_index, datepickerStart, datepickerEnd);
+            try
+            {
+                _listData.Clear();
+                _listData = ProcessCollection(data, requestFormData);
+                int transFiltered = GetTotalRecordsFiltered(requestFormData, data, _listData);
+                dynamic response = new
+                {
+                    data = _listData,
+                    draw = requestFormData["draw"],
+                    recordsFiltered = transFiltered,
+                    recordsTotal = data.Count
+                };
+                ViewBag.Tra = data;
+                return View(data);
+
+
+            }
+            catch (Exception ex)
+            {
+
+                return NotFound();
+            }
+
+
+            return View();
+        }
+
         ApiServerCoda _api = new ApiServerCoda();
 
         private static List<TransactionsAccountViewModel> listData = new List<TransactionsAccountViewModel>();
         private static string name = "";
-       
+        private static IFormCollection requestFormData;
+
         public async Task<IActionResult> TransactionsByStatements(int statementId)
 
         {
-            var requestFormData = Request.Form;
+             requestFormData = Request.Form;
             List<TransactionsAccountViewModel> data = await ApiClientFactory.Instance.GetTransactions(_index);
             try
             {
@@ -77,7 +109,39 @@ namespace Inocrea.CodaBox.Web.Controllers
            
 
         }
-       
+        [HttpPost]
+        public async Task<ActionResult> TransactionByDate(DateTime? datepickerStart, DateTime? datepickerEnd)
+        {
+
+
+            
+            List<TransactionsAccountViewModel> data =await  ApiClientFactory.Instance.GetTransactionsByDateAsync(_index, datepickerStart, datepickerEnd);
+            try
+            {
+                _listData.Clear();
+                _listData = ProcessCollection(data, requestFormData);
+                int transFiltered = GetTotalRecordsFiltered(requestFormData, data, _listData);
+                dynamic response = new
+                {
+                    data = _listData,
+                    draw = requestFormData["draw"],
+                    recordsFiltered = transFiltered,
+                    recordsTotal = data.Count
+                };
+                return Ok(response);
+
+
+            }
+            catch (Exception ex)
+            {
+
+                return NotFound();
+            }
+
+
+           
+        }
+
         private List<TransactionsAccountViewModel> ProcessCollection(List<TransactionsAccountViewModel> lstElements, Microsoft.AspNetCore.Http.IFormCollection requestFormData)
         {
             string searchText = string.Empty;

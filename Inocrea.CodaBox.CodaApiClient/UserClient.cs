@@ -1,6 +1,7 @@
 ﻿using Inocrea.CodaBox.ApiModel;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 
@@ -168,5 +169,34 @@ namespace Inocrea.CodaBox.CodaApiClient
             return await PostAsync<LoginModel>(requestUrl,null);
         }
 
+        public async Task<List<TransactionsAccountViewModel>> GetTransactionsByDateAsync(int statementId, DateTime? datepickerStart, DateTime? datepickerEnd)
+        {
+            string startDate = null;
+            string endDate = null;
+            List<TransactionsAccountViewModel> returnList =new List<TransactionsAccountViewModel>();
+            if (datepickerStart != null)
+            {
+                 startDate = datepickerStart.Value.Date.ToString("MM/dd/yyyy");
+                 startDate = startDate.Replace("/", "-");
+                 startDate = startDate.Replace(" 00:00:00", "%2000%3A00%3A00");
+            }
+
+            if (datepickerEnd != null)
+            {
+                 endDate = datepickerEnd.Value.Date.ToString("MM/dd/yyyy");
+                 endDate = endDate.Replace("/", "-");
+                 endDate = endDate.Replace(" 00:00:00", "%2000%3A00%3A00");
+
+            }
+
+            string parameters = statementId+"/"+ startDate +"/"+ endDate;
+            var requestUrl = CreateRequestUri(string.Format(System.Globalization.CultureInfo.InvariantCulture,
+                "api/transactions/GetTransactionsByDate/" + parameters));
+
+            repTra = await GetAsync<Transactions>(requestUrl);
+         
+           
+            return   GetBusinessTransactions(repTra); ;
+        }
     }
 }

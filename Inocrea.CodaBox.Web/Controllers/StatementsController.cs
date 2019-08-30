@@ -26,7 +26,8 @@ namespace Inocrea.CodaBox.Web.Controllers
 
         private static List<StatementAccountViewModel> _listData = new List<StatementAccountViewModel>();
         private static string _name = "";
-
+        private static DateTime? StartDate;
+        private static DateTime? EndDate;
         public StatementsController(IOptions<SettingsModels> app)
         {
             _appSettings = app;
@@ -225,7 +226,18 @@ namespace Inocrea.CodaBox.Web.Controllers
 
 
         }
+        [HttpPost]
+        public ActionResult TransactionByDate([FromQuery]DateTime? datepickerStart, [FromQuery] DateTime? datepickerEnd)
+        {
+            StartDate = datepickerStart;
+            EndDate = datepickerEnd;
 
-       
+
+            return View("Index");
+        }
+
+
+
+
     }
 }

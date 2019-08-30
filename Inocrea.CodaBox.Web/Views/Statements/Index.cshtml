@@ -1,111 +1,145 @@
-﻿@model IEnumerable<Inocrea.CodaBox.ApiModel.ViewModel.StatementAccountViewModel>
+﻿<!--  jQuery -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 
-    @{
+<!-- Isolated Version of Bootstrap, not needed if your site already uses Bootstrap -->
+<link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso.css" />
+
+<!-- Bootstrap Date-Picker Plugin -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css" />
+<script>
+    $(function () {
+        $("#datetimepicker2").datepicker();
+    });
+</script>
+
+
+@model IEnumerable<Inocrea.CodaBox.ApiModel.ViewModel.StatementAccountViewModel>
+
+@{
     Layout = "_Layout";
-    }
+}
 
-    @section styles {
-        <link rel='stylesheet' type='text/css' href='https://cdn.datatables.net/v/dt/dt-1.10.13/datatables.min.css' />
-    }
-    <div class='row'>
+@section styles {
+    <link rel='stylesheet' type='text/css' href='https://cdn.datatables.net/v/dt/dt-1.10.13/datatables.min.css' />
+}
+<div class="container" style="margin-top: 10%">
+    <div>
+        <p>
+            <a asp-action="ExportTransactions">Export testaments to Excel</a>
+        </p>
+    </div>
+             
 
-        <div>
-            <div>
-                <p>
-                    <a asp-action="ExportTransactions">Export testaments to Excel</a>
-                </p>
-            </div>
-            <div class='panel-body'>
-                <table id='example' class='table table-striped  table-hover '>
-                    <thead>
-
-
-                        <tr>
-
-
-
+    <form action="Statements/TransactionByDate" method="POST">
+        <input type="date" name="datepickerStart" />
+        <input type="date" name="datepickerEnd" />
+        <input type="submit" value="search by date" />
+    </form> 
+        <div class="row">
+          
 
 
-                            <th>
-                                @Html.DisplayNameFor(model => model.StatementId)
-                            </th>
-
-                            <th>
-                                @Html.DisplayNameFor(model => model.Iban)
-                            </th>
 
 
-                            <th>
-                                @Html.DisplayNameFor(model => model.InformationalMessage)
-                            </th>
+            <div class='row'>
 
-                            <th>
-                                @Html.DisplayNameFor(model => model.Date)
-                            </th>
+                <div>
 
-                            <th>
-                                @Html.DisplayNameFor(model => model.IdentificationNumber)
-                            </th>
+                    <div class='panel-body'>
+                        <table id='example' class='table table-striped  table-hover '>
+                            <thead>
 
-                            <th>
-                                @Html.DisplayNameFor(model => model.CurrencyCode)
-                            </th>
 
-                            <th>
-                                @Html.DisplayNameFor(model => model.Bic)
-
-                            </th>
+                                <tr>
 
 
 
 
 
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.StatementId)
+                                    </th>
+
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Iban)
+                                    </th>
 
 
-                            <th>
-                                @Html.DisplayNameFor(model => model.NewBalance)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.InitialBalance)
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.InformationalMessage)
+                                    </th>
 
-                            </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Date)
+                                    </th>
+
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.IdentificationNumber)
+                                    </th>
+
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.CurrencyCode)
+                                    </th>
+
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Bic)
+
+                                    </th>
 
 
-                        </tr>
-                    </thead>
 
-                </table>
+
+
+
+
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.NewBalance)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.InitialBalance)
+
+                                    </th>
+
+
+                                </tr>
+                            </thead>
+
+                        </table>
+                    </div>
+                </div>
+
             </div>
         </div>
+</div>
+@section scripts {
+    <script type='text/javascript' src='https://cdn.datatables.net/v/dt/dt-1.10.13/datatables.min.js'></script>
+   
+    <script>
+            var yourGlobalVariable;
+            $(document).ready(function () {
+                var table = $('#example')
+                    .DataTable({
+                        'processing': true,
+                        'serverSide': true,
 
-    </div>
-    @section scripts {
-        <script type='text/javascript' src='https://cdn.datatables.net/v/dt/dt-1.10.13/datatables.min.js'></script>
-        <script>
-        var yourGlobalVariable;
-        $(document).ready(function () {
-            var table = $('#example')
-                .DataTable({
-                    'processing': true,
-                    'serverSide': true,
+                        'ajax': {
 
-                    'ajax': {
+                            'url': 'Statements/LoadTransaction',
+                            ' dataFilter': function(data) {
+                                var json = jQuery.parseJSON(data);
+                                json.recordsTotal = json.total;
+                                json.recordsFiltered = json.total;
+                                json.data = json.list;
 
-                        'url': 'Statements/LoadTransaction',
-                        ' dataFilter': function(data) {
-                            var json = jQuery.parseJSON(data);
-                            json.recordsTotal = json.total;
-                            json.recordsFiltered = json.total;
-                            json.data = json.list;
+                                return JSON.stringify(json); // return JSON string
+                            },
 
-                            return JSON.stringify(json); // return JSON string
+                            'type': 'POST'
+
                         },
-
-                        'type': 'POST'
-
-                    },
-                    'data': yourGlobalVariable,
-                    'columns':
+                        'data': yourGlobalVariable,
+                        'columns':
                         [
                             { data: 'StatementId', name: 'StatementId', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
                             { data: 'Iban', name: 'Iban', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
@@ -121,40 +155,40 @@
 
                         ],
 
-                    'ordering': true,
-                    'paging': true,
-                    'searching': true,
-                    'pagingType': 'full_numbers',
-                    'pageLength': 10
+                        'ordering': true,
+                        'paging': true,
+                        'searching': true,
+                        'pagingType': 'full_numbers',
+                        'pageLength': 10
 
 
 
-                });
+                    });
 
                 //now use AJAX with data, which is on the form [ { col1 : value, col2: value ..}]
 
-            //$('#example').on('dblclick','tr', function() {
-            //    var currentRowData = table.row(this).data();
-            //    alert(currentRowData[1]); // wil give you the value of this clicked row and first index (td)
-            //    //your stuff goes here
-            //});
-            //$('#example').on('click',
-            //    'tbody tr',
-            //    function() {
-            //        console.log('API row values : ', table.row(this).data());
-            //        alert(table.row(this).data().);
-            //    });
+                //$('#example').on('dblclick','tr', function() {
+                //    var currentRowData = table.row(this).data();
+                //    alert(currentRowData[1]); // wil give you the value of this clicked row and first index (td)
+                //    //your stuff goes here
+                //});
+                //$('#example').on('click',
+                //    'tbody tr',
+                //    function() {
+                //        console.log('API row values : ', table.row(this).data());
+                //        alert(table.row(this).data().);
+                //    });
 
 
 
-            $("#example tbody").delegate("tr", "dblclick", function () {
+                $("#example tbody").delegate("tr", "dblclick", function () {
 
-                var firstCellText = $("td:first", this).text();
+                    var firstCellText = $("td:first", this).text();
 
-                window.open('../Transactions?index='+firstCellText);
-                @*window.location.href = "@Url.Action("Index", "Transactions")" + "/" + firstCellText;*@
+                    window.open('../Transactions?index='+firstCellText);
+                    @*window.location.href = "@Url.Action("Index", "Transactions")" + "/" + firstCellText;*@
+                });
             });
-        });
             //$('#example thead tr').clone(true).appendTo( '#example thead' );
             //$('#example thead tr:eq(1) th').each( function (i) {
             //    var title = $(this).text();
@@ -249,8 +283,8 @@
 
             //        });
             //})(jQuery);
-        </script>
-    }
+    </script>
+}
 
 
 
