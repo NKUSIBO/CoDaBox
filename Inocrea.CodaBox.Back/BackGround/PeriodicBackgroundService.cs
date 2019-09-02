@@ -24,7 +24,7 @@ namespace Inocrea.CodaBox.Back.BackGround
                         _cts = CancellationTokenSource.CreateLinkedTokenSource(stoppingToken);
                     }
 
-                    await Task.Delay(TimeSpan.FromDays(1), _cts.Token);
+                    await Task.Delay(TimeSpan.FromHours(8), _cts.Token);
                     stoppingToken.ThrowIfCancellationRequested();
 
                 }
