@@ -15,12 +15,7 @@
                 <a asp-action="ExportTransactions">Export testaments to Excel</a>
             </p>
         </div>
-        <form action="/TransactionByDate" method="POST">
-            <input type="date" name="datepickerStart" />
-            <input type="date" name="datepickerEnd" />
-
-            <input type="submit" value="search by date" />
-        </form>
+     
 
         <div class='panel-body'>
             <table id='example' class='table table-striped  table-hover '>
@@ -88,7 +83,7 @@
                                 @Html.DisplayFor(modelItem => item.ValueDate)
                             </th>
                             </tr>
-                        };
+                        }
 
                   
 
@@ -105,59 +100,62 @@
 @section scripts {
     <script type='text/javascript' src='https://cdn.datatables.net/v/dt/dt-1.10.13/datatables.min.js'></script>
     <script>
-        $(document).ready(function() {
-            $('#example').DataTable();
-        } );
-        //$(document).ready(function () {
-        //    var table = $('#example')
-        //        .DataTable({
-        //            'processing': true,
-        //            'serverSide': true,
+      
+        $(document).ready(function () {
+            var table = $('#example')
+                .DataTable({
+                    'processing': true,
+                    'serverSide': true,
 
-        //            'ajax': {
-        //                'url': 'Transactions/TransactionByDate',
-        //                ' dataFilter': function (data) {
-        //                    var json = jQuery.parseJSON(data);
-        //                    json.recordsTotal = json.total;
-        //                    json.recordsFiltered = json.total;
-        //                    json.data = json.list;
+                    'ajax': {
+                        'url': 'Transactions/IndexByDate',
+                        ' dataFilter': function (data) {
+                            var json = jQuery.parseJSON(data);
+                            json.recordsTotal = json.total;
+                            json.recordsFiltered = json.total;
+                            json.data = json.list;
 
-        //                    return JSON.stringify(json); // return JSON string
-        //                },
+                            return JSON.stringify(json); // return JSON string
+                        },
 
-        //                'type': 'POST'
+                        'type': 'POST'
 
-        //            },
+                    },
 
-        //            'columns':
-        //                [
+                    'columns':
+                        [
 
-        //                    { data: 'CurrencyCode', name: 'CurrencyCode', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
-        //                    { data: 'Iban', name: 'Iban', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
-        //                    { data: 'Bic', name: 'Bic', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
+                            { data: 'CurrencyCode', name: 'CurrencyCode', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
+                            { data: 'Iban', name: 'Iban', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
+                            { data: 'Bic', name: 'Bic', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
 
-        //                    { data: 'Amount', name: 'Amount', 'sDefaultContent': '0', 'autoWidth': true },
+                            { data: 'Amount', name: 'Amount', 'sDefaultContent': '0', 'autoWidth': true },
 
-        //                    { data: 'Message', name: 'Message', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
-        //                    { data: 'Date', name: 'Date', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
+                            { data: 'Message', name: 'Message', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
+                            { data: 'Date', name: 'Date', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
 
 
-        //                    //{ data: 'TransactionDateFrmt', name: 'TransactionDateFrmt', 'sDefaultContent': '0-0-0000', 'autoWidth': true }
+                            //{ data: 'TransactionDateFrmt', name: 'TransactionDateFrmt', 'sDefaultContent': '0-0-0000', 'autoWidth': true }
 
 
-        //                ],
+                        ],
 
-        //            'ordering': true,
-        //            'paging': true,
-        //            'searching': true,
-        //            'pagingType': 'full_numbers',
-        //            'pageLength': 10
+                    'ordering': true,
+                    'paging': true,
+                    'searching': true,
+                    'pagingType': 'full_numbers',
+                    'pageLength': 10
 
 
 
-        //        });
-        //   });
+                });
+           });
+        $.fn.dataTable.ext.errMode = 'none';
 
+        $('#example').on( 'error.dt', function ( e, settings, techNote, message ) {
+            console.log( 'An error has been reported by DataTables: ', message );
+        } ) .DataTable();
+        $('#example').DataTable();
     </script>
 }
 

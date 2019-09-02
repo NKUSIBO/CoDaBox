@@ -41,9 +41,38 @@ namespace Inocrea.CodaBox.Web.Controllers
             return View();
         }
 
-        public async Task<ActionResult> IndexByDate(DateTime? datepickerStart, DateTime? datepickerEnd)
+        //public async Task<ActionResult> IndexByDate(DateTime? datepickerStart, DateTime? datepickerEnd)
+        //{
+        //    List<TransactionsAccountViewModel> data = await ApiClientFactory.Instance.GetTransactionsByDateAsync(_index, datepickerStart, datepickerEnd);
+        //    try
+        //    {
+        //        _listData.Clear();
+        //        _listData = ProcessCollection(data, requestFormData);
+        //        int transFiltered = GetTotalRecordsFiltered(requestFormData, data, _listData);
+        //        dynamic response = new
+        //        {
+        //            data = _listData,
+        //            draw = requestFormData["draw"],
+        //            recordsFiltered = transFiltered,
+        //            recordsTotal = data.Count
+        //        };
+        //        ViewBag.Tra = data;
+        //        return View(data);
+
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+        //        return NotFound();
+        //    }
+
+
+        //    return View();
+        //}
+        public async Task<ActionResult> IndexByDate(string Iban,DateTime? datepickerStart, DateTime? datepickerEnd)
         {
-            List<TransactionsAccountViewModel> data = await ApiClientFactory.Instance.GetTransactionsByDateAsync(_index, datepickerStart, datepickerEnd);
+            List<TransactionsAccountViewModel> data = await ApiClientFactory.Instance.GetTransactionsByDateIban(Iban, datepickerStart, datepickerEnd);
             try
             {
                 _listData.Clear();
@@ -70,7 +99,6 @@ namespace Inocrea.CodaBox.Web.Controllers
 
             return View();
         }
-
         ApiServerCoda _api = new ApiServerCoda();
 
         private static List<TransactionsAccountViewModel> listData = new List<TransactionsAccountViewModel>();
@@ -110,12 +138,12 @@ namespace Inocrea.CodaBox.Web.Controllers
 
         }
         [HttpPost]
-        public async Task<ActionResult> TransactionByDate(DateTime? datepickerStart, DateTime? datepickerEnd)
+        public async Task<ActionResult> TransactionByDate(string iban,DateTime? datepickerStart, DateTime? datepickerEnd)
         {
 
 
             
-            List<TransactionsAccountViewModel> data =await  ApiClientFactory.Instance.GetTransactionsByDateAsync(_index, datepickerStart, datepickerEnd);
+            List<TransactionsAccountViewModel> data =await  ApiClientFactory.Instance.GetTransactionsByDateIban(iban, datepickerStart, datepickerEnd);
             try
             {
                 _listData.Clear();
@@ -141,7 +169,38 @@ namespace Inocrea.CodaBox.Web.Controllers
 
            
         }
+        [HttpPost]
+        public async Task<ActionResult> TransactionByDateIban(string iban,DateTime? datepickerStart, DateTime? datepickerEnd)
+        {
 
+
+
+            List<TransactionsAccountViewModel> data = await ApiClientFactory.Instance.GetTransactionsByDateIban(iban, datepickerStart, datepickerEnd);
+            try
+            {
+                _listData.Clear();
+                _listData = ProcessCollection(data, requestFormData);
+                int transFiltered = GetTotalRecordsFiltered(requestFormData, data, _listData);
+                dynamic response = new
+                {
+                    data = _listData,
+                    draw = requestFormData["draw"],
+                    recordsFiltered = transFiltered,
+                    recordsTotal = data.Count
+                };
+                return Ok(response);
+
+
+            }
+            catch (Exception ex)
+            {
+
+                return NotFound();
+            }
+
+
+
+        }
         private List<TransactionsAccountViewModel> ProcessCollection(List<TransactionsAccountViewModel> lstElements, Microsoft.AspNetCore.Http.IFormCollection requestFormData)
         {
             string searchText = string.Empty;

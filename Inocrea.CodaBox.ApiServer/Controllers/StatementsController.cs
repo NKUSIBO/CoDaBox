@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Identity.Entities;
@@ -68,6 +69,23 @@ namespace Inocrea.CodaBox.ApiServer.Controllers
             statements.Transactions = transactions;
 
             return statements;
+        }
+        [HttpGet("{Iban}/{datepickerStart}/{datepickerEnd}")]
+        public IEnumerable<Transactions> GetTransactionsByDateIban(string Iban, DateTime? datepickerStart, DateTime? datepickerEnd)
+        {
+            try
+            {
+
+
+                var userN = HttpContext.User.Identities.FirstOrDefault()?.Claims.FirstOrDefault()?.Value;
+                var transactionsByDate = _context.Set<Transactions>().FromSql("dbo.sp_transactionByDateIban @StartDate = {0},@EndDate = {1},@UserName = {2},@Iban = {3}", datepickerStart, datepickerEnd, userN, Iban);
+                return transactionsByDate;
+            }
+            catch (System.Exception ex)
+            {
+
+                throw ex;
+            }
         }
 
     }

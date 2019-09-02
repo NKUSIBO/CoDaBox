@@ -226,16 +226,7 @@ namespace Inocrea.CodaBox.Web.Controllers
 
 
         }
-        [HttpPost]
-        public ActionResult TransactionByDate([FromQuery]DateTime? datepickerStart, [FromQuery] DateTime? datepickerEnd)
-        {
-            StartDate = datepickerStart;
-            EndDate = datepickerEnd;
-
-
-            return View("Index");
-        }
-
+       
 
 
 

@@ -198,5 +198,37 @@ namespace Inocrea.CodaBox.CodaApiClient
            
             return   GetBusinessTransactions(repTra); ;
         }
+
+        public async Task<List<TransactionsAccountViewModel>> GetTransactionsByDateIban(string Iban, DateTime? datepickerStart, DateTime? datepickerEnd)
+        {
+            string startDate = null;
+            string endDate = null;
+            List<TransactionsAccountViewModel> returnList = new List<TransactionsAccountViewModel>();
+            if (datepickerStart != null)
+            {
+                startDate = datepickerStart.Value.Date.ToString("MM/dd/yyyy");
+                startDate = startDate.Replace("/", "-");
+                startDate = startDate.Replace(" 00:00:00", "%2000%3A00%3A00");
+            }
+
+            if (datepickerEnd != null)
+            {
+                endDate = datepickerEnd.Value.Date.ToString("MM/dd/yyyy");
+                endDate = endDate.Replace("/", "-");
+                endDate = endDate.Replace(" 00:00:00", "%2000%3A00%3A00");
+
+            }
+
+            string parameters = Iban + "/" + startDate + "/" + endDate;
+            var requestUrl = CreateRequestUri(string.Format(System.Globalization.CultureInfo.InvariantCulture,
+                "api/Statements/" + parameters));
+
+            repTra = await GetAsync<Transactions>(requestUrl);
+
+
+            return GetBusinessTransactions(repTra); ;
+        }
+
+
     }
 }
