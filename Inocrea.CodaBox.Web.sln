@@ -20,7 +20,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodaParser", "CodaParser\CodaParser.csproj", "{852CA81E-2593-4565-B376-160829531524}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodaWeb", "CodaWeb\CodaWeb.csproj", "{D0B72521-F034-4F8E-987E-9D07226112BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Inocrea.CodaBox.Back", "Inocrea.CodaBox.Back\Inocrea.CodaBox.Back.csproj", "{4E1B3C88-9C49-4B91-83D3-FD9FCBA0DC01}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -56,10 +56,10 @@ Global
 		{852CA81E-2593-4565-B376-160829531524}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{852CA81E-2593-4565-B376-160829531524}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{852CA81E-2593-4565-B376-160829531524}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D0B72521-F034-4F8E-987E-9D07226112BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D0B72521-F034-4F8E-987E-9D07226112BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D0B72521-F034-4F8E-987E-9D07226112BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D0B72521-F034-4F8E-987E-9D07226112BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E1B3C88-9C49-4B91-83D3-FD9FCBA0DC01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E1B3C88-9C49-4B91-83D3-FD9FCBA0DC01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E1B3C88-9C49-4B91-83D3-FD9FCBA0DC01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E1B3C88-9C49-4B91-83D3-FD9FCBA0DC01}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

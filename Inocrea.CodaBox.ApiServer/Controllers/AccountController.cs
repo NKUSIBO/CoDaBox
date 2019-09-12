@@ -22,7 +22,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Inocrea.CodaBox.ApiServer.Controllers
 {
-     [Produces("application/json")]
+        [Produces("application/json")]
         [Route("api/[controller]")]
         [ApiController]
         [AllowAnonymous]

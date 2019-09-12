@@ -41,28 +41,21 @@ namespace Inocrea.CodaBox.ApiServer.Entities
 
             //modelBuilder.Ignore<IdentityUserRole<string>>();
 
-            modelBuilder.Entity<Company>(entity =>
-            {
-                entity.Property(e => e.Tva).HasMaxLength(50);
-            });
-           
+
 
             modelBuilder.Entity<CompteBancaire>(entity =>
             {
-                entity.HasIndex(e => e.CompanyId);
-
                 entity.HasOne(d => d.Company)
                     .WithMany(p => p.CompteBancaire)
                     .HasForeignKey(d => d.CompanyId);
             });
 
           
+
             modelBuilder.Entity<Statements>(entity =>
             {
                 entity.HasKey(e => e.StatementId)
                     .ForSqlServerIsClustered(false);
-
-                entity.HasIndex(e => e.CompteBancaireId);
 
                 entity.Property(e => e.Date).HasColumnType("date");
 
@@ -81,10 +74,6 @@ namespace Inocrea.CodaBox.ApiServer.Entities
             {
                 entity.HasKey(e => e.Id)
                     .ForSqlServerIsClustered(false);
-
-                entity.HasIndex(e => e.CompteBancaireId);
-
-                entity.HasIndex(e => e.StatementId);
 
                 entity.Property(e => e.Message).HasColumnType("text");
 

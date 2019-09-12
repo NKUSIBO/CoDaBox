@@ -9,7 +9,7 @@ namespace Inocrea.CodaBox.ApiModel.Models
     {
         public Company()
         {
-           
+
             CompteBancaire = new HashSet<CompteBancaire>();
         }
 
@@ -22,7 +22,6 @@ namespace Inocrea.CodaBox.ApiModel.Models
         public string ActivitSic { get; set; }
         public string Nentreprise { get; set; }
 
-        
         public virtual ICollection<CompteBancaire> CompteBancaire { get; set; }
 }
 }

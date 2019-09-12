@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using Inocrea.CodaBox.Web.Data;
 using Inocrea.CodaBox.Web.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -71,6 +72,8 @@ namespace Inocrea.CodaBox.Web
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<ApplicationUser>()
                 .AddEntityFrameworkStores<ApplicationUserDbContext>();
+            //services.AddDefaultIdentity<IdentityUser>()
+            //    .AddEntityFrameworkStores<IdentityDbContext>();
             services.Configure<SettingsModels>(Configuration.GetSection("ApiSettings"));
             services.Configure<SettingsModelsApiServer>(Configuration.GetSection("ApiServerSettings"));
          

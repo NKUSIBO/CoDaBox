@@ -20,16 +20,16 @@ namespace Inocrea.CodaBox.CodaApiClient
     {
         readonly ApiServerCoda _api = new ApiServerCoda();
        
-        private List<StatementAccountViewModel> repSta = new List<StatementAccountViewModel>();
+        private List<Statements> repSta = new List<Statements>();
 
         private List<Transactions> repTra = new List<Transactions>();
 
-        public async Task<List<StatementAccountViewModel>> GetStatementsAccountVm()
-        {
-            await GetStatements();
-            return 
-               repSta;
-        }
+        //public async Task<List<StatementAccountViewModel>> GetStatementsAccountVm()
+        //{
+        //    await GetStatements();
+        //    return 
+        //       repSta;
+        //}
         public async Task<List<StatementAccountViewModel>> GetStatements()
         {
           
@@ -37,13 +37,12 @@ namespace Inocrea.CodaBox.CodaApiClient
                 "api/Statements"));
 
 
-            repSta =  await  GetAsync<StatementAccountViewModel>(requestUrl);
+            repSta =  await  GetAsync<Statements>(requestUrl);
 
 
 
-            return repSta;
-            //return await GetBusinessStatementsAsync
-            //    (repSta);
+            
+            return  GetBusinessStatements(repSta);
         }
 
         public async Task<List<TransactionsAccountViewModel>> GetTransactions(int statementId)
@@ -90,19 +89,19 @@ namespace Inocrea.CodaBox.CodaApiClient
 
             return role;
         }
-     
-        private async Task<List<StatementAccountViewModel>> GetBusinessStatements(List<Statements> statementsList )
+
+        private List<StatementAccountViewModel> GetBusinessStatements(List<Statements> statementsList)
 
         {
-            List<StatementAccountViewModel> listStateAccountViewModels=new List<StatementAccountViewModel>();
+            List<StatementAccountViewModel> listStateAccountViewModels = new List<StatementAccountViewModel>();
             foreach (var statement in statementsList)
             {
                 StatementAccountViewModel sta = new StatementAccountViewModel();
-                CompteBancaire cp=new CompteBancaire();
-                //cp = await GetCompteBancaire(statement.CompteBancaireId);
+                CompteBancaire cp = new CompteBancaire();
+                cp = GetCompteBancaire(statement.CompteBancaireId).Result;
                 //cp = GetCompte(statement.CompteBancaireId).Result;
-                cp = statement.CompteBancaire;
-                
+                statement.CompteBancaire=cp;
+
                 sta.StatementId = statement.StatementId;
                 sta.Date = statement.Date;
                 sta.InitialBalance = statement.InitialBalance;
@@ -112,7 +111,7 @@ namespace Inocrea.CodaBox.CodaApiClient
                 sta.Bic = cp.Bic;
                 sta.InformationalMessage = statement.InformationalMessage;
                 sta.CurrencyCode = cp.CurrencyCode;
-               
+
                 listStateAccountViewModels.Add(sta);
 
             }
