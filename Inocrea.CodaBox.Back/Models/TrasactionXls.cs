@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Linq;
+
 using Inocrea.CodaBox.ApiModel.Models;
+using Inocrea.CodaBox.Back.Entities;
 
 namespace Inocrea.CodaBox.ApiServer.Models
 {
@@ -16,6 +19,15 @@ namespace Inocrea.CodaBox.ApiServer.Models
             Montant = transactions.Amount;
             Description = transactions.StructuredMessage;
             Bénéficiaire = transactions.CompteBancaire.Iban;
+        }
+
+        private void GetDescription(Transactions transactions)
+        {
+            //nom du client + numero de facture (communication structuré)
+            var db = new InosysDBContext();
+            var co = db.CompteBancaire.Where(cb => cb.Id == transactions.CompteBancaireId).First();
+            var iban = co.Iban;
+            var com = transactions.StructuredMessage;
         }
     }
 }

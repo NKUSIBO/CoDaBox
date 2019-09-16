@@ -32,8 +32,8 @@ namespace Inocrea.CodaBox.Back.BackGround
             foreach (var feed in feedClients)
             {
                 var id = feed.Id;
-                //var feedEntries = client.GetRedownloadFeed(id);
-                var feedEntries = client.GetFeed(id);
+                var feedEntries = client.GetRedownloadFeed(id);
+                //var feedEntries = client.GetFeed(id);
                 var cod = GetCodasAsync(feedEntries, id);
                 if (cod != null) allStatements.AddRange(cod);
             }
@@ -72,31 +72,37 @@ namespace Inocrea.CodaBox.Back.BackGround
                 }
                 if (codPath.ContainsKey(md.Iban))
                 {
-                    //cod = client.GetCodaRedownFile(index, "cod");
-                    cod = client.GetCodaFile(index, "cod");
+                    cod = client.GetCodaRedownFile(index, "cod");
+                    //cod = client.GetCodaFile(index, "cod");
                     var directory = codPath[md.Iban];
-                    var codOk = ApiWD.UploadFile(cod, directory, name + ".cod").Result;
-                    _ = ApiWD.UploadFile(cod, "g4xh16d20b8ee120a4156ba185622f0637fbb", name + ".cod");
+                    //var codOk = ApiWD.UploadFile(cod, directory, name + ".cod").Result;
+                    var codOk = ApiWD.UploadFile(cod, "ghs3qc80dd0c25d4c4c78b654b1a91a279501", name + ".cod").Result;
 
                     if (!codOk)
+                    {
                         exclu += name + '\n';
+                        continue;
+                    }
                 }
-                if (pdfPath.ContainsKey(md.Iban))
-                {
-                    //var pdf = client.GetCodaRedownFilePdf(index, "pdf");
-                    var pdf = client.GetCodaFilePdf(index, "pdf");
-                    var directory = pdfPath[md.Iban];
-                    var pdfOk = ApiWD.UploadFile(pdf, directory, name + ".pdf").Result;
-                    _ = ApiWD.UploadFile(pdf, "g4xh16d20b8ee120a4156ba185622f0637fbb", name + ".pdf");
+                //if (pdfPath.ContainsKey(md.Iban))
+                //{
+                //    //var pdf = client.GetCodaRedownFilePdf(index, "pdf");
+                //    var pdf = client.GetCodaFilePdf(index, "pdf");
+                //    var directory = pdfPath[md.Iban];
+                //var pdfOk = ApiWD.UploadFile(pdf, directory, name + ".pdf").Result;
+                //    _ = ApiWD.UploadFile(pdf, "g4xh16d20b8ee120a4156ba185622f0637fbb", name + ".pdf").Result;
 
-                    if (!pdfOk)
-                        exclu += name + '\n';
-                }
+                //if (!pdfOk)
+                //{
+                //    exclu += name + '\n';
+                //    continue;
+                //}
+                //}
 
                 var statements = client.GetStatementsAsync(cod).Result;
                 statements = SaveStatement(statements);
 
-                client.PutFeed(id, index);
+                //client.PutFeed(id, index);
 
             }
 
@@ -111,8 +117,13 @@ namespace Inocrea.CodaBox.Back.BackGround
             foreach (var st in statements)
             {
                 st.CompteBancaire = BankAccount(st.CompteBancaire);
+                st.CompteBancaireId = st.CompteBancaire.Id;
+
                 foreach (var tr in st.Transactions)
+                {
                     tr.CompteBancaire = BankAccount(tr.CompteBancaire);
+                    tr.CompteBancaireId = tr.CompteBancaire.Id;
+                }
 
                 List<TrasactionXls> trasactionXls = new List<TrasactionXls>();
                 foreach (var tr in st.Transactions)
