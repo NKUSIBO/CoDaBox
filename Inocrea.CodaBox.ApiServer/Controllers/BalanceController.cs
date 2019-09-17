@@ -3,8 +3,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Inocrea.CodaBox.ApiModel.ViewModels;
 using Inocrea.CodaBox.ApiServer.Entities;
+using Inocrea.CodaBox.ApiServer.Entities2;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using BalanceViewModel = Inocrea.CodaBox.ApiServer.Entities2.ViewModel.BalanceViewModel;
+using BalanceViewModel2 = Inocrea.CodaBox.ApiServer.Entities2.ViewModel.BalanceViewModel2;
+
 
 namespace Inocrea.CodaBox.ApiServer.Controllers
 {
@@ -13,9 +17,9 @@ namespace Inocrea.CodaBox.ApiServer.Controllers
     [ApiController]
     public class BalanceController : ControllerBase
     {
-        private readonly InosysDBContext _context;
+        private readonly DbInosalesContext _context;
 
-        public BalanceController(InosysDBContext context)
+        public BalanceController(DbInosalesContext context)
         {
             _context = context;
         }

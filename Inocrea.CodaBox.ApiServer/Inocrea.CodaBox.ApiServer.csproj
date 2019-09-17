@@ -35,11 +35,11 @@
 
   <ItemGroup>
 
-    <Folder Include="Entities2\" />
-
     <Folder Include="Helper\" />
 
     <Folder Include="Areas\Identity\Pages\Account\" />
+
+    <Folder Include="NewFolder\" />
 
   </ItemGroup>
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Inocrea.CodaBox.ApiModel.Models
+namespace Inocrea.CodaBox.ApiServer.Entities2
 {
     public partial class AspNetRoles
     {

@@ -91,7 +91,7 @@ namespace Inocrea.CodaBox.ApiServer
             });
 
             #endregion
-            services.AddDbContext<InosysDBContext>(options =>
+            services.AddDbContext<DbInosalesContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);

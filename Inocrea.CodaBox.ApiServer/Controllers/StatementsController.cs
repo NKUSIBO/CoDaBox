@@ -2,45 +2,35 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Identity.Entities;
+using Inocrea.CodaBox.ApiModel.Models;
+using Inocrea.CodaBox.ApiServer.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-using Inocrea.CodaBox.ApiServer.Entities;
-
-using Microsoft.AspNetCore.Authorization;
-using Inocrea.CodaBox.ApiModel.Models;
-using Inocrea.CodaBox.ApiModel.ViewModel;
-using Microsoft.AspNetCore.Identity;
 
 namespace Inocrea.CodaBox.ApiServer.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class StatementsController : ControllerBase
     {
-        private readonly InosysDBContext _context;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly DbInosalesContext _context;
 
-        public StatementsController(InosysDBContext context, UserManager<ApplicationUser> userManager)
+        public StatementsController(DbInosalesContext context)
         {
             _context = context;
-            _userManager = userManager;
-
         }
 
         // GET: api/Statements
         [HttpGet]
-       
-        //[EnableQuery()]
         public async Task<ActionResult<IEnumerable<Statements>>> GetStatements()
         {
             try
             {
                 var userN = HttpContext.User.Identities.FirstOrDefault()?.Claims.FirstOrDefault()?.Value;
                 var statementByUser =  _context.Set<Statements>().FromSql("dbo.sp_statsByUser @UserName = {0}", userN);
-                return  new ActionResult<IEnumerable<Statements>>(statementByUser);
+                return new ActionResult<IEnumerable<Statements>>(statementByUser);
 
             }
             catch (System.Exception ex)
@@ -55,38 +45,74 @@ namespace Inocrea.CodaBox.ApiServer.Controllers
         public async Task<ActionResult<Statements>> GetStatements(int id)
         {
             var statements = await _context.Statements.FindAsync(id);
-            if (statements == null) return NotFound();
 
-            var transactions = _context.Transactions.Where(t => t.StatementId == id).ToList();
-            var cb = await _context.CompteBancaire.FindAsync(statements.CompteBancaireId);
-            statements.CompteBancaire = cb;
-            foreach(var tr in transactions)
+            if (statements == null)
             {
-                var cbt = await _context.CompteBancaire.FindAsync(tr.CompteBancaireId);
-                tr.CompteBancaire = cbt;
+                return NotFound();
             }
-
-            statements.Transactions = transactions;
 
             return statements;
         }
-        [HttpGet("{Iban}/{datepickerStart}/{datepickerEnd}")]
-        public IEnumerable<Transactions> GetTransactionsByDateIban(string Iban, DateTime? datepickerStart, DateTime? datepickerEnd)
+
+        // PUT: api/Statements/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutStatements(int id, Statements statements)
         {
+            if (id != statements.StatementId)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(statements).State = EntityState.Modified;
+
             try
             {
-
-
-                var userN = HttpContext.User.Identities.FirstOrDefault()?.Claims.FirstOrDefault()?.Value;
-                var transactionsByDate = _context.Set<Transactions>().FromSql("dbo.sp_transactionByDateIban @StartDate = {0},@EndDate = {1},@UserName = {2},@Iban = {3}", datepickerStart, datepickerEnd, userN, Iban);
-                return transactionsByDate;
+                await _context.SaveChangesAsync();
             }
-            catch (System.Exception ex)
+            catch (DbUpdateConcurrencyException)
             {
-
-                throw ex;
+                if (!StatementsExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
             }
+
+            return NoContent();
         }
 
+        // POST: api/Statements
+        [HttpPost]
+        public async Task<ActionResult<Statements>> PostStatements(Statements statements)
+        {
+            _context.Statements.Add(statements);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetStatements", new { id = statements.StatementId }, statements);
+        }
+
+        // DELETE: api/Statements/5
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<Statements>> DeleteStatements(int id)
+        {
+            var statements = await _context.Statements.FindAsync(id);
+            if (statements == null)
+            {
+                return NotFound();
+            }
+
+            _context.Statements.Remove(statements);
+            await _context.SaveChangesAsync();
+
+            return statements;
+        }
+
+        private bool StatementsExists(int id)
+        {
+            return _context.Statements.Any(e => e.StatementId == id);
+        }
     }
 }

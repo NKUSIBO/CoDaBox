@@ -1,7 +1,7 @@
 ﻿//using System;
 //using System.Collections.Generic;
 
-//namespace Inocrea.CodaBox.Web.Entities
+//namespace Inocrea.CodaBox.ApiServer.Entities2
 //{
 //    public partial class CompteBancaire
 //    {
@@ -18,8 +18,7 @@
 //        public string CurrencyCode { get; set; }
 //        public int? CompanyId { get; set; }
 
-//        public Company Company { get; set; }
-//        public ICollection<Statements> Statements { get; set; }
-//        public ICollection<Transactions> Transactions { get; set; }
+//        public virtual ICollection<Statements> Statements { get; set; }
+//        public virtual ICollection<Transactions> Transactions { get; set; }
 //    }
 //}

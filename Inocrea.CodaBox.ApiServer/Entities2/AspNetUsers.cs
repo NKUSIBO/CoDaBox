@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Inocrea.CodaBox.ApiModel.Models
+namespace Inocrea.CodaBox.ApiServer.Entities2
 {
     public partial class AspNetUsers
     {
@@ -11,6 +11,7 @@ namespace Inocrea.CodaBox.ApiModel.Models
             AspNetUserLogins = new HashSet<AspNetUserLogins>();
             AspNetUserRoles = new HashSet<AspNetUserRoles>();
             AspNetUserTokens = new HashSet<AspNetUserTokens>();
+            Order = new HashSet<Order>();
         }
 
         public string Id { get; set; }
@@ -37,5 +38,6 @@ namespace Inocrea.CodaBox.ApiModel.Models
         public virtual ICollection<AspNetUserLogins> AspNetUserLogins { get; set; }
         public virtual ICollection<AspNetUserRoles> AspNetUserRoles { get; set; }
         public virtual ICollection<AspNetUserTokens> AspNetUserTokens { get; set; }
+        public virtual ICollection<Order> Order { get; set; }
     }
 }
