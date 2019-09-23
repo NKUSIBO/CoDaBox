@@ -1,7 +1,7 @@
 ﻿using System;
 using Inocrea.CodaBox.ApiModel.Models;
 
-namespace Inocrea.CodaBox.ApiServer.Models
+namespace Inocrea.CodaBox.Back.Models
 {
     public class TrasactionXls
     {

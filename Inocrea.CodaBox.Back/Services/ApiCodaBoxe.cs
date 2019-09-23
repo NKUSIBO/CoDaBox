@@ -8,7 +8,6 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using Inocrea.CodaBox.Back.Models;
 using Inocrea.CodaBox.ApiModel.Models;
-using CodaParser;
 using System.Threading.Tasks;
 using System.IO;
 
@@ -97,82 +96,18 @@ namespace Inocrea.CodaBox.Back.Services
             data = data.Replace('\r','\n');
             var line = data.Split('\n');
 
-            var parser = new Parser();
-            IEnumerable<CodaParser.Statements.Statement> statements=null;
+            var parser = new DeCoda.DeCoda();
+            List<Statements> statements=new List<Statements>();
             try
             {
-                statements = parser.Parse(line);
+                var st = parser.getStatement(line);
+                statements.Add(st);
             }
             catch (Exception e)
             {
 
             }
-
-            var sts = new List<Statements>();
-
-            foreach (var st in statements)
-            {
-
-                var account = st.Account;
-                var compteBancaire = new CompteBancaire
-                {
-                    Iban = account.Number.Replace(" ", ""),
-                    Bic = account.Bic,
-                    IdentificationNumber = account.CompanyIdentificationNumber,
-                    CurrencyCode = account.CurrencyCode
-                };
-
-                var mySt = new Statements
-                {
-                    Date = st.Date,
-                    InformationalMessage = st.InformationalMessage,
-                    InitialBalance = (double)st.InitialBalance,
-                    NewBalance = (double)st.NewBalance,
-                    CompteBancaire = compteBancaire,
-                };
-
-                foreach (var tr in st.Transactions)
-                {
-                    var trAccount = tr.Account;
-                    var cb = new CompteBancaire
-                    {
-                        Iban = trAccount.Number.Replace(" ",""),
-                        Bic = trAccount.Bic,
-                        CurrencyCode = trAccount.CurrencyCode,
-                    };
-
-                    SepaDirectDebit sepa=null;
-                    //todo sepa
-                    //if (tr.SepaDirectDebit != null)
-                    //{
-                    //    var sepaParse = tr.SepaDirectDebit;
-                    //    sepa = new SepaDirectDebit
-                    //    {
-                    //        CreditorIdentificationCode = sepaParse.CreditorIdentificationCode,
-                    //        PaidReason = sepaParse.PaidReason,
-                    //        MandateReference = sepaParse.MandateReference,
-                    //        Scheme = sepaParse.Scheme,
-                    //        Type = sepaParse.Type
-                    //    };
-                    //}
-
-                    var myTr = new Transactions
-                    {
-                        Amount = (double)tr.Amount,
-                        Message = tr.Message,
-                        StructuredMessage = tr.StructuredMessage,
-                        TransactionDate = tr.TransactionDate,
-                        ValueDate = tr.ValutaDate,
-                        CompteBancaire = cb,
-                        //SepaDirectDebit = sepa
-                    };
-
-                    mySt.Transactions.Add(myTr);
-                }
-                sts.Add(mySt);
-            }
-
-            return sts;
+            return statements;
         } 
 
         public bool PutFeed(int id, Guid index)
