@@ -5,7 +5,7 @@ namespace Inocrea.CodaBox.Back.Entities
 {
     public class InosysDBContext : DbContext
     {
-        private const string connectionString = "Server=tcp:inocrea.database.windows.net,1433;Database=InosysDB;Persist Security Info=False;User ID=Inosys@inocrea;Password=Inocrea01!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;;MultipleActiveResultSets=true";
+        private const string connectionString = "Server=tcp:inocrea.database.windows.net,1433;Initial Catalog=DbInosales;Persist Security Info=False;User ID=Inosys@inocrea;Password=Inocrea01!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
 
         public InosysDBContext() { }
 

@@ -7,7 +7,6 @@ using Newtonsoft.Json;
 
 using System.Collections.Generic;
 using Inocrea.CodaBox.Back.Models;
-using DeCoda;
 using System.Threading.Tasks;
 using System.IO;
 using Inocrea.CodaBox.ApiModel.Models;
@@ -93,18 +92,18 @@ namespace Inocrea.CodaBox.ApiServer.Services
             return data;
         }
 
-        public async Task<IEnumerable<Statements>> GetStatementsAsync(string data)
-        {
-            data = data.Replace('\r','\n');
-            var line = data.Split('\n');
+        //public async Task<IEnumerable<Statements>> GetStatementsAsync(string data)
+        //{
+        //    data = data.Replace('\r','\n');
+        //    var line = data.Split('\n');
 
-            var parser = new DeCoda.DeCoda();
+        //    var parser = new DeCoda.DeCoda();
  
 
-            var sts = new List<Statements>();
-            sts.Add(parser.getStatement(line));
-            return sts;
-        } 
+        //    var sts = new List<Statements>();
+        //    sts.Add(parser.getStatement(line));
+        //    return sts;
+        //} 
 
         public bool PutFeed(int id, Guid index)
         {

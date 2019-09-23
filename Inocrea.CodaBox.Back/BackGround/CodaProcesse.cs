@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Inocrea.CodaBox.ApiModel.Models;
-using Inocrea.CodaBox.ApiServer.Models;
 using Inocrea.CodaBox.Back.Entities;
 using Inocrea.CodaBox.Back.Models;
 using Inocrea.CodaBox.Back.Services;
@@ -43,6 +42,7 @@ namespace Inocrea.CodaBox.Back.BackGround
         private IEnumerable<Statements> GetCodasAsync(IEnumerable<FeedEntry> feedEntries, int id)
         {
             var ApiWD = new ApiWorkDrive();
+            //hack definir un path pour les fichier json
             var Path = "/Users/bilal/Downloads/Coda/";
 
             //Hack: utiliser des fichier au lieu de string

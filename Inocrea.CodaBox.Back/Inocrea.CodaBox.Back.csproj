@@ -19,6 +19,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Inocrea.CodaBox.ApiModel\Inocrea.CodaBox.ApiModel.csproj" />
+    <ProjectReference Include="..\DeCoda\DeCoda.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="appsettings.json" />
