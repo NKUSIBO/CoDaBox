@@ -56,6 +56,7 @@ namespace Inocrea.CodaBox.ApiServer.Controllers
             [Route("token")]
             public async Task<IActionResult> CreateToken([FromBody] LoginModel model)
             {
+               
             var user = await userManager.FindByNameAsync(model.Username);
             if (user != null && await userManager.CheckPasswordAsync(user, model.Password))
             {

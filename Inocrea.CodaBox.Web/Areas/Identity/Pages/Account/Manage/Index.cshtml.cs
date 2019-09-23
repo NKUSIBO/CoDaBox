@@ -15,7 +15,8 @@ namespace Inocrea.CodaBox.Web.Areas.Identity.Pages.Account.Manage
     public partial class IndexModel : PageModel
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly SignInManager<ApplicationUser> 
+            _signInManager;
         private readonly IEmailSender _emailSender;
 
         public IndexModel(

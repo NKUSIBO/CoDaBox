@@ -61,6 +61,8 @@ namespace Inocrea.CodaBox.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginModel loginModel)
         {
+            var user = await userManager.FindByNameAsync(loginModel.Username);
+
             var saved = await ApiClientFactory.Instance.LogUser(loginModel);
             if (saved.IsSuccess)
             {

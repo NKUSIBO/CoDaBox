@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Identity.DbContext;
 using Identity.Entities;
@@ -61,9 +62,32 @@ namespace Inocrea.CodaBox.Web
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.HttpOnly = true;
+                options.Cookie.Expiration = TimeSpan.FromDays(5);
+                options.LoginPath = "/Account/Login";
+            });
+
             //services.AddDbContext<InosysDBContext>(options =>
             //    options.UseSqlServer(
             //        Configuration.GetConnectionString("DefaultConnection")));
+            services.AddAuthentication(option => {
+                option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                option.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options => {
+                options.SaveToken = true;
+                options.RequireHttpsMetadata = true;
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidAudience = Configuration["Jwt:Site"],
+                    ValidIssuer = Configuration["Jwt:Site"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:SigningKey"]))
+                };
+            });
             services.AddDbContext<ApplicationDbContext>(options =>
                  options.UseSqlServer(
                      Configuration.GetConnectionString("DefaultConnection")));
@@ -75,7 +99,6 @@ namespace Inocrea.CodaBox.Web
             //services.AddDefaultIdentity<IdentityUser>()
             //    .AddEntityFrameworkStores<IdentityDbContext>();
             services.Configure<SettingsModels>(Configuration.GetSection("ApiSettings"));
-            services.Configure<SettingsModelsApiServer>(Configuration.GetSection("ApiServerSettings"));
          
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);

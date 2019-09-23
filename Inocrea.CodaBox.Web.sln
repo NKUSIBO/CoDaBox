@@ -22,6 +22,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodaParser", "CodaParser\Co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Inocrea.CodaBox.Back", "Inocrea.CodaBox.Back\Inocrea.CodaBox.Back.csproj", "{4E1B3C88-9C49-4B91-83D3-FD9FCBA0DC01}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebCodaBox", "WebCodaBox\WebCodaBox.csproj", "{56C0580B-0E6B-43C5-A988-1ECA7CB60D0B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -60,6 +62,10 @@ Global
 		{4E1B3C88-9C49-4B91-83D3-FD9FCBA0DC01}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4E1B3C88-9C49-4B91-83D3-FD9FCBA0DC01}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4E1B3C88-9C49-4B91-83D3-FD9FCBA0DC01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56C0580B-0E6B-43C5-A988-1ECA7CB60D0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56C0580B-0E6B-43C5-A988-1ECA7CB60D0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56C0580B-0E6B-43C5-A988-1ECA7CB60D0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56C0580B-0E6B-43C5-A988-1ECA7CB60D0B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

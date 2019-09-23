@@ -4,12 +4,12 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser > UserManager
 
-@if (SignInManager.IsSignedIn(User))
+@if ( TempData["principal"]!=null)
 {
     <form asp-area="" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post" id="logoutForm" class="navbar-right">
         <ul class="nav navbar-nav navbar-right">
             <li>
-                <a asp-area="" asp-page="/Account/Login/" title="Manage">Hello @User.Identities.FirstOrDefault()?.Claims.FirstOrDefault()?.Value;!</a>
+                <a asp-area="" asp-page="/Account/Login/" title="Manage">Hello @TempData["principal"]!</a>
             </li>
             <li>
                 <button type="submit" class="btn btn-link navbar-btn navbar-link">Logout</button>

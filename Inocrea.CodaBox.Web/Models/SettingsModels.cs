@@ -7,7 +7,6 @@ namespace Inocrea.CodaBox.Web.Models
 {
     public class SettingsModels
     {
-        public string StatementsUrl { get; set; }
         public string WebApiBaseUrl { get; set; }
         public string Password { get; set; }
 

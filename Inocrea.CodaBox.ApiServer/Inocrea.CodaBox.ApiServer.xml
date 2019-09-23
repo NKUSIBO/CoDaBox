@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Inocrea.CodaBox.ApiServer</name>
+    </assembly>
+    <members>
+        <member name="M:Inocrea.CodaBox.ApiServer.Controllers.TransactionsController.GetTransactions(System.Int32)">
+            <summary>
+            this helps to get transactions by its ID
+            </summary>
+            <param name="id"></param>
+            <returns>transactions</returns>
+        </member>
+        <member name="M:Inocrea.CodaBox.ApiServer.Controllers.TransactionsController.GetTransactionsByStatement(System.Int32)">
+            <summary>
+            recherche de transactions par la clé du statement
+            </summary>
+            <param name="statementId"></param>
+            <returns>transactions</returns>
+        </member>
+        <member name="M:Inocrea.CodaBox.ApiServer.Controllers.TransactionsController.PutTransactions(System.Int32,Inocrea.CodaBox.ApiModel.Models.Transactions)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+            <param name="transactions"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

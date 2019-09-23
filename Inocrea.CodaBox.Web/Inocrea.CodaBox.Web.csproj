@@ -4,29 +4,6 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <UserSecretsId>aspnet-Inocrea.CodaBox.Web-75383B08-5E24-4864-BF9D-76FEF68458E9</UserSecretsId>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="Entities\**" />
-    <Content Remove="Entities\**" />
-    <EmbeddedResource Remove="Entities\**" />
-    <None Remove="Entities\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="Entities\AspNetRoleClaims.cs" />
-    <Compile Include="Entities\AspNetRoles.cs" />
-    <Compile Include="Entities\AspNetUserClaims.cs" />
-    <Compile Include="Entities\AspNetUserLogins.cs" />
-    <Compile Include="Entities\AspNetUserRoles.cs" />
-    <Compile Include="Entities\AspNetUsers.cs" />
-    <Compile Include="Entities\AspNetUserTokens.cs" />
-    <Compile Include="Entities\Company.cs" />
-    <Compile Include="Entities\CompteBancaire.cs" />
-    <Compile Include="Entities\INosysDevContext.cs" />
-    <Compile Include="Entities\SepaDirectDebits.cs" />
-    <Compile Include="Entities\Statements.cs" />
-    <Compile Include="Entities\Transactions.cs" />
-  </ItemGroup>
   <ItemGroup>
     <Content Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
