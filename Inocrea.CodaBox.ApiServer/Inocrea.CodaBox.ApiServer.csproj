@@ -46,9 +46,6 @@
   <ItemGroup>
 
 
-    <ProjectReference Include="..\CodaParser\CodaParser.csproj" />
-
-
     <ProjectReference Include="..\Common\Common.csproj" />
     <ProjectReference Include="..\Identity\Identity.csproj" />
     <ProjectReference Include="..\Inocrea.CodaBox.ApiModel\Inocrea.CodaBox.ApiModel.csproj" />

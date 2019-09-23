@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Inocrea.CodaBox.ApiModel.Models;
-using Inocrea.CodaBox.ApiServer.Models;
 using Inocrea.CodaBox.Back.Entities;
 using Inocrea.CodaBox.Back.Models;
 using Inocrea.CodaBox.Back.Services;
@@ -75,8 +73,11 @@ namespace Inocrea.CodaBox.Back.BackGround
                     //cod = client.GetCodaRedownFile(index, "cod");
                     cod = client.GetCodaFile(index, "cod");
                     var directory = codPath[md.Iban];
-                    var codOk = ApiWD.UploadFile(cod, directory, name + ".cod").Result;
-                    _ = ApiWD.UploadFile(cod, "g4xh16d20b8ee120a4156ba185622f0637fbb", name + ".cod");
+                    //var codOk = ApiWD.UploadFile(cod, directory, name + ".cod").Result;
+
+                    var codOk = ApiWD.UploadFile(cod, "ghs3qc80dd0c25d4c4c78b654b1a91a279501", name + ".cod").Result;
+
+                    //_ = ApiWD.UploadFile(cod, "g4xh16d20b8ee120a4156ba185622f0637fbb", name + ".cod");
 
                     if (!codOk)
                         exclu += name + '\n';
@@ -86,8 +87,9 @@ namespace Inocrea.CodaBox.Back.BackGround
                     //var pdf = client.GetCodaRedownFilePdf(index, "pdf");
                     var pdf = client.GetCodaFilePdf(index, "pdf");
                     var directory = pdfPath[md.Iban];
-                    var pdfOk = ApiWD.UploadFile(pdf, directory, name + ".pdf").Result;
-                    _ = ApiWD.UploadFile(pdf, "g4xh16d20b8ee120a4156ba185622f0637fbb", name + ".pdf");
+                    //var pdfOk = ApiWD.UploadFile(pdf, directory, name + ".pdf").Result;
+                    var pdfOk = ApiWD.UploadFile(pdf, "ghs3qc80dd0c25d4c4c78b654b1a91a279501", name + ".pdf").Result;
+                    //_ = ApiWD.UploadFile(pdf, "g4xh16d20b8ee120a4156ba185622f0637fbb", name + ".pdf");
 
                     if (!pdfOk)
                         exclu += name + '\n';
@@ -112,7 +114,9 @@ namespace Inocrea.CodaBox.Back.BackGround
             {
                 st.CompteBancaire = BankAccount(st.CompteBancaire);
                 foreach (var tr in st.Transactions)
+                {
                     tr.CompteBancaire = BankAccount(tr.CompteBancaire);
+                }
 
                 List<TrasactionXls> trasactionXls = new List<TrasactionXls>();
                 foreach (var tr in st.Transactions)
