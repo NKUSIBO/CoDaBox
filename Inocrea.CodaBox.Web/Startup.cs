@@ -69,35 +69,13 @@ namespace Inocrea.CodaBox.Web
                 options.LoginPath = "/Account/Login";
             });
 
-            //services.AddDbContext<InosysDBContext>(options =>
-            //    options.UseSqlServer(
-            //        Configuration.GetConnectionString("DefaultConnection")));
-            services.AddAuthentication(option => {
-                option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                option.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(options => {
-                options.SaveToken = true;
-                options.RequireHttpsMetadata = true;
-                options.TokenValidationParameters = new TokenValidationParameters()
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidAudience = Configuration["Jwt:Site"],
-                    ValidIssuer = Configuration["Jwt:Site"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:SigningKey"]))
-                };
-            });
-            services.AddDbContext<ApplicationDbContext>(options =>
-                 options.UseSqlServer(
-                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDbContext<ApplicationUserDbContext>(options =>
+            
+            services.AddDbContext<CodaBoxContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<ApplicationUser>()
-                .AddEntityFrameworkStores<ApplicationUserDbContext>();
-            //services.AddDefaultIdentity<IdentityUser>()
-            //    .AddEntityFrameworkStores<IdentityDbContext>();
+            services.AddDefaultIdentity<CodaBoxUser>()
+                .AddEntityFrameworkStores<CodaBoxContext>();
+         
             services.Configure<SettingsModels>(Configuration.GetSection("ApiSettings"));
          
 
@@ -105,7 +83,7 @@ namespace Inocrea.CodaBox.Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ApplicationDbContext dbContext)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, CodaBoxContext dbContext)
         {
 
             if (env.IsDevelopment())

@@ -29,7 +29,7 @@ namespace WebCodaBox
             services.AddDbContext<CodaBoxContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddIdentity<CodaBoxUser,CodaBoxRole>()
+            services.AddDefaultIdentity<CodaBoxUser>()
                 .AddEntityFrameworkStores<CodaBoxContext>();
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -38,6 +38,7 @@ namespace WebCodaBox
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.Configure<SettingsModels>(Configuration.GetSection("ApiSettings"));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }

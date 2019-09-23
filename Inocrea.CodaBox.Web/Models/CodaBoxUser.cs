@@ -5,8 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Inocrea.CodaBox.ApiModel.Models;
 using Microsoft.AspNetCore.Identity;
-
-namespace WebCodaBox.Models
+namespace Inocrea.CodaBox.Web.Models
 {
     public class CodaBoxUser:IdentityUser
     {

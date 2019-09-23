@@ -81,7 +81,7 @@ namespace WebCodaBox.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Login(LoginModel model)
+        public async Task<IActionResult> Login(LoginModel model, string returnUrl)
         {
             try
             {
@@ -90,13 +90,13 @@ namespace WebCodaBox.Controllers
                 var result = await _signInManager.PasswordSignInAsync(codaUser, "P@ssW0rd", false, false);
                 if (result.Succeeded)
                 {
-                    RedirectToAction("Index", "Home");
+                    return Redirect(Url.Action("Index", "Home", new { returnUrl }));
                 }
                 else
                 {
                     ViewBag.Result = "error :" + result;
                 }
-                return View();
+                return View( );
             }
             catch (Exception ex)
             {
