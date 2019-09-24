@@ -140,7 +140,7 @@ namespace Inocrea.CodaBox.CodaApiClient
                 tra.Iban = cp.Iban;
                 tra.IdentificationNumber = cp.IdentificationNumber;
                 tra.Bic = cp.Bic;
-                
+                tra.ContrePartie = transactions.ContrePartie;
                 tra.CurrencyCode = cp.CurrencyCode;
 
                 listStateAccountViewModels.Add(tra);

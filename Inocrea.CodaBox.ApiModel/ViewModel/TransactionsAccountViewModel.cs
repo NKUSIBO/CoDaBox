@@ -25,6 +25,7 @@ namespace Inocrea.CodaBox.ApiModel.ViewModel
         public int Id { get; set; }
         [Display(Name = "Description")]
         public string Message { get; set; }
+        public string ContrePartie { get; set; }
 
         [Display(Name = "CompteBancaire")]
         public string Iban { get; set; }
