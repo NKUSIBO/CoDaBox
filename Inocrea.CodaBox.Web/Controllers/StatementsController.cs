@@ -199,7 +199,7 @@ namespace Inocrea.CodaBox.Web.Controllers
         {
 
             var requestFormData = Request.Form;
-            List<StatementAccountViewModel> data = await ApiClientFactory.Instance.GetStatements();
+            List<StatementAccountViewModel> data=null ;
             try
             {
 

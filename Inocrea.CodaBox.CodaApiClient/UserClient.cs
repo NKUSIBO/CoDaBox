@@ -30,11 +30,11 @@ namespace Inocrea.CodaBox.CodaApiClient
         //    return 
         //       repSta;
         //}
-        public async Task<List<StatementAccountViewModel>> GetStatements()
+        public async Task<List<StatementAccountViewModel>> GetStatements(string username)
         {
           
             var requestUrl = CreateRequestUri(string.Format(System.Globalization.CultureInfo.CurrentCulture,
-                "api/Statements"));
+                "api/Statements/GetStatementsByUsername/" + username));
 
 
             repSta =  await  GetAsync<Statements>(requestUrl);

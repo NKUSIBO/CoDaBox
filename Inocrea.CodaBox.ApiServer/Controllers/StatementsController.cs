@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Inocrea.CodaBox.ApiServer.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class StatementsController : ControllerBase
     {
@@ -23,12 +23,17 @@ namespace Inocrea.CodaBox.ApiServer.Controllers
         }
 
         // GET: api/Statements
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Statements>>> GetStatements()
+        [HttpGet("{username}")]
+
+        public async Task<ActionResult<IEnumerable<Statements>>> GetStatementsByUsername(string username)
         {
             try
             {
                 var userN = HttpContext.User.Identities.FirstOrDefault()?.Claims.FirstOrDefault()?.Value;
+                if (userN==null)
+                {
+                    userN = username;
+                }
                 var statementByUser =  _context.Set<Statements>().FromSql("dbo.sp_statsByUser @UserName = {0}", userN);
                 return new ActionResult<IEnumerable<Statements>>(statementByUser);
 

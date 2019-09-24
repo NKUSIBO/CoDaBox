@@ -104,6 +104,12 @@ namespace WebCodaBox.Controllers
                 throw ex;
             }
         }
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return Redirect(Url.Action("Index", "Home"));
 
+
+        }
     }
 }

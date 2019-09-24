@@ -195,13 +195,15 @@ namespace WebCodaBox.Controllers
 
         //    }
         //}
-        //[HttpPost]
+        [HttpPost]
 
         public async Task<IActionResult> LoadTransaction()
         {
 
             var requestFormData = Request.Form;
-            List<StatementAccountViewModel> data = await ApiClientFactory.Instance.GetStatements();
+            var userN = HttpContext.User.Identities.FirstOrDefault()?.Name;
+
+            List<StatementAccountViewModel> data = await ApiClientFactory.Instance.GetStatements(userN);
             try
             {
 

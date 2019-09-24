@@ -24,7 +24,7 @@
     <PackageReference Include="PagedList.Mvc" Version="4.5.0" />
     <PackageReference Include="System.Linq.Dynamic.Core" Version="1.0.18" />
   </ItemGroup>
-
+b
   <ItemGroup>
     <ProjectReference Include="..\Identity\Identity.csproj" />
     <ProjectReference Include="..\Inocrea.CodaBox.CodaApiClient\Inocrea.CodaBox.CodaApiClient.csproj" />
@@ -32,6 +32,7 @@
 
   <ItemGroup>
     <Folder Include="Areas\Identity\Services\" />
+    <Folder Include="Data\Migrations\" />
   </ItemGroup>
 
   <ItemGroup>

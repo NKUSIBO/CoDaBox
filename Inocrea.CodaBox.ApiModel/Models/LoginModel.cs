@@ -11,6 +11,7 @@ namespace Inocrea.CodaBox.ApiModel.Models
         public String Username { get; set; }
 
         [Required]
+   
         public String Password { get; set; }
 
         public  string Token { get; set; }

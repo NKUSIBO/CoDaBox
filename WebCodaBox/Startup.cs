@@ -16,10 +16,24 @@ namespace WebCodaBox
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IHostingEnvironment env)
         {
-            Configuration = configuration;
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
+
+            // add this file name to your .gitignore file
+            // so you can create it and use on your local dev machine
+            // remember last config source added wins if it has the same settings
+            builder.AddJsonFile("appsettings.dev.json", optional: true);
+            builder.AddEnvironmentVariables();
+
+            Configuration = builder.Build();
+
+            environment = env;
         }
+        public IHostingEnvironment environment { get; set; }
 
         public IConfiguration Configuration { get; }
 
