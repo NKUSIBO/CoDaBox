@@ -114,15 +114,15 @@ namespace Inocrea.CodaBox.Back.BackGround
             {
                 st.CompteBancaire = BankAccount(st.CompteBancaire);
                 foreach (var tr in st.Transactions)
-                {
                     tr.CompteBancaire = BankAccount(tr.CompteBancaire);
+
+                if (st.CompteBancaire.Iban == "BE35001677318037" || st.CompteBancaire.Iban == "BE05735042087375")
+                {
+                    List<TrasactionXls> trasactionXls = new List<TrasactionXls>();
+                    foreach (var tr in st.Transactions)
+                        trasactionXls.Add(new TrasactionXls(tr));
+                    _ = Export.WriteTsvAsync(trasactionXls, st.Date.ToString("yyyy-MM-dd") + ' ' + st.CompteBancaire.Iban + ".xls");
                 }
-
-                List<TrasactionXls> trasactionXls = new List<TrasactionXls>();
-                foreach (var tr in st.Transactions)
-                    trasactionXls.Add(new TrasactionXls(tr));
-
-                _ = Export.WriteTsvAsync(trasactionXls, st.Date.ToString("yyyy-MM-dd") + ' ' + st.CompteBancaire.Iban + ".xls");
 
                 Db.Statements.Add(st);
                 Db.SaveChanges();

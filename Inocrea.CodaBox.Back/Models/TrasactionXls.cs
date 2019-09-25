@@ -8,15 +8,26 @@ namespace Inocrea.CodaBox.Back.Models
         public DateTime Date { get; set; }
         public double Montant { get; set; }
         public string Description { get; set; }
-        public string Bénéficiaire { get; set; }
+        public string Beneficiaire { get; set; }
 
         public TrasactionXls(Transactions transactions)
         {
             Date = transactions.ValueDate;
             Montant = transactions.Amount;
-            Description = transactions.ContrePartie+ " " +transactions.StructuredMessage;
+            Description = transactions.ContrePartie + " ";
+            if (!string.IsNullOrEmpty(transactions.StructuredMessage))
+                Description += Format(transactions.StructuredMessage);
+            else
+                Description += Format(transactions.Message);
             if (transactions.CompteBancaire.Iban != null)
-                Bénéficiaire = transactions.CompteBancaire.Iban;
+                Beneficiaire = transactions.CompteBancaire.Iban;
+        }
+
+        private string Format(string txt)
+        {
+            txt = txt.Replace('\n', '|');
+            txt = txt.Replace('\t', '|');
+            return txt;
         }
     }
 }
