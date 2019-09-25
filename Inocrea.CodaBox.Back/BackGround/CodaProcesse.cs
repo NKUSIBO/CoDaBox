@@ -30,8 +30,8 @@ namespace Inocrea.CodaBox.Back.BackGround
             foreach (var feed in feedClients)
             {
                 var id = feed.Id;
-                //var feedEntries = client.GetRedownloadFeed(id);
-                var feedEntries = client.GetFeed(id);
+                var feedEntries = client.GetRedownloadFeed(id);
+                //var feedEntries = client.GetFeed(id);
                 var cod = GetCodasAsync(feedEntries, id);
                 if (cod != null) allStatements.AddRange(cod);
             }
@@ -70,8 +70,8 @@ namespace Inocrea.CodaBox.Back.BackGround
                 }
                 if (codPath.ContainsKey(md.Iban))
                 {
-                    //cod = client.GetCodaRedownFile(index, "cod");
-                    cod = client.GetCodaFile(index, "cod");
+                    cod = client.GetCodaRedownFile(index, "cod");
+                    //cod = client.GetCodaFile(index, "cod");
                     var directory = codPath[md.Iban];
                     //var codOk = ApiWD.UploadFile(cod, directory, name + ".cod").Result;
 
@@ -84,8 +84,8 @@ namespace Inocrea.CodaBox.Back.BackGround
                 }
                 if (pdfPath.ContainsKey(md.Iban))
                 {
-                    //var pdf = client.GetCodaRedownFilePdf(index, "pdf");
-                    var pdf = client.GetCodaFilePdf(index, "pdf");
+                    var pdf = client.GetCodaRedownFilePdf(index, "pdf");
+                    //var pdf = client.GetCodaFilePdf(index, "pdf");
                     var directory = pdfPath[md.Iban];
                     //var pdfOk = ApiWD.UploadFile(pdf, directory, name + ".pdf").Result;
                     var pdfOk = ApiWD.UploadFile(pdf, "ghs3qc80dd0c25d4c4c78b654b1a91a279501", name + ".pdf").Result;
@@ -98,7 +98,7 @@ namespace Inocrea.CodaBox.Back.BackGround
                 var statements = client.GetStatementsAsync(cod).Result;
                 statements = SaveStatement(statements);
 
-                client.PutFeed(id, index);
+                //client.PutFeed(id, index);
 
             }
 

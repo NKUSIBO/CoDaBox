@@ -66,7 +66,7 @@ namespace DeCoda
             {
                 Bic = mv.Bic,
                 Iban = mv.NumCompteContrepartie,
-                //Titulaire = mv.NomCompteContrepartie,
+                //Titulaire = mv.NomCompteContrepartie, 
                 CurrencyCode = mv.DeviseCompteContrepartie,
             };
 
@@ -78,6 +78,8 @@ namespace DeCoda
                 StructuredMessage = Txt(mv.CommunicationStructuree),
                 TransactionDate = GetDate(mv.DateComptabilisation),
                 ValueDate = GetDate(mv.Date),
+                ContrePartie = mv.NomCompteContrepartie, 
+
             };
 
             return tr;
