@@ -15,7 +15,8 @@ namespace Inocrea.CodaBox.Back.Models
             Date = transactions.ValueDate;
             Montant = transactions.Amount;
             Description = transactions.StructuredMessage;
-            Bénéficiaire = transactions.CompteBancaire.Iban;
+            if (transactions.CompteBancaire.Iban != null)
+                Bénéficiaire = transactions.CompteBancaire.Iban;
         }
     }
 }

@@ -132,7 +132,9 @@ namespace Inocrea.CodaBox.Back.BackGround
 
         private CompteBancaire BankAccount(CompteBancaire bankAccount)
         {
-            var iban = bankAccount.Iban.Replace(" ", "");
+            if (bankAccount.Iban == null)
+                return bankAccount;
+            var iban = bankAccount.Iban = bankAccount.Iban.Trim();
             try
             {
                 var ba = Db.CompteBancaire.First(b => b.Iban == iban);

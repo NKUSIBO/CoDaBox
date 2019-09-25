@@ -11,7 +11,8 @@ namespace DeCoda
             var day = int.Parse(date.Substring(0, 2));
             var mon = int.Parse(date.Substring(2, 2));
             var yer = int.Parse(date.Substring(4, 2));
-            return new DateTime(yer,mon,day);
+            yer += 2000;
+            return new DateTime(yer, mon, day);
         }
 
 
@@ -29,7 +30,7 @@ namespace DeCoda
             foreach (var mv in record.mouvements)
             {
                 var tr = GetTransaction(mv);
-                if(tr!=null)
+                if (tr != null)
                     trs.Add(tr);
             }
 
@@ -38,7 +39,7 @@ namespace DeCoda
             {
                 CompteBancaire = cb,
                 Date = Util.GetDate(record.header.Date),
-                InitialBalance = GetMontant(record.oldSolde.Solde,record.oldSolde.Signe),
+                InitialBalance = GetMontant(record.oldSolde.Solde, record.oldSolde.Signe),
                 NewBalance = GetMontant(record.newSolde.Solde, record.newSolde.Signe),
                 Transactions = trs,
             };
@@ -51,7 +52,7 @@ namespace DeCoda
             var montant = double.Parse(money);
             if (signe == "1")
                 montant *= -1;
-            return montant;
+            return montant / 1000;
         }
 
         private static Transactions GetTransaction(Mouvement mv)
@@ -74,9 +75,9 @@ namespace DeCoda
                 Amount = GetMontant(mv.Montant, mv.Signe),
                 CompteBancaire = cb,
                 Message = mv.GetCommunication(),
-                StructuredMessage= Txt(mv.CommunicationStructuree),
-                TransactionDate=GetDate(mv.DateComptabilisation),
-                ValueDate=GetDate(mv.Date),
+                StructuredMessage = Txt(mv.CommunicationStructuree),
+                TransactionDate = GetDate(mv.DateComptabilisation),
+                ValueDate = GetDate(mv.Date),
             };
 
             return tr;

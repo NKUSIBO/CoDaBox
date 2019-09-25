@@ -11,8 +11,7 @@ namespace Inocrea.CodaBox.Back.Services
 
         public ApiWorkDrive()
         {
-            var zoho = new ApiZoho();
-            SetRequestHeaders("Authorization", "Zoho-oauthtoken " + zoho.Token);
+            SetRequestHeaders("Authorization", "Zoho-oauthtoken " + ApiZoho.Token);
         }
 
         public async Task<bool> UploadJson(string json)

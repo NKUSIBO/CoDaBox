@@ -11,7 +11,6 @@ namespace Inocrea.CodaBox.Back.Services
     {
         private HttpClient _httpClient;
 
-
         protected ApiBase()
         {
             _httpClient = new HttpClient();
@@ -75,12 +74,27 @@ namespace Inocrea.CodaBox.Back.Services
             return true;
         }
 
+        protected bool Put(Uri uri, HttpContent content)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                response = _httpClient.PutAsync(uri, content).Result;
+                response.EnsureSuccessStatusCode();
+            }
+            catch (Exception)
+            {
+                throw new ApiException(_httpClient, "PUT", uri, content, response);
+            }
+            return true;
+        }
+
         protected async Task<bool> PostFileAsync(Uri uri, byte[] data, string fileName)
         {
             var formContent = new MultipartFormDataContent();
             formContent.Add(new StreamContent(new MemoryStream(data)), "content", fileName);
             var rep = await PostAsync(uri, formContent);
-            if (rep == "409") return false;
+            if (string.IsNullOrEmpty(rep)) return false;
             return true;
         }
 
@@ -89,7 +103,7 @@ namespace Inocrea.CodaBox.Back.Services
             var formContent = new MultipartFormDataContent();
             formContent.Add(new StreamContent(data), "content", fileName);
             var rep = await PostAsync(uri, formContent);
-            if (rep == "409") return false;
+            if (string.IsNullOrEmpty(rep)) return false;
             return true;
         }
 
@@ -101,22 +115,17 @@ namespace Inocrea.CodaBox.Back.Services
             return true;
         }
 
-        protected async Task<string> PostAsync(Uri uri, HttpContent content=null)
+        protected async Task<string> PostAsync(Uri uri, HttpContent content = null)
         {
             HttpResponseMessage response = null;
-            try
+
+            response = await _httpClient.PostAsync(uri, content);
+            if (response.StatusCode == HttpStatusCode.Accepted)
             {
-                response = await _httpClient.PostAsync(uri, content);
-                if (response.StatusCode == HttpStatusCode.Conflict)
-                    return "409";
-                response.EnsureSuccessStatusCode();
+                var data = await response.Content.ReadAsStringAsync();
+                return data;
             }
-            catch (Exception)
-            {
-                throw new ApiException(_httpClient, "POST", uri, response);
-            }
-            var data = await response.Content.ReadAsStringAsync();
-            return data;
+            return null;
         }
     }
 }

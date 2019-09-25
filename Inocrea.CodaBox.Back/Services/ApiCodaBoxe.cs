@@ -10,10 +10,11 @@ using Inocrea.CodaBox.Back.Models;
 using Inocrea.CodaBox.ApiModel.Models;
 using System.Threading.Tasks;
 using System.IO;
+using Inocrea.CodaBox.ApiModel;
 
 namespace Inocrea.CodaBox.Back.Services
 {
-    public class ApiCodaBoxe:ApiBase
+    public class ApiCodaBoxe : ApiBase
     {
         //private string baseUrl = "https://sandbox-api.codabox.com/v2/delivery/";
         //private string xCompany = "641088c3-8fcb-47a3-8cef-de8197f5172c";
@@ -21,14 +22,14 @@ namespace Inocrea.CodaBox.Back.Services
         //private string pwd = "XyJn6NQYrm";
 
         private string baseUrl = "https://api.codabox.com/v2/delivery/";
-        private CodaIdentity codaID;
+        private CodaIdentities codaID;
 
-        public ApiCodaBoxe(CodaIdentity codaID)
+        public ApiCodaBoxe(CodaIdentities codaID)
         {
             this.codaID = codaID;
             SetRequestHeaders("X-Software-Company", codaID.XCompany);
-            var byteArray = Encoding.ASCII.GetBytes(codaID.Login+':'+codaID.Pwd);
-            SetAuthorization (new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray)));
+            var byteArray = Encoding.ASCII.GetBytes(codaID.Login + ':' + codaID.Pwd);
+            SetAuthorization(new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray)));
         }
 
         public IEnumerable<FeedClient> GetPod()
@@ -40,7 +41,7 @@ namespace Inocrea.CodaBox.Back.Services
             {
                 podClient = JsonConvert.DeserializeObject<PodClient>(data);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
 
             }
@@ -57,7 +58,7 @@ namespace Inocrea.CodaBox.Back.Services
 
         public IEnumerable<FeedEntry> GetRedownloadFeed(int id)
         {
-            var uri = new Uri(baseUrl+"redownload-feed/" + id + "/");
+            var uri = new Uri(baseUrl + "redownload-feed/" + id + "/");
             var data = GetAsync(uri).Result;
             var feed = JsonConvert.DeserializeObject<Feed>(data);
             return feed.FeedEntries;
@@ -79,7 +80,7 @@ namespace Inocrea.CodaBox.Back.Services
 
         public string GetCodaFile(Guid index, string extension)
         {
-            var uri = new Uri(baseUrl + "download/" + index + '/'+ extension + '/');
+            var uri = new Uri(baseUrl + "download/" + index + '/' + extension + '/');
             var data = GetAsync(uri).Result;
             return data;
         }
@@ -93,11 +94,11 @@ namespace Inocrea.CodaBox.Back.Services
 
         public async Task<IEnumerable<Statements>> GetStatementsAsync(string data)
         {
-            data = data.Replace('\r','\n');
+            data = data.Replace('\r', '\n');
             var line = data.Split('\n');
 
             var parser = new DeCoda.DeCoda();
-            List<Statements> statements=new List<Statements>();
+            List<Statements> statements = new List<Statements>();
             try
             {
                 var st = parser.getStatement(line);
@@ -108,13 +109,13 @@ namespace Inocrea.CodaBox.Back.Services
 
             }
             return statements;
-        } 
+        }
 
         public bool PutFeed(int id, Guid index)
         {
             var json = "{\"feed_offset\":\"" + index + "\"}";
             var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var uri = new Uri(baseUrl+"feed/" + id + "/");
+            var uri = new Uri(baseUrl + "feed/" + id + "/");
             var data = PutAsync(uri, content).Result;
             return data;
         }
