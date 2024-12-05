@@ -58,7 +58,6 @@ namespace CodaParser.StatementParsers
 
             var transactionParser = new TransactionParser();
             var transactions = transactionLines.Select(l => transactionParser.Parse(l));
-
             return new Statement(
                 date,
                 account,

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Net.Http;
 
 using System.Threading.Tasks;
-
+using Inocrea.CodaBox.ApiModel.Models;
 using Inocrea.CodaBox.ApiModel.ViewModel;
 using Inocrea.CodaBox.CodaApiClient.Helper;
 using Newtonsoft.Json;
@@ -125,7 +125,18 @@ namespace Inocrea.CodaBox.CodaApiClient
 
             return listStateAccountViewModels;
         }
-
+        public async Task<Message<RegisterModel>> SaveUser(RegisterModel model)
+        {
+            var requestUrl = CreateRequestUri(string.Format(System.Globalization.CultureInfo.InvariantCulture,
+                "api/Account/Register"));
+            return await PostAsync<RegisterModel>(requestUrl, model);
+        }
+        public async Task<Message<LoginModel>> LogUser(LoginModel model)
+        {
+            var requestUrl = CreateRequestUri(string.Format(System.Globalization.CultureInfo.InvariantCulture,
+                "api/Account/token"));
+            return await PostAsync<LoginModel>(requestUrl, model);
+        }
 
     }
 }

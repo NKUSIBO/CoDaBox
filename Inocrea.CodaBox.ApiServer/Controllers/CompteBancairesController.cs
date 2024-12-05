@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Inocrea.CodaBox.ApiServer.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Inocrea.CodaBox.ApiServer.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CompteBancairesController : ControllerBase
     {
         private readonly InosysDBContext _context;
@@ -32,11 +31,7 @@ namespace Inocrea.CodaBox.ApiServer.Controllers
         public async Task<ActionResult<CompteBancaire>> GetCompteBancaire(int id)
         {
             var compteBancaire = await _context.CompteBancaire.FindAsync(id);
-
-            if (compteBancaire == null)
-            {
-                return NotFound();
-            }
+            if (compteBancaire == null) return NotFound();
 
             return compteBancaire;
         }

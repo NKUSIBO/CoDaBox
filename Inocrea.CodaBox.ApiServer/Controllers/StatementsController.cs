@@ -1,17 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+
 using Inocrea.CodaBox.ApiServer.Entities;
+
 using Microsoft.AspNet.OData;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+
 
 namespace Inocrea.CodaBox.ApiServer.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class StatementsController : ControllerBase
     {
         private readonly InosysDBContext _context;
@@ -23,6 +28,7 @@ namespace Inocrea.CodaBox.ApiServer.Controllers
 
         // GET: api/Statements
         [HttpGet]
+       
         //[EnableQuery()]
         public async Task<ActionResult<IEnumerable<Statements>>> GetStatements()
         {
@@ -34,11 +40,18 @@ namespace Inocrea.CodaBox.ApiServer.Controllers
         public async Task<ActionResult<Statements>> GetStatements(int id)
         {
             var statements = await _context.Statements.FindAsync(id);
+            if (statements == null) return NotFound();
 
-            if (statements == null)
+            var transactions = _context.Transactions.Where(t => t.StatementId == id).ToList();
+            var cb = await _context.CompteBancaire.FindAsync(statements.CompteBancaireId);
+            statements.CompteBancaire = cb;
+            foreach(var tr in transactions)
             {
-                return NotFound();
+                var cbt = await _context.CompteBancaire.FindAsync(tr.CompteBancaireId);
+                tr.CompteBancaire = cbt;
             }
+
+            statements.Transactions = transactions;
 
             return statements;
         }
