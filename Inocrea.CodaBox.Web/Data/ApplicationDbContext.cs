@@ -13,6 +13,12 @@ namespace Inocrea.CodaBox.Web.Data
             : base(options)
         {
         }
-        public DbSet<Inocrea.CodaBox.ApiModel.InvoiceModel> InvoiceModel { get; set; }
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+            // Customize the ASP.NET Identity model and override the defaults if needed.
+            // For example, you can rename the ASP.NET Identity table names and more.
+            // Add your customizations after calling base.OnModelCreating(builder);
+        }
     }
 }

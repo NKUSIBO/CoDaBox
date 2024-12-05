@@ -1,0 +1,265 @@
+﻿@model IEnumerable<Inocrea.CodaBox.ApiModel.ViewModel.StatementAccountViewModel>
+
+@{
+    Layout = "_Layout";
+}
+
+
+@section styles {
+    <link rel='stylesheet' type='text/css' href='https://cdn.datatables.net/v/dt/dt-1.10.13/datatables.min.css' />
+}
+<div class='row'>
+
+    <div>
+        <div>
+            <p>
+                <a asp-action="ExportTransactions">Export testaments to Excel</a>
+            </p>
+        </div>
+        <div class='panel-body'>
+            <table id='example' class='table table-striped  table-hover '>
+                <thead>
+
+
+                    <tr>
+
+
+
+
+
+                        <th>
+                            @Html.DisplayNameFor(model => model.StatementId)
+                        </th>
+
+                        <th>
+                            @Html.DisplayNameFor(model => model.Iban)
+                        </th>
+
+
+                        <th>
+                            @Html.DisplayNameFor(model => model.InformationalMessage)
+                        </th>
+
+                        <th>
+                            @Html.DisplayNameFor(model => model.Date)
+                        </th>
+
+                        <th>
+                            @Html.DisplayNameFor(model => model.IdentificationNumber)
+                        </th>
+
+                        <th>
+                            @Html.DisplayNameFor(model => model.CurrencyCode)
+                        </th>
+
+                        <th>
+                            @Html.DisplayNameFor(model => model.Bic)
+
+                        </th>
+
+
+
+
+
+
+
+                        <th>
+                            @Html.DisplayNameFor(model => model.NewBalance)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.InitialBalance)
+
+                        </th>
+
+
+                    </tr>
+                </thead>
+
+            </table>
+        </div>
+    </div>
+
+</div>
+@section scripts {
+    <script type='text/javascript' src='https://cdn.datatables.net/v/dt/dt-1.10.13/datatables.min.js'></script>
+    <script>
+        var yourGlobalVariable;
+        $(document).ready(function () {
+            var table = $('#example')
+                .DataTable({
+                    'processing': true,
+                    'serverSide': true,
+
+                    'ajax': {
+                        'dataFilter':function(data) {
+                            var json = jQuery.parseJSON(data);
+                            json.recordsTotal = json.total;
+                            json.recordsFiltered = json.total;
+                            json.data = json.list;
+
+                            return JSON.stringify(json); 
+                        },
+                        'url': 'Statements/LoadTransaction',
+                        //'dataFilter': function(data) {
+                        //    var json = jQuery.parseJSON(data);
+                        //    json.recordsTotal = json.total;
+                        //    json.recordsFiltered = json.total;
+                        //    json.data = json.list;
+
+                        //    return JSON.stringify(json); // return JSON string
+                        //},
+
+                        'type': 'POST'
+
+                    },
+                    'data': yourGlobalVariable,
+                    'columns':
+                        [
+                            { data: 'StatementId', name: 'StatementId', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
+                            { data: 'Iban', name: 'Iban', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
+                            { data: 'InformationalMessage', name: 'InformationalMessage', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
+                            { data: 'DateFrmt', name: 'DateFrmt', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
+                            { data: 'IdentificationNumber', name: 'IdentificationNumber', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
+
+                            { data: 'CurrencyCode', 'sDefaultContent': '0-0-0000', name: 'CurrencyCode', 'autoWidth': true },
+                            { data: 'Bic', name: 'Bic', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
+
+                            { data: 'NewBalance', name: 'NewBalance', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
+                            { data: 'InitialBalance', name: 'InitialBalance', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
+
+                        ],
+
+                    'ordering': true,
+                    'paging': true,
+                    'searching': true,
+                    'pagingType': 'full_numbers',
+                    'pageLength': 10
+
+
+
+                });
+
+                //now use AJAX with data, which is on the form [ { col1 : value, col2: value ..}]
+
+            //$('#example').on('dblclick','tr', function() {
+            //    var currentRowData = table.row(this).data();
+            //    alert(currentRowData[1]); // wil give you the value of this clicked row and first index (td)
+            //    //your stuff goes here
+            //});
+            //$('#example').on('click',
+            //    'tbody tr',
+            //    function() {
+            //        console.log('API row values : ', table.row(this).data());
+            //        alert(table.row(this).data().);
+            //    });
+
+
+
+            $("#example tbody").delegate("tr", "dblclick", function () {
+
+                var firstCellText = $("td:first", this).text();
+
+                window.open('../Transactions?index='+firstCellText);
+                @*window.location.href = "@Url.Action("Index", "Transactions")" + "/" + firstCellText;*@
+            });
+        });
+            //$('#example thead tr').clone(true).appendTo( '#example thead' );
+            //$('#example thead tr:eq(1) th').each( function (i) {
+            //    var title = $(this).text();
+            //    $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+
+            //    $( 'input', this ).on( 'keyup change', function () {
+            //        if ( table.column(i).search() !== this.value ) {
+            //            table
+            //                .column(i)
+            //                .search( this.value )
+            //                .draw();
+            //        }
+            //    } );
+            //} );
+            //$('#example body').on('click','tr.group',function(){
+            //    var data = $('#example').DataTable().row(this).data();
+            //    alert(data);
+            //});
+            //$('#example').on('click', 'tbody > tr > td', function ()
+            //{
+            //    for (var i = 0; i < table.rows('.selected').data().length; i++) {
+            //        alert( table.rows('.selected').data()[i]);
+            //    }
+            //});
+            //$('#example tbody').on( 'click', 'button', function () {
+            //    var data = table.row($(this).parents('tr')).data();
+
+            //    alert( data[1] +"'s salary is: "+ data[5] );
+            //} );
+
+
+
+            //(function($) {
+            //    var generateCustomerTable = $('#example')
+            //        .dataTable({
+            //            'processing': true,
+            //            'serverSide': true,
+            //            'ajax': {
+            //                'url': '/Home/LoadTransaction',
+            //                'dataSrc': '',
+            //                'method': 'POST'
+            //            },
+
+            //            'columns': [
+            //                { 'data': 'ValueDate', 'name': 'ValueDate', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
+            //                { 'data': 'StructuredMessage', 'name': 'StructuredMessage', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
+            //                {
+            //                    'data': 'Message',
+            //                    'name': 'Message',
+            //                    'sDefaultContent': '0-0-0000',
+            //                    'autoWidth': true
+            //                },
+            //                { 'data': 'Number', 'name': 'Number', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
+            //                {
+            //                    'data': 'NumeroIdentification',
+            //                    'sDefaultContent': '0-0-0000',
+            //                    'name': 'NumeroIdentification',
+            //                    'autoWidth': true
+            //                },
+            //                { 'data': 'Name', 'name': 'Name', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
+            //                {
+            //                    'data': 'CurrencyCode',
+            //                    'sDefaultContent': '0-0-0000',
+            //                    'name': 'CurrencyCode',
+            //                    'autoWidth': true
+            //                },
+            //                { 'data': 'Bic', 'name': 'Bic', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
+            //                { 'data': 'Amount', 'name': 'Amount', 'sDefaultContent': '0-0-0000', 'autoWidth': true },
+            //                {
+            //                    'data': 'NewBalance',
+            //                    'name': 'NewBalance',
+            //                    'sDefaultContent': '0-0-0000',
+            //                    'autoWidth': true
+            //                },
+            //                {
+            //                    'data': 'InitialBalance',
+            //                    'name': 'InitialBalance',
+            //                    'sDefaultContent': '0-0-0000',
+            //                    'autoWidth': true
+            //                },
+            //                {
+            //                    'data': 'AccountingDate',
+            //                    'name': 'AccountingDate',
+            //                    'sDefaultContent': '0-0-0000',
+            //                    'autoWidth': true
+            //                }
+            //            ],
+            //            'ordering': true,
+            //            'paging': true,
+            //            'pagingType': 'full_numbers',
+            //            'pageLength': 10
+
+            //        });
+            //})(jQuery);
+    </script>
+}
+
+
+
+
